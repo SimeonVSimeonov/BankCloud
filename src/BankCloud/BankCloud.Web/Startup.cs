@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using BankCloud.Data.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BankCloud.Data.Entities;
+
 
 namespace BankCloud.Web
 {
@@ -38,9 +40,11 @@ namespace BankCloud.Web
             services.AddDbContext<BankCloudDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+
+            services.AddDefaultIdentity<BankUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<BankCloudDbContext>();
+                .AddEntityFrameworkStores<BankCloudDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -58,6 +62,14 @@ namespace BankCloud.Web
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetRequiredService<BankCloudDbContext>())
+                {
+                    context.Database.EnsureCreated();
+                }
             }
 
             app.UseHttpsRedirection();
