@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
 
 namespace BankCloud.Web.Areas.Identity.Pages.Account
 {
@@ -33,6 +35,8 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
 
         [BindProperty]
         public InputModel Input { get; set; }
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
