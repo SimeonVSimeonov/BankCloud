@@ -41,7 +41,7 @@ namespace BankCloud.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<BankUser>()
+            services.AddIdentity<BankUser, BankUserRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<BankCloudDbContext>()
                 .AddDefaultTokenProviders();
@@ -69,15 +69,24 @@ namespace BankCloud.Web
                 using (var context = serviceScope.ServiceProvider.GetRequiredService<BankCloudDbContext>())
                 {
                     context.Database.EnsureCreated();
+
+                    if (!context.Roles.Any())
+                    {
+                        context.Roles.Add(new BankUserRole { Name = "Admin", NormalizedName = "ADMIN" });
+                        context.Roles.Add(new BankUserRole { Name = "User", NormalizedName = "USER" });
+                        context.Roles.Add(new BankUserRole { Name = "Agent", NormalizedName = "AGENT" });
+                    }
+
+                    context.SaveChanges();
                 }
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

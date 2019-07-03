@@ -14,6 +14,13 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
+                            <label asp-for="Input.Name"></label>
+                            <input asp-for="Input.Name" class="form-control form-control-lg form-control-a" />
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
                             <label asp-for="Input.Email"></label>
                             <input asp-for="Input.Email" class="form-control form-control-lg form-control-a" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -33,9 +40,19 @@
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label asp-for="Input.IsAgent">
+                                    <input asp-for="Input.IsAgent" />
+                                    Become Agent
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-a">Login</button>
+                            <button type="submit" class="btn btn-a">Register</button>
                         </div>
                     </div>
                 </form>

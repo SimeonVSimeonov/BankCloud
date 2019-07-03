@@ -10,23 +10,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using BankCloud.Data.Context;
 
 namespace BankCloud.Web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private readonly RoleManager<BankUserRole> _roleManager;
         private readonly SignInManager<BankUser> _signInManager;
+        private readonly RoleManager<BankUserRole> _RoleManager;
         private readonly UserManager<BankUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            RoleManager<BankUserRole> _roleManager,
             UserManager<BankUser> userManager,
             SignInManager<BankUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _RoleManager = _roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -42,6 +48,13 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+
+            public bool IsAgent { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -69,10 +82,27 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new BankUser { UserName = Input.Email, Email = Input.Email };
+                var user = new BankUser
+                {
+                    Name = Input.Name,
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    IsAgent = Input.IsAgent,
+                                        
+                };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+
+
                 if (result.Succeeded)
                 {
+                    if (user.IsAgent)
+                    {
+                        await _userManager.UpdateSecurityStampAsync(user);
+                        await _userManager.AddToRoleAsync(user, "Agent");
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -84,6 +114,7 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

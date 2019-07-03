@@ -10,14 +10,17 @@ namespace BankCloud.Data.Context
 {
     public class BankCloudDbContext : IdentityDbContext<BankUser, BankUserRole, string>
     {
-        //public DbSet<BankUser> BankUsers { get; set; }
-        //public DbSet<BankUserRole> BankUserRoles { get; set; }
+        
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CreditScoring> CreditScorings { get; set; }
         public DbSet<Curency> Curencies { get; set; }
-        public DbSet<FullName> FullNames { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Loan> Loans { get; set; }
+        public DbSet<Insurance> Insurances { get; set; }
+        public DbSet<Save> Saves { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Investment> Investments { get; set; }
 
         public BankCloudDbContext(DbContextOptions<BankCloudDbContext> options)
             : base(options)
@@ -39,7 +42,6 @@ namespace BankCloud.Data.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<CreditScoring>().HasKey(x => new { x.ContractorId, x.OrderId });
 
             builder.Entity<CreditScoring>()
                 .HasOne(credit => credit.Order)
@@ -65,8 +67,6 @@ namespace BankCloud.Data.Context
                 .HasForeignKey(order => order.ContractorId);
 
             base.OnModelCreating(builder);
-
-            //builder.Entity<BankUser>().HasKey(x => x.Id);
         }
     }
 }

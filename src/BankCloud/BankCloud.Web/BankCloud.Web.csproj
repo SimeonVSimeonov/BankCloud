@@ -37,6 +37,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankCloud.Data\BankCloud.Data.csproj" />
+    <ProjectReference Include="..\BankCloud.Models\BankCloud.Models.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Views\Orders\" />
   </ItemGroup>
 
 </Project>

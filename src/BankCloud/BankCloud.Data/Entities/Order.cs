@@ -6,6 +6,11 @@ namespace BankCloud.Data.Entities
 {
     public class Order
     {
+        public Order()
+        {
+
+        }
+
         public string Id { get; set; }
 
         public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
@@ -18,10 +23,6 @@ namespace BankCloud.Data.Entities
         [Required]
         public string ContractorId { get; set; }
         public BankUser Contractor { get; set; }
-
-        [Required]
-        public string ProductId { get; set; }
-        public Product Product { get; set; }
 
         [Required]
         public OrderStatus Status { get; set; }
