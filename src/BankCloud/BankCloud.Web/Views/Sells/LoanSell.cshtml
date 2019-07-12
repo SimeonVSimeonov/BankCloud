@@ -1,0 +1,76 @@
+﻿@using BankCloud.Data.Entities;
+@model BankCloud.Models.BindingModels.LoanSellInputModel
+
+@{
+    ViewData["Title"] = "LoanSell";
+}
+
+<br />
+<br />
+<br />
+
+<section class="section-agents section-t8">
+    <div class="container-fluid text-center">
+        <h1>Loan</h1>
+
+        <h4>LoanSellInputModel</h4>
+        <hr />
+        <div class="container">
+            <div class="col-md-5 mx-auto">
+                <form asp-action="Loan" class="form-a fa-sign-in">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="InterestRate" class="control-label"></label>
+                            <input asp-for="InterestRate" class="form-control" />
+                            <span asp-validation-for="InterestRate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Period" class="control-label"></label>
+                            <input asp-for="Period" class="form-control" />
+                            <span asp-validation-for="Period" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Amount" class="control-label"></label>
+                            <input asp-for="Amount" class="form-control" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Curency" class="control-label"></label>
+                            <select asp-for="Curency" class="custom-select">
+                                <option selected >Curency</option>
+                                @foreach (var curency in (List<Curency>)ViewData["Curencies"])
+                                {
+                                    <option value="@curency.Id">@curency.IsoCode</option>
+                                };
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-a" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a href="/Products/AllCategories">Back to List</a>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,9 +1,4 @@
-﻿using BankCloud.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankCloud.Models.BindingModels
+﻿namespace BankCloud.Models.BindingModels
 {
     public class LoanSellInputModel
     {
@@ -11,12 +6,12 @@ namespace BankCloud.Models.BindingModels
 
         public decimal InterestRate { get; set; }
 
-        public DateTime Period { get; set; }
+        public int Period { get; set; }
 
         public decimal Amount { get; set; }
 
-        public decimal MonthlyFee { get; set; }
+        public string Seller { get; set; }
 
-        public Curency Curency { get; set; }
+        public string Curency { get; set; }
     }
 }
