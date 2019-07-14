@@ -18,6 +18,6 @@
 
         public string CurencyName { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal Commission { get; set; }
     }
 }

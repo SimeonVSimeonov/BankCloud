@@ -8,8 +8,6 @@ namespace BankCloud.Data.Entities
     {
         public Loan()
         {
-            this.Orders = new HashSet<Order>();
-            
         }
 
         public string Id { get; set; }
@@ -22,15 +20,12 @@ namespace BankCloud.Data.Entities
 
         public decimal Amount { get; set; }
 
-        public decimal MonthlyFee { get; set; }
+        public decimal Commission { get; set; }
 
-        public string BankUserId { get; set; }
+        public string SellerID { get; set; }
         public BankUser Seller { get; set; }
 
         public string CurencyId { get; set; }
         public Curency Curency { get; set; }
-
-        public string OrderId { get; set; }
-        public ICollection<Order> Orders { get; set; }
     }
 }

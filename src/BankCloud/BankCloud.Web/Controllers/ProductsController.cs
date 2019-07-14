@@ -33,7 +33,6 @@ namespace BankCloud.Web.Controllers
         {
             var loanFromDb = this.context.Loans
                 .Include(curency => curency.Curency)
-                //.Include(user => user.Seller)
                 .ToList();
 
             var view = loanFromDb.Select(loan => new LoanAllViewModel
@@ -44,7 +43,6 @@ namespace BankCloud.Web.Controllers
                 Curency = loan.Curency.IsoCode,
                 InterestRate = loan.InterestRate,
                 Period = loan.Period,
-                //Seller = loan.Seller.Name
             });
 
             return View(view);
@@ -68,7 +66,7 @@ namespace BankCloud.Web.Controllers
                 Period = loan.Period,
                 CurencyIso = loan.Curency.IsoCode,
                 CurencyName = loan.Curency.Name,
-                Price = loan.Amount * 0.05m,
+                Commission = loan.Commission, //TODO: implement this in sales
                 Seller = loan.Seller.Name
             };
 

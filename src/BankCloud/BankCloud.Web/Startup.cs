@@ -77,6 +77,33 @@ namespace BankCloud.Web
                         context.Roles.Add(new BankUserRole { Name = "Agent", NormalizedName = "AGENT" });
                     }
 
+                    if (!context.Curencies.Any())
+                    {
+                        context.Curencies.Add(new Curency
+                        {
+                            IsoCode = "USD",
+                            Name = "American Dollar",
+                            Type = Data.Entities.Enums.CurencyType.International,
+                            ТrustLevel = 9
+                        });
+
+                        context.Curencies.Add(new Curency
+                        {
+                            IsoCode = "EUR",
+                            Name = "Euro",
+                            Type = Data.Entities.Enums.CurencyType.International,
+                            ТrustLevel = 9
+                        });
+
+                        context.Curencies.Add(new Curency
+                        {
+                            IsoCode = "BGN",
+                            Name = "Bulgarian Lev",
+                            Type = Data.Entities.Enums.CurencyType.National,
+                            ТrustLevel = 9
+                        });
+                    }
+
                     context.SaveChanges();
                 }
             }

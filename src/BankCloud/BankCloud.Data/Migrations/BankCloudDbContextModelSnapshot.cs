@@ -161,17 +161,11 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<int>("Level");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired();
-
                     b.Property<DateTime?>("UntilTo");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContractorId");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.ToTable("CreditScorings");
                 });
@@ -201,8 +195,6 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("BankUserId");
-
                     b.Property<decimal>("Coverage");
 
                     b.Property<string>("CurencyId");
@@ -211,15 +203,15 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("OrderId");
+                    b.Property<string>("SellerID");
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId");
-
                     b.HasIndex("CurencyId");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Insurances");
                 });
@@ -229,11 +221,17 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("BankUserId");
+                    b.Property<string>("CurencyId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("SellerID");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId");
+                    b.HasIndex("CurencyId");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Investments");
                 });
@@ -245,36 +243,33 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<decimal>("Amount");
 
-                    b.Property<string>("BankUserId");
+                    b.Property<decimal>("Commission");
 
                     b.Property<string>("CurencyId");
 
                     b.Property<decimal>("InterestRate");
 
-                    b.Property<decimal>("MonthlyFee");
-
                     b.Property<string>("Name");
-
-                    b.Property<string>("OrderId");
 
                     b.Property<int>("Period");
 
+                    b.Property<string>("SellerID");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId");
-
                     b.HasIndex("CurencyId");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Loans");
                 });
 
-            modelBuilder.Entity("BankCloud.Data.Entities.Order", b =>
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderInsurances", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime?>("CompletedOn")
-                        .IsRequired();
+                    b.Property<DateTime?>("CompletedOn");
 
                     b.Property<string>("ContractorId")
                         .IsRequired();
@@ -285,8 +280,6 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<DateTime>("IssuedOn");
 
-                    b.Property<string>("LoanId");
-
                     b.Property<int>("Status");
 
                     b.HasKey("Id");
@@ -295,9 +288,125 @@ namespace BankCloud.Data.Migrations
 
                     b.HasIndex("InsuranceId");
 
+                    b.ToTable("OrderInsurances");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderInvestments", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CompletedOn");
+
+                    b.Property<string>("ContractorId")
+                        .IsRequired();
+
+                    b.Property<decimal>("CostPrice");
+
+                    b.Property<string>("InvestmentId");
+
+                    b.Property<DateTime>("IssuedOn");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.HasIndex("InvestmentId");
+
+                    b.ToTable("OrderInvestments");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoans", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Amount");
+
+                    b.Property<DateTime?>("CompletedOn");
+
+                    b.Property<string>("ContractorId")
+                        .IsRequired();
+
+                    b.Property<decimal>("CostPrice");
+
+                    b.Property<decimal>("InterestRate");
+
+                    b.Property<DateTime>("IssuedOn");
+
+                    b.Property<string>("LoanId");
+
+                    b.Property<decimal>("MonthlyFee");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Period");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
                     b.HasIndex("LoanId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("OrderLoans");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderPayments", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CompletedOn");
+
+                    b.Property<string>("ContractorId")
+                        .IsRequired();
+
+                    b.Property<decimal>("CostPrice");
+
+                    b.Property<DateTime>("IssuedOn");
+
+                    b.Property<string>("PaymentId");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("OrderPayments");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderSaves", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CompletedOn");
+
+                    b.Property<string>("ContractorId")
+                        .IsRequired();
+
+                    b.Property<decimal>("CostPrice");
+
+                    b.Property<DateTime>("IssuedOn");
+
+                    b.Property<string>("SaveId");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.HasIndex("SaveId");
+
+                    b.ToTable("OrderSaves");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Payment", b =>
@@ -305,11 +414,17 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("BankUserId");
+                    b.Property<string>("CurencyId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("SellerID");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId");
+                    b.HasIndex("CurencyId");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Payments");
                 });
@@ -319,11 +434,17 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("BankUserId");
+                    b.Property<string>("CurencyId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("SellerID");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId");
+                    b.HasIndex("CurencyId");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Saves");
                 });
@@ -438,70 +559,121 @@ namespace BankCloud.Data.Migrations
                         .WithMany("CreditScorings")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("BankCloud.Data.Entities.Order", "Order")
-                        .WithOne()
-                        .HasForeignKey("BankCloud.Data.Entities.CreditScoring", "OrderId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Insurance", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.BankUser")
-                        .WithMany("Insurances")
-                        .HasForeignKey("BankUserId");
-
                     b.HasOne("BankCloud.Data.Entities.Curency", "Curency")
                         .WithMany()
                         .HasForeignKey("CurencyId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerID");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Investment", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.BankUser")
-                        .WithMany("Investments")
-                        .HasForeignKey("BankUserId");
+                    b.HasOne("BankCloud.Data.Entities.Curency", "Curency")
+                        .WithMany()
+                        .HasForeignKey("CurencyId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerID");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Loan", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
-                        .WithMany("Loans")
-                        .HasForeignKey("BankUserId");
-
                     b.HasOne("BankCloud.Data.Entities.Curency", "Curency")
                         .WithMany()
                         .HasForeignKey("CurencyId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerID");
                 });
 
-            modelBuilder.Entity("BankCloud.Data.Entities.Order", b =>
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderInsurances", b =>
                 {
                     b.HasOne("BankCloud.Data.Entities.BankUser", "Contractor")
-                        .WithMany("Orders")
+                        .WithMany("OrderInsurances")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BankCloud.Data.Entities.Insurance")
-                        .WithMany("Orders")
+                    b.HasOne("BankCloud.Data.Entities.Insurance", "Insurance")
+                        .WithMany()
                         .HasForeignKey("InsuranceId");
+                });
 
-                    b.HasOne("BankCloud.Data.Entities.Loan")
-                        .WithMany("Orders")
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderInvestments", b =>
+                {
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Contractor")
+                        .WithMany()
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BankCloud.Data.Entities.Investment", "Investment")
+                        .WithMany()
+                        .HasForeignKey("InvestmentId");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoans", b =>
+                {
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Contractor")
+                        .WithMany("OrderLoans")
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BankCloud.Data.Entities.Loan", "Loan")
+                        .WithMany()
                         .HasForeignKey("LoanId");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderPayments", b =>
+                {
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Contractor")
+                        .WithMany()
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BankCloud.Data.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+                });
+
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderSaves", b =>
+                {
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Contractor")
+                        .WithMany()
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BankCloud.Data.Entities.Save", "Save")
+                        .WithMany()
+                        .HasForeignKey("SaveId");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Payment", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.BankUser")
-                        .WithMany("Payments")
-                        .HasForeignKey("BankUserId");
+                    b.HasOne("BankCloud.Data.Entities.Curency", "Curency")
+                        .WithMany()
+                        .HasForeignKey("CurencyId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerID");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Save", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.BankUser")
-                        .WithMany("Saves")
-                        .HasForeignKey("BankUserId");
+                    b.HasOne("BankCloud.Data.Entities.Curency", "Curency")
+                        .WithMany()
+                        .HasForeignKey("CurencyId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

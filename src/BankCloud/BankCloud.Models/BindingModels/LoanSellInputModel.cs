@@ -13,5 +13,7 @@
         public string Seller { get; set; }
 
         public string Curency { get; set; }
+
+        public decimal Commission { get; set; }
     }
 }

@@ -9,9 +9,7 @@ namespace BankCloud.Data.Entities
         public BankUser()
         {
             this.Accounts = new HashSet<Account>();
-            this.Loans = new HashSet<Loan>();
-            this.Insurances = new HashSet<Insurance>();
-            this.Orders = new HashSet<Order>();
+            //this.Orders = new HashSet<Order>();
             this.CreditScorings = new HashSet<CreditScoring>();
         }
 
@@ -36,16 +34,15 @@ namespace BankCloud.Data.Entities
 
         public ICollection<CreditScoring> CreditScorings { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderInsurances> OrderInsurances { get; set; }
+        public ICollection<OrderLoans> OrderLoans{ get; set; }
 
-        public ICollection<Loan> Loans { get; set; }
+        //public ICollection<Order> Orders { get; set; }
 
-        public ICollection<Insurance> Insurances { get; set; }
+        //public ICollection<Save> Saves { get; set; }
 
-        public ICollection<Save> Saves { get; set; }
+        //public ICollection<Payment> Payments { get; set; }
 
-        public ICollection<Payment> Payments { get; set; }
-
-        public ICollection<Investment> Investments { get; set; }
+        //public ICollection<Investment> Investments { get; set; }
     }
 }

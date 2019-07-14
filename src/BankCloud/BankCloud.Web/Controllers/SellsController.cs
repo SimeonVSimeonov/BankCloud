@@ -37,17 +37,16 @@ namespace BankCloud.Web.Controllers
         public IActionResult LoanSell(LoanSellInputModel model)
         {
 
-
             var loan = new Loan
             {
 
                 Amount = model.Amount,
                 InterestRate = model.InterestRate,
-                BankUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                SellerID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 Period = model.Period,
                 Name = model.Name,
-                Curency = context.Curencies.SingleOrDefault(curency => curency.Id == model.Curency)
-
+                Curency = context.Curencies.SingleOrDefault(curency => curency.Id == model.Curency),
+                Commission = model.Commission
             };
 
             context.Loans.Add(loan);

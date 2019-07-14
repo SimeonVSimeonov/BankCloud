@@ -8,6 +8,12 @@ namespace BankCloud.Data.Entities
     {
         public string Id { get; set; }
 
+        public string Name { get; set; }
 
+        public string SellerID { get; set; }
+        public BankUser Seller { get; set; }
+
+        public string CurencyId { get; set; }
+        public Curency Curency { get; set; }
     }
 }
