@@ -19,15 +19,15 @@ namespace BankCloud.Web.Controllers
             this.context = context;
         }
 
-        public IActionResult AllCategories()
-        {
-            return View();
-        }
+        //public IActionResult AllCategories()
+        //{
+        //    return View();
+        //}
 
-        public IActionResult AllProducts()
-        {
-            return View();
-        }
+        //public IActionResult AllProducts()
+        //{
+        //    return View();
+        //}
 
         public IActionResult LoanAll()
         {

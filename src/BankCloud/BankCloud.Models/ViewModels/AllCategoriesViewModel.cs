@@ -1,6 +1,6 @@
-﻿namespace BankCloud.Models.ViewModels
-{
-    public class AllCategoriesViewModel
-    {
-    }
-}
+﻿//namespace BankCloud.Models.ViewModels
+//{
+//    public class AllCategoriesViewModel
+//    {
+//    }
+//}

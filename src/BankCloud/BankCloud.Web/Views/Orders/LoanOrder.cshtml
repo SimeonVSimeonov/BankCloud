@@ -5,8 +5,7 @@
 }
 
 <br />
-<br />
-<br />
+    
 
 <section class="section-agents section-t8">
     <div class="container-fluid text-center">
@@ -21,18 +20,23 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Period" class="control-label"></label>
-                        <input asp-for="Period" class="form-control" />
+                        <input asp-for="Period" class="form-control" id="period" />
                         <span asp-validation-for="Period" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Amount" class="control-label"></label>
-                        <input asp-for="Amount" class="form-control" />
+                        <input asp-for="Amount" class="form-control" id="amount" />
                         <span asp-validation-for="Amount" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="MonthlyFee" class="control-label"></label>
-                        <input asp-for="MonthlyFee" class="form-control" />
+                        <input asp-for="MonthlyFee" class="form-control" id="fee" />
                         <span asp-validation-for="MonthlyFee" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InterestRate" class="control-label"></label>
+                        <input asp-for="InterestRate" class="form-control" readonly id="intRate" />
+                        <span asp-validation-for="InterestRate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />

@@ -23,7 +23,6 @@ namespace BankCloud.Data.Entities
         [Required]
         public OrderStatus Status { get; set; }
 
-
         public string PaymentId { get; set; }
         public Payment Payment { get; set; }
     }

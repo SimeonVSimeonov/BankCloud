@@ -10,9 +10,6 @@ namespace BankCloud.Data.Entities
     {
         public string Id { get; set; }
 
-        //public string OrderId { get; set; }
-        //public Order Order { get; set; }
-
         public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
 
         public DateTime? CompletedOn { get; set; }

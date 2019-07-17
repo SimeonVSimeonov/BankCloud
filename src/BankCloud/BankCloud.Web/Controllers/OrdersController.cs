@@ -7,6 +7,7 @@ using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankCloud.Web.Controllers
@@ -21,6 +22,7 @@ namespace BankCloud.Web.Controllers
         }
 
         [HttpGet("/Orders/LoanOrder/{id}")]
+        [Authorize]
         public IActionResult LoanOrder(string id)
         {
             Loan loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == id);
@@ -28,14 +30,18 @@ namespace BankCloud.Web.Controllers
             LoanOrderInputModel model = new LoanOrderInputModel()
             {
                 Amount = loanFromDb.Amount,
-                MonthlyFee = loanFromDb.Commission,
                 Period = loanFromDb.Period,
+                InterestRate = loanFromDb.InterestRate,
+                MonthlyFee = decimal
+                .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
+                                                                    2, MidpointRounding.AwayFromZero)
             };
 
             return View(model);
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LoanOrder(LoanOrderInputModel model)
         {
             var loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == model.Id);
@@ -53,8 +59,19 @@ namespace BankCloud.Web.Controllers
                 Name = loanFromDb.Name,
                 InterestRate = loanFromDb.InterestRate,
                 Period = model.Period,
-                MonthlyFee = (model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1),
+                MonthlyFee = decimal
+                .Round(((model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1)),
+                                                                    2, MidpointRounding.AwayFromZero),
             };
+
+            //TODO: add message for invalid parameters
+
+            if (model.Amount > loanFromDb.Amount 
+                || model.Period > loanFromDb.Period 
+                || model.InterestRate != loanFromDb.InterestRate)
+            {
+                return this.RedirectToAction();
+            }
 
             this.context.OrderLoans.Add(orderLoan);
 
