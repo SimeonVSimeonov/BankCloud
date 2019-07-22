@@ -1,12 +1,10 @@
 ﻿using BankCloud.Data.Entities.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BankCloud.Data.Entities
 {
-    public class OrderLoans
+    public class OrderLoan
     {
         public string Id { get; set; }
 
@@ -27,14 +25,16 @@ namespace BankCloud.Data.Entities
         public int Period { get; set; }
 
         [Required]
-        public string ContractorId { get; set; }
-        public BankUser Contractor { get; set; }
+        public string BuyerId { get; set; }
+        public BankUser Buyer { get; set; }
+
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
 
         [Required]
         public OrderStatus Status { get; set; }
 
         public string LoanId { get; set; }
-        public Loan Loan { get; set; }
-
+        public Loan Loan {get; set;}
     }
 }

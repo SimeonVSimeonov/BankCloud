@@ -38,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BankCloud.Data\BankCloud.Data.csproj" />
     <ProjectReference Include="..\BankCloud.Models\BankCloud.Models.csproj" />
+    <ProjectReference Include="..\BankCloud.Services\BankCloud.Services.csproj" />
   </ItemGroup>
 
 </Project>

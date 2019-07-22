@@ -1,0 +1,52 @@
+﻿@model BankCloud.Models.BindingModels.AccountInputModel
+@using BankCloud.Data.Entities;
+
+@{
+    ViewData["Title"] = "AccountCreate";
+}
+
+
+<section class="section-agents section-t8">
+    <h1>CreateNewAccount</h1>
+
+    <h4>AccountInputModel</h4>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AccountCreate">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Charge" class="control-label"></label>
+                    <input asp-for="Charge" class="form-control" />
+                    <span asp-validation-for="Charge" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MonthlyIncome" class="control-label"></label>
+                    <input asp-for="MonthlyIncome" class="form-control" />
+                    <span asp-validation-for="MonthlyIncome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Curency" class="control-label"></label>
+                    <select asp-for="Curency" class="custom-select">
+                        <option selected>Curency</option>
+                        @foreach (var curency in (List
+                        <Curency>
+                            )ViewData["Curencies"])
+                            {
+                            <option value="@curency.Id">@curency.IsoCode</option>
+                            };
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+</section>
+

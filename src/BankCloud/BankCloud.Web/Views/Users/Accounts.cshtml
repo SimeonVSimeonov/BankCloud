@@ -1,0 +1,63 @@
+﻿@model IEnumerable<BankCloud.Models.ViewModels.UsersAccountViewModel>
+
+@{
+    ViewData["Title"] = "Accounts";
+}
+
+<section class="section-agents section-t8">
+
+    <h1>Accounts</h1>
+
+    <p class="text-center">
+        <a asp-action="AccountCreate">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IBAN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MonthlyIncome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Balance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurencyIso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurencyName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IBAN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonthlyIncome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Balance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurencyIso)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurencyName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

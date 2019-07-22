@@ -12,7 +12,7 @@ namespace BankCloud.Data.Entities
             this.CreditScorings = new HashSet<CreditScoring>();
 
             this.OrderedInsurances = new HashSet<OrderInsurances>();
-            this.OrderedLoans = new HashSet<OrderLoans>();
+            this.OrderedLoans = new HashSet<OrderLoan>();
             this.OrderedSaves = new HashSet<OrderSaves>();
             this.OrderedInvestments = new HashSet<OrderInvestments>();
             this.OrderedPayments = new HashSet<OrderPayments>();
@@ -33,6 +33,8 @@ namespace BankCloud.Data.Entities
         public string AddressId { get; set; }
         public Address Address { get; set; }
 
+        public bool IsActive { get; set; }
+
         public bool IsAgent { get; set; }
 
         public ICollection<Account> Accounts { get; set; }
@@ -40,7 +42,7 @@ namespace BankCloud.Data.Entities
         public ICollection<CreditScoring> CreditScorings { get; set; }
 
         public ICollection<OrderInsurances> OrderedInsurances { get; set; }
-        public ICollection<OrderLoans> OrderedLoans { get; set; }
+        public ICollection<OrderLoan> OrderedLoans { get; set; }
         public ICollection<OrderSaves> OrderedSaves { get; set; }
         public ICollection<OrderInvestments> OrderedInvestments { get; set; }
         public ICollection<OrderPayments> OrderedPayments { get; set; }

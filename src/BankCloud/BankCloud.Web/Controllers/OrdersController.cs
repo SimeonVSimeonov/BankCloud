@@ -9,6 +9,7 @@ using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankCloud.Web.Controllers
 {
@@ -27,6 +28,13 @@ namespace BankCloud.Web.Controllers
         {
             Loan loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == id);
 
+            BankUser user = this.context.Users
+                .Include(u => u.Accounts)
+                .ThenInclude(a => a.Curency)
+                .SingleOrDefault(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            this.ViewData["Accounts"] = user.Accounts.ToList();
+
             LoanOrderInputModel model = new LoanOrderInputModel()
             {
                 Amount = loanFromDb.Amount,
@@ -34,7 +42,7 @@ namespace BankCloud.Web.Controllers
                 InterestRate = loanFromDb.InterestRate,
                 MonthlyFee = decimal
                 .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
-                                                                    2, MidpointRounding.AwayFromZero)
+                                                                    2, MidpointRounding.AwayFromZero),
             };
 
             return View(model);
@@ -45,12 +53,12 @@ namespace BankCloud.Web.Controllers
         public IActionResult LoanOrder(LoanOrderInputModel model)
         {
             var loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == model.Id);
+            BankUser user = this.context.Users.Include(u => u.Accounts)
+                .SingleOrDefault(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var curencyFromDb = this.context.Curencies;
-
-            var orderLoan = new OrderLoans()
+            var orderLoan = new OrderLoan()
             {
-                ContractorId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                BuyerId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 IssuedOn = DateTime.UtcNow,
                 Status = OrderStatus.Pending,
                 CostPrice = loanFromDb.Commission * loanFromDb.Amount / 100,
@@ -62,6 +70,7 @@ namespace BankCloud.Web.Controllers
                 MonthlyFee = decimal
                 .Round(((model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1)),
                                                                     2, MidpointRounding.AwayFromZero),
+                AccountId = model.AccountId
             };
 
             //TODO: add message for invalid parameters
@@ -73,11 +82,16 @@ namespace BankCloud.Web.Controllers
                 return this.RedirectToAction();
             }
 
+            if (!user.Accounts.Any())
+            {
+                return this.Redirect("/Users/AccountActivate");
+            }
+
             this.context.OrderLoans.Add(orderLoan);
 
             this.context.SaveChanges();
 
-            return this.Redirect("/Products/LoanAll");
+            return this.Redirect("/Users/AllMyLoans");
         }
     }
 }

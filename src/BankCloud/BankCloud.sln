@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankCloud.Models", "BankCloud.Models\BankCloud.Models.csproj", "{75FB9754-64BC-4EEB-B53C-A04D570400C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankCloud.Models", "BankCloud.Models\BankCloud.Models.csproj", "{75FB9754-64BC-4EEB-B53C-A04D570400C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankCloud.Data", "BankCloud.Data\BankCloud.Data.csproj", "{0F2A25FB-9AA2-421A-A406-A5FC0FE83A10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankCloud.Data", "BankCloud.Data\BankCloud.Data.csproj", "{0F2A25FB-9AA2-421A-A406-A5FC0FE83A10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankCloud.Services", "BankCloud.Services\BankCloud.Services.csproj", "{F8DB312D-6C87-46CB-A1D4-694420F7689A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankCloud.Services", "BankCloud.Services\BankCloud.Services.csproj", "{F8DB312D-6C87-46CB-A1D4-694420F7689A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankCloud.Test", "BankCloud.Test\BankCloud.Test.csproj", "{4DB2DE0B-CDE8-4CD0-AD89-27102853B852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankCloud.Test", "BankCloud.Test\BankCloud.Test.csproj", "{4DB2DE0B-CDE8-4CD0-AD89-27102853B852}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankCloud.Web", "BankCloud.Web\BankCloud.Web.csproj", "{C32CBEBA-F503-41EF-9061-C1E0687C8E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankCloud.Web", "BankCloud.Web\BankCloud.Web.csproj", "{C32CBEBA-F503-41EF-9061-C1E0687C8E59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox", "SandBox\SandBox.csproj", "{561A4558-A2FD-4A72-BE93-D7DDFAEC0D64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C32CBEBA-F503-41EF-9061-C1E0687C8E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C32CBEBA-F503-41EF-9061-C1E0687C8E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C32CBEBA-F503-41EF-9061-C1E0687C8E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561A4558-A2FD-4A72-BE93-D7DDFAEC0D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561A4558-A2FD-4A72-BE93-D7DDFAEC0D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561A4558-A2FD-4A72-BE93-D7DDFAEC0D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561A4558-A2FD-4A72-BE93-D7DDFAEC0D64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

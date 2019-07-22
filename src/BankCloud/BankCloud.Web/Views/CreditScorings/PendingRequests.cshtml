@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BankCloud.Models.ViewModels.CreditScoringsOrderedLoansViewModel>
+
+    @{
+    ViewData["Title"] = "PendingRequests";
+    }
+    <section>
+        <h1>PendingRequests</h1>
+
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Buyer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Period)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Commission)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MonthlyFee)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Curency)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Buyer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Commission)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonthlyFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Curency)
+                    </td>
+                    <td>
+                        <div class="price-box d-flex">
+                            <a href="/CreditScorings/DetailRequest/@item.Id"><span class="price-a">Details</span></a>
+                        </div>
+                    </td>
+                </tr>
+                   }
+            </tbody>
+        </table>
+    </section>

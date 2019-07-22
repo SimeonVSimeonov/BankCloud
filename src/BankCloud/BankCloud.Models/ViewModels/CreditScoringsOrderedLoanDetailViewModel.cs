@@ -1,17 +1,16 @@
-﻿using BankCloud.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BankCloud.Models.ViewModels
 {
-    public class MyOrderedLoansDetailViewModel
+    public class CreditScoringsOrderedLoanDetailViewModel
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Seller { get; set; }
+        public string Buyer { get; set; }
+
+        public IEnumerable<UsersAccountViewModel> BuyerAcconts { get; set; }
 
         public string Status { get; set; }
 
@@ -25,10 +24,11 @@ namespace BankCloud.Models.ViewModels
 
         public string CompletedOn { get; set; }
 
-        //public Loan Loan { get; set; }
-
         public decimal Commission { get; set; }
 
         public decimal MonthlyFee { get; set; }
+
+        public string Curency { get; set; }
+
     }
 }

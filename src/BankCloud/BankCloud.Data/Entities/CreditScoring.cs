@@ -22,8 +22,8 @@ namespace BankCloud.Data.Entities
         //public Order Order { get; set; }
 
         [Required]
-        public string ContractorId { get; set; }
-        public BankUser Contractor { get; set; }
+        public string BuyerId { get; set; }
+        public BankUser Buyer { get; set; }
 
     }
 }

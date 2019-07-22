@@ -67,7 +67,8 @@ namespace BankCloud.Web.Controllers
                 CurencyIso = loan.Curency.IsoCode,
                 CurencyName = loan.Curency.Name,
                 Commission = loan.Commission, //TODO: implement this in sales
-                Seller = loan.Seller.Name
+                Seller = loan.Seller.Name,
+                SellerEmail = loan.Seller.Email
             };
 
 

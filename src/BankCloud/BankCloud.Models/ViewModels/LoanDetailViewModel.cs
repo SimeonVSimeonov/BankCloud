@@ -14,6 +14,8 @@
 
         public string Seller { get; set; }
 
+        public string SellerEmail { get; set; }
+
         public string CurencyIso { get; set; }
 
         public string CurencyName { get; set; }

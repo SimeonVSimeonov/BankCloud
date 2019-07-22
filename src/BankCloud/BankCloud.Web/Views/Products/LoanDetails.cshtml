@@ -122,9 +122,17 @@
                         </div>
                         <div class="amenities-list color-text-a text-center">
                             <div class="mx-auto">
-                                <a href="/Orders/LoanOrder/@Model.Id" class="btn btn-a">Order</a>
+                                @if (User.Identity.Name == @Model.SellerEmail)
+                                {
+                                    <a href="/Products/LoanAll" class="btn btn-a">Back</a>
+                                }
+                                else
+                                {
+                                    <a href="/Orders/LoanOrder/@Model.Id" class="btn btn-a">Order</a>
+                                }
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -10,13 +10,13 @@ namespace BankCloud.Data.Context
 {
     public class BankCloudDbContext : IdentityDbContext<BankUser, BankUserRole, string>
     {
-        
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CreditScoring> CreditScorings { get; set; }
         public DbSet<Curency> Curencies { get; set; }
 
         public DbSet<Loan> Loans { get; set; }
-        public DbSet<OrderLoans> OrderLoans { get; set; }
+        public DbSet<OrderLoan> OrderLoans { get; set; }
 
         public DbSet<Insurance> Insurances { get; set; }
         public DbSet<OrderInsurances> OrderInsurances { get; set; }
@@ -57,7 +57,7 @@ namespace BankCloud.Data.Context
             //    .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<CreditScoring>()
-                .HasOne(credit => credit.Contractor)
+                .HasOne(credit => credit.Buyer)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -66,8 +66,8 @@ namespace BankCloud.Data.Context
 
             builder.Entity<BankUser>()
                 .HasMany(user => user.CreditScorings)
-                .WithOne(credit => credit.Contractor)
-                .HasForeignKey(credit => credit.ContractorId);
+                .WithOne(credit => credit.Buyer)
+                .HasForeignKey(credit => credit.BuyerId);
 
             //builder.Entity<BankUser>()
             //    .HasMany(user => user.Orders)

@@ -4,14 +4,16 @@ using BankCloud.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankCloud.Data.Migrations
 {
     [DbContext(typeof(BankCloudDbContext))]
-    partial class BankCloudDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190721131732_AddContrToBuyer")]
+    partial class AddContrToBuyer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,8 +35,6 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("IBAN");
 
                     b.Property<decimal>("MonthlyIncome");
-
-                    b.Property<decimal>("MonthlyOutcome");
 
                     b.HasKey("Id");
 
@@ -324,7 +324,7 @@ namespace BankCloud.Data.Migrations
                     b.ToTable("OrderInvestments");
                 });
 
-            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoan", b =>
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoans", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -628,7 +628,7 @@ namespace BankCloud.Data.Migrations
                         .HasForeignKey("InvestmentId");
                 });
 
-            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoan", b =>
+            modelBuilder.Entity("BankCloud.Data.Entities.OrderLoans", b =>
                 {
                     b.HasOne("BankCloud.Data.Entities.Account", "Account")
                         .WithMany()

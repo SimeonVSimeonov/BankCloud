@@ -15,5 +15,7 @@
         public string Curency { get; set; }
 
         public decimal Commission { get; set; }
+
+        public string AccountId { get; set; }
     }
 }

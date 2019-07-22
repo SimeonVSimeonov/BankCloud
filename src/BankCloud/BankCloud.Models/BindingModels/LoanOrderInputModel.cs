@@ -22,5 +22,6 @@ namespace BankCloud.Models.BindingModels
 
         public string CurencyId { get; set; }
 
+        public string AccountId { get; set; }
     }
 }
