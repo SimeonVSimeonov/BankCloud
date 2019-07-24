@@ -25,10 +25,14 @@ namespace BankCloud.Models.ViewModels
 
         public string CompletedOn { get; set; }
 
-        //public Loan Loan { get; set; }
+        public string CurencyIso { get; set; }
 
         public decimal Commission { get; set; }
 
         public decimal MonthlyFee { get; set; }
+
+        public decimal DueAmount { get; set; }
+
+        public string Account { get; set; }
     }
 }

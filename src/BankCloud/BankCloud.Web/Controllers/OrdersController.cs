@@ -26,7 +26,10 @@ namespace BankCloud.Web.Controllers
         [Authorize]
         public IActionResult LoanOrder(string id)
         {
-            Loan loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == id);
+            Loan loanFromDb = this.context.Loans
+                .Include(loan => loan.Account)
+                .ThenInclude(account => account.Curency)
+                .SingleOrDefault(loan => loan.Id == id);
 
             BankUser user = this.context.Users
                 .Include(u => u.Accounts)
@@ -37,12 +40,14 @@ namespace BankCloud.Web.Controllers
 
             LoanOrderInputModel model = new LoanOrderInputModel()
             {
+                Name = loanFromDb.Name,
                 Amount = loanFromDb.Amount,
                 Period = loanFromDb.Period,
                 InterestRate = loanFromDb.InterestRate,
                 MonthlyFee = decimal
                 .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
                                                                     2, MidpointRounding.AwayFromZero),
+                CurencyName = loanFromDb.Account.Curency.Name,
             };
 
             return View(model);
@@ -53,6 +58,7 @@ namespace BankCloud.Web.Controllers
         public IActionResult LoanOrder(LoanOrderInputModel model)
         {
             var loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == model.Id);
+
             BankUser user = this.context.Users.Include(u => u.Accounts)
                 .SingleOrDefault(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
 

@@ -5,15 +5,14 @@
     ViewData["Title"] = "LoanOrder";
 }
 
-<br />
-
-
 <section class="section-agents section-t8">
     <div class="container-fluid text-center">
 
         <h1>Loan</h1>
 
-        <h4>LoanOrderInputModel</h4>
+        <h4>@Model.Name</h4>
+        <h4>@Model.InterestRate %</h4>
+        <h4>@Model.CurencyName</h4>
         <hr />
         <div class="row">
             <div class="col-md-4">
@@ -35,8 +34,8 @@
                         <span asp-validation-for="MonthlyFee" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="InterestRate" class="control-label"></label>
-                        <input asp-for="InterestRate" class="form-control" readonly id="intRate" />
+                        @*<label asp-for="InterestRate" class="control-label"></label>*@
+                        <input asp-for="InterestRate" type="hidden" class="form-control" readonly id="intRate" />
                         <span asp-validation-for="InterestRate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -44,10 +43,11 @@
                         <select asp-for="AccountId" class="custom-select">
                             <option selected>Curency</option>
                             @foreach (var account in (List<Account>)ViewData["Accounts"])
-                                {
+                            {
                                 <option value="@account.Id">@account.IBAN | @account.Balance | @account.Curency.IsoCode</option>
-                                };
+                            };
                         </select>
+                        <span asp-validation-for="AccountId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />

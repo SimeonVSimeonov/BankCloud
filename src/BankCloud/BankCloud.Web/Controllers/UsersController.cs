@@ -127,7 +127,6 @@ namespace BankCloud.Web.Controllers
 
         }
 
-
         [HttpPost]
         public IActionResult AccountCreate(AccountInputModel model)
         {
@@ -151,8 +150,9 @@ namespace BankCloud.Web.Controllers
         {
             List<OrderLoan> AllOrderLoansFormDb = this.context
                 .OrderLoans
-                .Include(x => x.Loan)
-                .Where(loanFromDb => loanFromDb.BuyerId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Include(orderLoan => orderLoan.Loan)
+                .ThenInclude(loan => loan.Account.Curency)
+                .Where(orderLoan => orderLoan.BuyerId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 .ToList();
 
             var viewAllOrderLoans = AllOrderLoansFormDb
@@ -163,7 +163,8 @@ namespace BankCloud.Web.Controllers
                     Period = loanFromDb.Period,
                     Name = loanFromDb.Loan.Name,
                     Id = loanFromDb.Id,
-                    Status = loanFromDb.Status.ToString()
+                    Status = loanFromDb.Status.ToString(),
+                    CurencyIso = loanFromDb.Loan.Account.Curency.IsoCode
                 });
 
             return View(viewAllOrderLoans);
@@ -172,24 +173,31 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Users/MyLoan/{id}")]
         public IActionResult MyLoan(string id)
         {
-            OrderLoan orderLoan = this.context
+            OrderLoan orderLoanFromDB = this.context
                 .OrderLoans
-                .Include(x => x.Loan)
-                .ThenInclude(s => s.Seller)
-                .SingleOrDefault(loan => loan.Id == id);
+                .Include(orderLoan => orderLoan.Account)
+                .ThenInclude(orderLoan => orderLoan.Curency)
+                .Include(orderLoan => orderLoan.Loan)
+                .ThenInclude(loan => loan.Seller)
+                .Include(orderLoan => orderLoan.Loan)
+                .ThenInclude(loan => loan.Account.Curency)
+                .SingleOrDefault(orderLoan => orderLoan.Id == id);
 
             var detailOrderLoan = new MyOrderedLoansDetailViewModel()
             {
-                Name = orderLoan.Name,
-                Period = orderLoan.Period,
-                Amount = orderLoan.Amount,
-                MonthlyFee = orderLoan.MonthlyFee,
-                Commission = orderLoan.CostPrice,
-                Seller = orderLoan.Loan.Seller.Name,
-                InterestRate = orderLoan.InterestRate,
-                IssuedOn = orderLoan.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
-                Status = orderLoan.Status.ToString(),
-                CompletedOn = orderLoan.CompletedOn.ToString(),
+                Name = orderLoanFromDB.Name,
+                Period = orderLoanFromDB.Period,
+                Amount = orderLoanFromDB.Amount,
+                MonthlyFee = orderLoanFromDB.MonthlyFee,
+                Commission = orderLoanFromDB.CostPrice,
+                Seller = orderLoanFromDB.Loan.Seller.Name,
+                InterestRate = orderLoanFromDB.InterestRate,
+                IssuedOn = orderLoanFromDB.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
+                Status = orderLoanFromDB.Status.ToString(),
+                CompletedOn = orderLoanFromDB.CompletedOn.ToString(),
+                CurencyIso = orderLoanFromDB.Loan.Account.Curency.IsoCode,
+                DueAmount = orderLoanFromDB.MonthlyFee * orderLoanFromDB.Period,
+                Account = orderLoanFromDB.Account.IBAN + " | " + orderLoanFromDB.Account.Curency.Name
             };
 
             return View(detailOrderLoan);

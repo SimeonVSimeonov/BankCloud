@@ -1,9 +1,14 @@
-﻿using BankCloud.Data.Entities.Enums;
+﻿using System.Collections.Generic;
 
 namespace BankCloud.Data.Entities
 {
     public class Account
     {
+        public Account()
+        {
+            this.Loans = new HashSet<Loan>();
+        }
+
         public string Id { get; set; }
 
         public string IBAN { get; set; }
@@ -19,5 +24,7 @@ namespace BankCloud.Data.Entities
 
         public string CurencyId { get; set; }
         public Curency Curency { get; set; }
+
+        public ICollection<Loan> Loans { get; set; }
     }
 }

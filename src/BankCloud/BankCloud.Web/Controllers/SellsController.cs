@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using BankCloud.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankCloud.Web.Controllers
 {
@@ -28,16 +29,33 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult LoanSell()
         {
-            this.ViewData["Curencies"] = this.context.Curencies.ToList();
+            this.ViewData["Accounts"] = this.context.Accounts
+                .Include(account => account.Curency)
+                .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .ToList();
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult LoanSell(LoanSellInputModel model)
+        public IActionResult LoanSell(SellsLoanInputModel model)
         {
+            this.ViewData["Accounts"] = this.context.Accounts
+                .Include(account => account.Curency)
+                .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .ToList();
 
-            var loan = new Loan
+            var userAcc = this.context.Accounts
+                .Where(x => x.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Select(x => x.Id)
+                .ToList();
+
+            if (!userAcc.Contains(model.AccountId))
+            {
+                return this.Redirect("/Sells/LoanSell");
+            }
+
+            Loan loan = new Loan
             {
 
                 Amount = model.Amount,
@@ -45,15 +63,20 @@ namespace BankCloud.Web.Controllers
                 SellerID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 Period = model.Period,
                 Name = model.Name,
-                Curency = context.Curencies.SingleOrDefault(curency => curency.Id == model.Curency),
-                Commission = model.Commission
+                AccountId = model.AccountId,
+                Commission = model.Commission,
             };
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
 
             context.Loans.Add(loan);
             context.SaveChanges();
 
-            return Redirect("/Products/LoanAll");
+            return Redirect("/Products/Loans");
         }
-
     }
 }

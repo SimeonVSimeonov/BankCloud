@@ -10,6 +10,8 @@ namespace BankCloud.Models.ViewModels
 
         public string Buyer { get; set; }
 
+        public string AccountForTransfer { get; set; }
+
         public IEnumerable<UsersAccountViewModel> BuyerAcconts { get; set; }
 
         public string Status { get; set; }

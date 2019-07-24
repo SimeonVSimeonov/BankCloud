@@ -18,5 +18,7 @@ namespace BankCloud.Models.ViewModels
         public decimal MonthlyFee { get; set; }
 
         public string Status { get; set; }
+
+        public string CurencyIso { get; set; }
     }
 }

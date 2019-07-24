@@ -1,6 +1,6 @@
 ﻿namespace BankCloud.Models.ViewModels
 {
-    public class LoanDetailViewModel
+    public class ProductsLoanDetailsViewModel
     {
         public string Id { get; set; }
 

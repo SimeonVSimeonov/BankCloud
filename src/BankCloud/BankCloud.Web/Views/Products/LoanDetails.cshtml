@@ -1,4 +1,4 @@
-﻿@model BankCloud.Models.ViewModels.LoanDetailViewModel
+﻿@model BankCloud.Models.ViewModels.ProductsLoanDetailsViewModel
 
 @{
     ViewData["Title"] = "LoanDetails";
@@ -124,11 +124,13 @@
                             <div class="mx-auto">
                                 @if (User.Identity.Name == @Model.SellerEmail)
                                 {
-                                    <a href="/Products/LoanAll" class="btn btn-a">Back</a>
+                                    <a href="/Products/Loans" class="btn btn-a">Back</a>
+                                    <a href="/Products/LoanDelete/@Model.Id" class="btn btn-a">Delete</a>
                                 }
                                 else
                                 {
                                     <a href="/Orders/LoanOrder/@Model.Id" class="btn btn-a">Order</a>
+                                    <a href="/Products/Loans" class="btn btn-a">Back</a>
                                 }
                             </div>
                         </div>

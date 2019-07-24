@@ -1,7 +1,9 @@
-﻿namespace BankCloud.Models.BindingModels
+﻿namespace BankCloud.Models.ViewModels
 {
-    public class LoanSellInputModel
+    public class ProductsLoansViewModel
     {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public decimal InterestRate { get; set; }
@@ -10,12 +12,7 @@
 
         public decimal Amount { get; set; }
 
-        public string Seller { get; set; }
-
         public string Curency { get; set; }
 
-        public decimal Commission { get; set; }
-
-        public string AccountId { get; set; }
     }
 }

@@ -4,80 +4,95 @@
     ViewData["Title"] = "MyLoan";
 }
 
-<h1>MyLoan</h1>
+<section class="section-agents section-t8">
+    <h1>MyLoan</h1>
 
-<div>
-    <h4>MyOrderedLoansViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Seller)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Seller)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IssuedOn)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IssuedOn)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CompletedOn)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CompletedOn)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Period)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Period)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Commission)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Commission)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MonthlyFee)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MonthlyFee)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InterestRate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InterestRate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a href="/Users/AllMyLoans">Back to List</a>
-</div>
+    <div>
+        <h4>MyOrderedLoansViewModel</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Seller)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Seller)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IssuedOn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IssuedOn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CompletedOn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CompletedOn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Period)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Period)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Amount)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Amount)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Commission)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Commission)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.MonthlyFee)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MonthlyFee)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DueAmount)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DueAmount)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CurencyIso)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CurencyIso)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.InterestRate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.InterestRate) %
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Account)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Account)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a href="/Users/AllMyLoans">Back to List</a>
+    </div>
+</section>
 
-@* 
-   
-   
-    
-    CompletedOn = orderLoan.CompletedOn.ToString(),*@

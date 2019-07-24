@@ -24,9 +24,11 @@
                     @Html.DisplayNameFor(model => model.MonthlyFee)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.CurencyIso)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +46,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MonthlyFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurencyIso)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status)
