@@ -72,7 +72,6 @@ namespace BankCloud.Web.Controllers
                 return this.View(model);
             }
 
-
             context.Loans.Add(loan);
             context.SaveChanges();
 

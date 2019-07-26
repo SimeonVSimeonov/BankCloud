@@ -22,6 +22,7 @@ namespace BankCloud.Web.Controllers
         public IActionResult Loans()
         {
             var loanFromDb = this.context.Loans
+                .Where(loan => loan.IsDeleted == false)
                 .Include(curency => curency.Account.Curency)
                 .ToList();
 
@@ -56,7 +57,7 @@ namespace BankCloud.Web.Controllers
                 Period = loan.Period,
                 CurencyIso = loan.Account.Curency.IsoCode,
                 CurencyName = loan.Account.Curency.Name,
-                Commission = loan.Commission, //TODO: implement this in sales
+                Commission = loan.Commission,
                 Seller = loan.Seller.Name,
                 SellerEmail = loan.Seller.Email
             };
@@ -65,47 +66,5 @@ namespace BankCloud.Web.Controllers
             return this.View(viewModel);
         }
 
-        public async Task<IActionResult> LoanDelete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Loan loanFromDb = await this.context.Loans
-                .Where(loan => loan.Id == id)
-                .Include(curency => curency.Account.Curency)
-                .Include(user => user.Seller)
-                .SingleOrDefaultAsync();
-
-            if (loanFromDb == null)
-            {
-                return NotFound();
-            }
-
-            var view = new ProductsLoanDetailsViewModel()
-            {
-                Id = loanFromDb.Id,
-                Name = loanFromDb.Name,
-                Amount = loanFromDb.Amount,
-                InterestRate = loanFromDb.InterestRate,
-                Commission = loanFromDb.Commission,
-                Period = loanFromDb.Period,
-                CurencyIso = loanFromDb.Account.Curency.IsoCode,
-                CurencyName = loanFromDb.Account.Curency.Name,
-            };
-
-            return View(view);
-        }
-
-        [HttpPost, ActionName("LoanDelete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoanDeleteConfirmed(string id)
-        {
-            Loan loan = await this.context.Loans.FindAsync(id);
-            this.context.Loans.Remove(loan);
-            await this.context.SaveChangesAsync();
-            return Redirect("/Products/Loans");
-        }
     }
 }

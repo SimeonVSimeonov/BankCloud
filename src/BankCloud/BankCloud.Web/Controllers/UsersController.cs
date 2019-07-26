@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
+using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Common;
@@ -20,13 +21,10 @@ namespace BankCloud.Web.Controllers
     public class UsersController : Controller
     {
         private readonly BankCloudDbContext context;
-        private readonly UserManager<BankUser> userManager;
 
-        public UsersController(BankCloudDbContext context,
-            UserManager<BankUser> userManager)
+        public UsersController(BankCloudDbContext context)
         {
             this.context = context;
-            this.userManager = userManager;
         }
 
         public IActionResult Products(string id)
@@ -146,17 +144,153 @@ namespace BankCloud.Web.Controllers
             return Redirect("/Users/Accounts");
         }
 
-        public IActionResult AllMyLoans(MyOrderedLoansViewModel model)
+        public IActionResult ProductLoans()
+        {
+            List<Loan> loanFromDb = this.context.Loans
+                .Include(curency => curency.Account.Curency)
+                .Where(loan => loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                && loan.IsDeleted == false)
+                .ToList();
+
+            var view = loanFromDb.Select(loan => new ProductsLoansViewModel
+            {
+                Id = loan.Id,
+                Name = loan.Name,
+                Amount = loan.Amount,
+                Curency = loan.Account.Curency.IsoCode,
+                InterestRate = loan.InterestRate,
+                Period = loan.Period,
+            });
+
+            return View(view);
+        }
+
+        [HttpGet("/Users/ProductLoanDetails/{id}")]
+        public IActionResult ProductLoanDetails(string id)
+        {
+            Loan loan = this.context.Loans
+               .Where(loanFromDb => loanFromDb.Id == id)
+               .Include(curency => curency.Account.Curency)
+               .Include(user => user.Seller)
+               .SingleOrDefault();
+
+            ProductsLoanDetailsViewModel view = new ProductsLoanDetailsViewModel()
+            {
+                Id = loan.Id,
+                Amount = loan.Amount,
+                InterestRate = loan.InterestRate,
+                Name = loan.Name,
+                Period = loan.Period,
+                CurencyIso = loan.Account.Curency.IsoCode,
+                CurencyName = loan.Account.Curency.Name,
+                Commission = loan.Commission,
+                Seller = loan.Seller.Name,
+                SellerEmail = loan.Seller.Email
+            };
+
+
+            return this.View(view);
+        }
+
+        public IActionResult LoanDelete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Loan loanFromDb = this.context.Loans
+                .Where(loan => loan.Id == id)
+                .Include(curency => curency.Account.Curency)
+                .Include(user => user.Seller)
+                .SingleOrDefault();
+
+            if (loanFromDb == null)
+            {
+                return NotFound();
+            }
+
+            var view = new ProductsLoanDetailsViewModel()
+            {
+                Id = loanFromDb.Id,
+                Name = loanFromDb.Name,
+                Amount = loanFromDb.Amount,
+                InterestRate = loanFromDb.InterestRate,
+                Commission = loanFromDb.Commission,
+                Period = loanFromDb.Period,
+                CurencyIso = loanFromDb.Account.Curency.IsoCode,
+                CurencyName = loanFromDb.Account.Curency.Name,
+            };
+
+            return View(view);
+        }
+
+        [HttpPost, ActionName("LoanDelete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult LoanDeleteConfirmed(string id)
+        {
+            Loan loan = this.context.Loans.Find(id);
+            var pendingLoanIds = this.context.OrderLoans
+                .Where(orderedLoan => orderedLoan.Status == OrderStatus.Pending)
+                .Select(orderedLoan => orderedLoan.LoanId);
+
+            if (pendingLoanIds.Contains(loan.Id))
+            {
+                return this.Redirect("/CreditScorings/PendingRequests");
+            }
+
+            loan.IsDeleted = true;
+            //this.context.Loans.Remove(loan);
+            this.context.SaveChanges();
+            return Redirect("/Users/ProductLoans");
+        }
+
+        public IActionResult ArchivedProductLoans()
+        {
+            List<Loan> loanFromDb = this.context.Loans
+                .Include(curency => curency.Account.Curency)
+                .Where(loan => loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                && loan.IsDeleted == true)
+                .ToList();
+
+            var view = loanFromDb.Select(loan => new ProductsLoansViewModel
+            {
+                Id = loan.Id,
+                Name = loan.Name,
+                Amount = loan.Amount,
+                Curency = loan.Account.Curency.IsoCode,
+                InterestRate = loan.InterestRate,
+                Period = loan.Period,
+            });
+
+            return View(view);
+        }
+
+        [HttpGet("/Users/RestoreProductloan/{id}")]
+        public IActionResult RestoreProductloan(string id)
+        {
+            Loan loanFromDb = this.context.Loans
+                .SingleOrDefault(loan => loan.Id == id);
+
+            loanFromDb.IsDeleted = false;
+
+            this.context.SaveChanges();
+
+            return this.Redirect("/Users/ProductLoans");
+        }
+
+        public IActionResult OrderedLoans(UsersOrderedLoansViewModel model)
         {
             List<OrderLoan> AllOrderLoansFormDb = this.context
                 .OrderLoans
                 .Include(orderLoan => orderLoan.Loan)
                 .ThenInclude(loan => loan.Account.Curency)
                 .Where(orderLoan => orderLoan.BuyerId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                //&& orderLoan.LoanId != null)
                 .ToList();
 
             var viewAllOrderLoans = AllOrderLoansFormDb
-                .Select(loanFromDb => new MyOrderedLoansViewModel
+                .Select(loanFromDb => new UsersOrderedLoansViewModel
                 {
                     Amount = loanFromDb.Amount,
                     MonthlyFee = loanFromDb.MonthlyFee,
@@ -170,8 +304,8 @@ namespace BankCloud.Web.Controllers
             return View(viewAllOrderLoans);
         }
 
-        [HttpGet("/Users/MyLoan/{id}")]
-        public IActionResult MyLoan(string id)
+        [HttpGet("/Users/OrderedLoanDetails/{id}")]
+        public IActionResult OrderedLoanDetails(string id)
         {
             OrderLoan orderLoanFromDB = this.context
                 .OrderLoans

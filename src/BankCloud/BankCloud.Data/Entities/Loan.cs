@@ -18,6 +18,8 @@ namespace BankCloud.Data.Entities
 
         public decimal Commission { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string SellerID { get; set; }
         public BankUser Seller { get; set; }
 

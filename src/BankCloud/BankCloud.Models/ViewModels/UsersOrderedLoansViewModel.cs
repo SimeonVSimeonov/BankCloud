@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BankCloud.Models.ViewModels
 {
-    public class MyOrderedLoansViewModel
+    public class UsersOrderedLoansViewModel
     {
         public string Id { get; set; }
 

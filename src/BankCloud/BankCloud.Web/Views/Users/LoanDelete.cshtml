@@ -1,0 +1,92 @@
+﻿@model BankCloud.Models.ViewModels.ProductsLoanDetailsViewModel
+
+@{
+    ViewData["Title"] = "ProductLoanDelete";
+}
+
+<section class="section-agents section-t8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1>Are you sure you want to delete this?</h1>
+                    <h3 class="title-single">@Model.Name</h3>
+                    <span class="color-text-a">After delete you can not restore your data</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/Users/ProductLoans">Loans</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<hr />
+<section class="property-single nav-arrow-b">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="property-summary">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="title-box-d section-t4">
+                                <h3 class="title-d">Quick Summary</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-list">
+                        <ul class="list">
+                            <li class="d-flex justify-content-between">
+                                <strong>Product Name:</strong>
+                                <span>@Model.Name</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Interest Rate:</strong>
+                                <span>@Model.InterestRate%</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Period:</strong>
+                                <span>@Model.Period months</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Amount:</strong>
+                                <span>@Model.Amount @Model.CurencyIso</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Charge Absorption:</strong>
+                                <span>@Model.Commission %</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Curency:</strong>
+                                <span>@Model.CurencyName</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+        <div>
+            <center>
+                <h4>Please be sure you have no pending orders before delete a product!</h4>
+            </center>
+        </div>
+        <div>
+            <center>
+                <form asp-action="LoanDelete" class="">
+                    <a href="/Users/ProductLoanDetails/@Model.Id" class="btn btn-a">Back</a>
+                    <input type="submit" value="Delete" class="btn btn-a" />
+                </form>
+            </center>
+        </div>
+    </div>
+</section>

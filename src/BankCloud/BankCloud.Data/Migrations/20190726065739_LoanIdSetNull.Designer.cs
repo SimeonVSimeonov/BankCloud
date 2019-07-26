@@ -4,14 +4,16 @@ using BankCloud.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankCloud.Data.Migrations
 {
     [DbContext(typeof(BankCloudDbContext))]
-    partial class BankCloudDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190726065739_LoanIdSetNull")]
+    partial class LoanIdSetNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,8 +256,6 @@ namespace BankCloud.Data.Migrations
                     b.Property<decimal>("Commission");
 
                     b.Property<decimal>("InterestRate");
-
-                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -645,7 +645,7 @@ namespace BankCloud.Data.Migrations
                     b.HasOne("BankCloud.Data.Entities.Loan", "Loan")
                         .WithMany()
                         .HasForeignKey("LoanId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.OrderPayments", b =>

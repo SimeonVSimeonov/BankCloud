@@ -22,23 +22,23 @@ namespace BankCloud.Web.Controllers
             this.context = context;
         }
 
-        [HttpGet("/Orders/LoanOrder/{id}")]
+        [HttpGet("/Orders/OrderLoan/{id}")]
         [Authorize]
-        public IActionResult LoanOrder(string id)
+        public IActionResult OrderLoan(string id)
         {
             Loan loanFromDb = this.context.Loans
                 .Include(loan => loan.Account)
                 .ThenInclude(account => account.Curency)
                 .SingleOrDefault(loan => loan.Id == id);
 
-            BankUser user = this.context.Users
-                .Include(u => u.Accounts)
-                .ThenInclude(a => a.Curency)
-                .SingleOrDefault(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BankUser userFromDb = this.context.Users
+                .Include(user => user.Accounts)
+                .ThenInclude(account => account.Curency)
+                .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            this.ViewData["Accounts"] = user.Accounts.ToList();
+            this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
 
-            LoanOrderInputModel model = new LoanOrderInputModel()
+            OrdersOrderLoanInputModel model = new OrdersOrderLoanInputModel()
             {
                 Name = loanFromDb.Name,
                 Amount = loanFromDb.Amount,
@@ -55,12 +55,29 @@ namespace BankCloud.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult LoanOrder(LoanOrderInputModel model)
+        public IActionResult OrderLoan(OrdersOrderLoanInputModel model)
         {
-            var loanFromDb = this.context.Loans.SingleOrDefault(loan => loan.Id == model.Id);
+            decimal monthlyFee = 0m;
 
-            BankUser user = this.context.Users.Include(u => u.Accounts)
-                .SingleOrDefault(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            Loan loanFromDb = this.context.Loans
+                .Include(loan => loan.Account)
+                .ThenInclude(account => account.Curency)
+                .SingleOrDefault(loan => loan.Id == model.Id);
+
+            BankUser userFromDb = this.context.Users
+                 .Include(user => user.Accounts)
+                 .ThenInclude(account => account.Curency)
+                 .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
+
+            if (model.Period != 0)
+            {
+                monthlyFee = decimal
+                  .Round(((model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1)),
+                                                                      2, MidpointRounding.AwayFromZero);
+            }
+
 
             var orderLoan = new OrderLoan()
             {
@@ -73,31 +90,31 @@ namespace BankCloud.Web.Controllers
                 Name = loanFromDb.Name,
                 InterestRate = loanFromDb.InterestRate,
                 Period = model.Period,
-                MonthlyFee = decimal
-                .Round(((model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1)),
-                                                                    2, MidpointRounding.AwayFromZero),
-                AccountId = model.AccountId
+                MonthlyFee = monthlyFee,
+                AccountId = model.AccountId,
             };
 
             //TODO: add message for invalid parameters
 
-            if (model.Amount > loanFromDb.Amount 
+            if (!userFromDb.Accounts.Any())
+            {
+                return this.Redirect("/Users/AccountActivate");
+            }
+
+            if (!ModelState.IsValid || model.Amount > loanFromDb.Amount 
                 || model.Period > loanFromDb.Period 
                 || model.InterestRate != loanFromDb.InterestRate)
             {
-                return this.RedirectToAction();
-            }
-
-            if (!user.Accounts.Any())
-            {
-                return this.Redirect("/Users/AccountActivate");
+                model.Name = loanFromDb.Name;
+                //model.CurencyName = loanFromDb.Account.Curency.Name;
+                return this.View(model);
             }
 
             this.context.OrderLoans.Add(orderLoan);
 
             this.context.SaveChanges();
 
-            return this.Redirect("/Users/AllMyLoans");
+            return this.Redirect("/Users/OrderedLoans");
         }
     }
 }

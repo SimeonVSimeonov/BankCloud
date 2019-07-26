@@ -56,6 +56,12 @@ namespace BankCloud.Data.Context
             //    .WithOne()
             //    .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<OrderLoan>()
+                .HasOne(ol => ol.Loan)
+                .WithMany()
+                .HasForeignKey(x => x.LoanId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Loan>()
                 .HasOne(a => a.Account)
                 .WithMany(a => a.Loans)

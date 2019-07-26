@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BankCloud.Models.ViewModels.ProductsLoansViewModel>
 
 @{
-    ViewData["Title"] = "Loans";
+    ViewData["Title"] = "ProductLoans";
 }
 
 <section class="section-agents section-t8">
@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12 col-lg-8">
                 <div class="title-single-box">
-                    <h1 class="title-single">Our Amazing Loans</h1>
+                    <h1 class="title-single">Your Amazing Product Loans</h1>
                     <span class="color-text-a">Grid Loans</span>
                 </div>
             </div>
@@ -17,10 +17,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Loans Grid
+                            <a href="/Users/Products">Back</a>
                         </li>
                     </ol>
                 </nav>
@@ -35,12 +32,12 @@
             <div class="col-sm-12">
                 <div class="grid-option">
                     @*<form>
-                        <select class="custom-select">
-                            <option selected>All</option>
-                            <option value="1">New to Old</option>
-                            <option value="2">Old  to New</option>
-                        </select>
-                    </form>*@
+                            <select class="custom-select">
+                                <option selected>All</option>
+                                <option value="1">New to Old</option>
+                                <option value="2">Old  to New</option>
+                            </select>
+                        </form>*@
                 </div>
             </div>
             @foreach (var item in Model)
@@ -54,7 +51,7 @@
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="/Products/LoanDetails/@item.Id">
+                                        <a href="/Users/ProductLoanDetails/@item.Id">
                                             Loan
                                             <br /> @item.Name
                                         </a>
@@ -62,7 +59,7 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <a href="/Products/LoanDetails/@item.Id"><span class="price-a">Buy now</span></a>
+                                        <a href="/Users/ProductLoanDetails/@item.Id"><span class="price-a">Details</span></a>
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
