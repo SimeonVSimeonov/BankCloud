@@ -14,7 +14,7 @@ using BankCloud.Data.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BankCloud.Data.Entities;
-
+using FixerSharp;
 
 namespace BankCloud.Web
 {
@@ -46,6 +46,16 @@ namespace BankCloud.Web
                 .AddEntityFrameworkStores<BankCloudDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MessagesCORSPolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://data.fixer.io/api/latest?access_key=391ea2067e573b4fd36e33b16e9f7ae8")
+                        .AllowAnyHeader();
+                    });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -64,6 +74,8 @@ namespace BankCloud.Web
                 app.UseHsts();
             }
 
+            Fixer.SetApiKey("391ea2067e573b4fd36e33b16e9f7ae8");
+
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 using (var context = serviceScope.ServiceProvider.GetRequiredService<BankCloudDbContext>())
@@ -77,29 +89,29 @@ namespace BankCloud.Web
                         context.Roles.Add(new BankUserRole { Name = "Agent", NormalizedName = "AGENT" });
                     }
 
-                    if (!context.Curencies.Any())
+                    if (!context.Currencies.Any())
                     {
-                        context.Curencies.Add(new Curency
+                        context.Currencies.Add(new Currency
                         {
                             IsoCode = "USD",
                             Name = "American Dollar",
-                            Type = Data.Entities.Enums.CurencyType.International,
+                            Type = Data.Entities.Enums.CurrencyType.International,
                             ТrustLevel = 9
                         });
 
-                        context.Curencies.Add(new Curency
+                        context.Currencies.Add(new Currency
                         {
                             IsoCode = "EUR",
                             Name = "Euro",
-                            Type = Data.Entities.Enums.CurencyType.International,
+                            Type = Data.Entities.Enums.CurrencyType.International,
                             ТrustLevel = 9
                         });
 
-                        context.Curencies.Add(new Curency
+                        context.Currencies.Add(new Currency
                         {
                             IsoCode = "BGN",
                             Name = "Bulgarian Lev",
-                            Type = Data.Entities.Enums.CurencyType.National,
+                            Type = Data.Entities.Enums.CurrencyType.National,
                             ТrustLevel = 9
                         });
                     }

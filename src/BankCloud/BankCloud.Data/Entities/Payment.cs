@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankCloud.Data.Entities
+﻿namespace BankCloud.Data.Entities
 {
     public class Payment
     {
@@ -13,7 +9,7 @@ namespace BankCloud.Data.Entities
         public string SellerID { get; set; }
         public BankUser Seller { get; set; }
 
-        public string CurencyId { get; set; }
-        public Curency Curency { get; set; }
+        public string CurrencyId { get; set; }
+        public Currency Currency { get; set; }
     }
 }

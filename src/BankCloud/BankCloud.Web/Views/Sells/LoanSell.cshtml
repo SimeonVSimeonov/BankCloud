@@ -58,7 +58,7 @@
                                 <option value="" selected>Choose Account</option>
                                 @foreach (var account in (List<Account>)ViewData["Accounts"])
                                 {
-                                    <option value="@account.Id">@account.IBAN | @account.Balance | @account.Curency.IsoCode</option>
+                                    <option value="@account.Id">@account.IBAN | @account.Balance | @account.Currency.IsoCode</option>
                                 };
                             </select>
                             <span asp-validation-for="AccountId" class="text-danger"></span>

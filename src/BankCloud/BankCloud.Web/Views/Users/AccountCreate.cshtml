@@ -26,15 +26,13 @@
                     <span asp-validation-for="MonthlyIncome" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Curency" class="control-label"></label>
-                    <select asp-for="Curency" class="custom-select">
+                    <label asp-for="Currency" class="control-label"></label>
+                    <select asp-for="Currency" class="custom-select">
                         <option selected>Curency</option>
-                        @foreach (var curency in (List
-                        <Curency>
-                            )ViewData["Curencies"])
-                            {
-                            <option value="@curency.Id">@curency.IsoCode</option>
-                            };
+                        @foreach (var currency in (List<Currency>)ViewData["Curencies"])
+                        {
+                            <option value="@currency.Id">@currency.IsoCode</option>
+                        };
                     </select>
                 </div>
                 <div class="form-group">

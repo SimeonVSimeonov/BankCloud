@@ -19,6 +19,8 @@ namespace BankCloud.Models.ViewModels
 
         public string Status { get; set; }
 
-        public string CurencyIso { get; set; }
+        public string Feedback { get; set; }
+
+        public string CurrencyIso { get; set; }
     }
 }

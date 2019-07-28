@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankCloud.Models.ViewModels
+﻿namespace BankCloud.Models.ViewModels
 {
     public class CreditScoringsOrderedLoansViewModel
     {
@@ -20,6 +16,6 @@ namespace BankCloud.Models.ViewModels
 
         public decimal MonthlyFee { get; set; }
 
-        public string Curency { get; set; }
+        public string Currency { get; set; }
     }
 }

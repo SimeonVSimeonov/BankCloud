@@ -4,14 +4,16 @@ using BankCloud.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankCloud.Data.Migrations
 {
     [DbContext(typeof(BankCloudDbContext))]
-    partial class BankCloudDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190727114634_LoanAdUrl")]
+    partial class LoanAdUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +30,7 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<string>("BankUserId");
 
-                    b.Property<string>("CurrencyId");
+                    b.Property<string>("CurencyId");
 
                     b.Property<string>("IBAN");
 
@@ -40,7 +42,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasIndex("BankUserId");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("CurencyId");
 
                     b.ToTable("Accounts");
                 });
@@ -193,7 +195,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Curencies");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Insurance", b =>
@@ -203,7 +205,7 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<decimal>("Coverage");
 
-                    b.Property<string>("CurrencyId");
+                    b.Property<string>("CurencyId");
 
                     b.Property<decimal>("Installment");
 
@@ -215,7 +217,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("CurencyId");
 
                     b.HasIndex("SellerID");
 
@@ -227,7 +229,7 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CurrencyId");
+                    b.Property<string>("CurencyId");
 
                     b.Property<string>("Name");
 
@@ -235,7 +237,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("CurencyId");
 
                     b.HasIndex("SellerID");
 
@@ -428,7 +430,7 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CurrencyId");
+                    b.Property<string>("CurencyId");
 
                     b.Property<string>("Name");
 
@@ -436,7 +438,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("CurencyId");
 
                     b.HasIndex("SellerID");
 
@@ -448,7 +450,7 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CurrencyId");
+                    b.Property<string>("CurencyId");
 
                     b.Property<string>("Name");
 
@@ -456,7 +458,7 @@ namespace BankCloud.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("CurencyId");
 
                     b.HasIndex("SellerID");
 
@@ -555,9 +557,9 @@ namespace BankCloud.Data.Migrations
                         .WithMany("Accounts")
                         .HasForeignKey("BankUserId");
 
-                    b.HasOne("BankCloud.Data.Entities.Currency", "Currency")
+                    b.HasOne("BankCloud.Data.Entities.Currency", "Curency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurencyId");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.BankUser", b =>
@@ -577,9 +579,9 @@ namespace BankCloud.Data.Migrations
 
             modelBuilder.Entity("BankCloud.Data.Entities.Insurance", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.Currency", "Currency")
+                    b.HasOne("BankCloud.Data.Entities.Currency", "Curency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurencyId");
 
                     b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
                         .WithMany()
@@ -588,9 +590,9 @@ namespace BankCloud.Data.Migrations
 
             modelBuilder.Entity("BankCloud.Data.Entities.Investment", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.Currency", "Currency")
+                    b.HasOne("BankCloud.Data.Entities.Currency", "Curency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurencyId");
 
                     b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
                         .WithMany()
@@ -676,9 +678,9 @@ namespace BankCloud.Data.Migrations
 
             modelBuilder.Entity("BankCloud.Data.Entities.Payment", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.Currency", "Currency")
+                    b.HasOne("BankCloud.Data.Entities.Currency", "Curency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurencyId");
 
                     b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
                         .WithMany()
@@ -687,9 +689,9 @@ namespace BankCloud.Data.Migrations
 
             modelBuilder.Entity("BankCloud.Data.Entities.Save", b =>
                 {
-                    b.HasOne("BankCloud.Data.Entities.Currency", "Currency")
+                    b.HasOne("BankCloud.Data.Entities.Currency", "Curency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurencyId");
 
                     b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
                         .WithMany()

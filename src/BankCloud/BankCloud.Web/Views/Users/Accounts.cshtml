@@ -5,59 +5,103 @@
 }
 
 <section class="section-agents section-t8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">Accounts</h1>
+                    <span class="color-text-a">Grid Accounts</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-between">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-action="AccountCreate">Create New</a>
+                        </li>
+                    </ol>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <h1>Accounts</h1>
-
-    <p class="text-center">
-        <a asp-action="AccountCreate">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.IBAN)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MonthlyIncome)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Balance)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CurencyIso)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CurencyName)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+<section class="property-grid grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="grid-option">
+                    @*<form>
+                            <select class="custom-select">
+                                <option selected>All</option>
+                                <option value="1">New to Old</option>
+                                <option value="2">Old  to New</option>
+                            </select>
+                        </form>*@
+                </div>
+            </div>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IBAN)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MonthlyIncome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Balance)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CurencyIso)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CurencyName)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+                <div class="col-md-4">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="/Accounts/Charge/@item.Id">
+                                            @item.CurrencyName
+                                            <br /> @item.CurrencyIso
+                                            <br /><span class="h4">@item.IBAN</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex justify-content-between">
+                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">Charge</span></a>
+                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">Detail</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Balance
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Income</h4>
+                                            <span>
+                                                @item.MonthlyIncome
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">OutCome</h4>
+                                            <span>
+                                                @item.MonthlyOutCome
+                                            </span>
+                                        </li>
+                                        @*<li>
+                                                <h4 class="card-info-title">Period</h4>
+                                                <span>
+                                                    @item.Period months
+                                                </span>
+                                            </li>*@
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    </div>
 </section>

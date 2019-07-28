@@ -13,7 +13,7 @@ namespace BankCloud.Data.Context
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CreditScoring> CreditScorings { get; set; }
-        public DbSet<Curency> Curencies { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
 
         public DbSet<Loan> Loans { get; set; }
         public DbSet<OrderLoan> OrderLoans { get; set; }

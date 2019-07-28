@@ -23,7 +23,7 @@ namespace BankCloud.Web.Controllers
         {
             var loanFromDb = this.context.Loans
                 .Where(loan => loan.IsDeleted == false)
-                .Include(curency => curency.Account.Curency)
+                .Include(curency => curency.Account.Currency)
                 .ToList();
 
             var view = loanFromDb.Select(loan => new ProductsLoansViewModel
@@ -31,7 +31,7 @@ namespace BankCloud.Web.Controllers
                 Id = loan.Id,
                 Name = loan.Name,
                 Amount = loan.Amount,
-                Curency = loan.Account.Curency.IsoCode,
+                Currency = loan.Account.Currency.IsoCode,
                 InterestRate = loan.InterestRate,
                 Period = loan.Period,
             });
@@ -44,7 +44,7 @@ namespace BankCloud.Web.Controllers
         {
             Loan loan = this.context.Loans
                 .Where(loanFromDb => loanFromDb.Id == id)
-                .Include(curency => curency.Account.Curency)
+                .Include(curency => curency.Account.Currency)
                 .Include(user => user.Seller)
                 .SingleOrDefault();
 
@@ -55,8 +55,8 @@ namespace BankCloud.Web.Controllers
                 InterestRate = loan.InterestRate,
                 Name = loan.Name,
                 Period = loan.Period,
-                CurencyIso = loan.Account.Curency.IsoCode,
-                CurencyName = loan.Account.Curency.Name,
+                CurrencyIso = loan.Account.Currency.IsoCode,
+                CurrencyName = loan.Account.Currency.Name,
                 Commission = loan.Commission,
                 Seller = loan.Seller.Name,
                 SellerEmail = loan.Seller.Email

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BankCloud.Models.ViewModels.ProductsLoansViewModel>
+﻿@model IEnumerable<BankCloud.Models.ViewModels.CreditScoringsOrderedLoansViewModel>
 
 @{
-    ViewData["Title"] = "ProductLoans";
+    ViewData["Title"] = "RejectedRequests";
 }
 
 <section class="section-agents section-t8">
@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12 col-lg-8">
                 <div class="title-single-box">
-                    <h1 class="title-single">Your Amazing Product Loans</h1>
+                    <h1 class="title-single">Your Rejected Sells</h1>
                     <span class="color-text-a">Grid Loans</span>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/Users/Products">Back</a>
+                            <a href="/CreditScorings/MySells">Back</a>
                         </li>
                     </ol>
                 </nav>
@@ -51,7 +51,7 @@
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="/Users/ProductLoanDetails/@item.Id">
+                                        <a href="/CreditScorings/DetailRequest/@item.Id">
                                             Loan
                                             <br /> @item.Name
                                         </a>
@@ -59,15 +59,21 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <a href="/Users/ProductLoanDetails/@item.Id"><span class="price-a">Details</span></a>
+                                        <a href="/CreditScorings/DetailRequest/@item.Id"><span class="price-a">Details</span></a>
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
                                     <ul class="card-info d-flex justify-content-around">
                                         <li>
-                                            <h4 class="card-info-title">Up to</h4>
+                                            <h4 class="card-info-title">Amount</h4>
                                             <span>
                                                 @item.Amount
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Monthly Fee</h4>
+                                            <span>
+                                                @item.MonthlyFee
                                             </span>
                                         </li>
                                         <li>
@@ -77,13 +83,7 @@
                                             </span>
                                         </li>
                                         <li>
-                                            <h4 class="card-info-title">Rate</h4>
-                                            <span>
-                                                @item.InterestRate %
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <h4 class="card-info-title">Period to</h4>
+                                            <h4 class="card-info-title">Period</h4>
                                             <span>
                                                 @item.Period months
                                             </span>
@@ -98,3 +98,4 @@
         </div>
     </div>
 </section>
+

@@ -61,10 +61,10 @@
                     <span asp-validation-for="Account.Charge" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Account.Curency" class="control-label"></label>
-                    <select asp-for="Account.Curency" class="custom-select">
+                    <label asp-for="Account.Currency" class="control-label"></label>
+                    <select asp-for="Account.Currency" class="custom-select">
                         <option selected>Curency</option>
-                        @foreach (var curency in (List<Curency>)ViewData["Curencies"])
+                        @foreach (var curency in (List<Currency>)ViewData["Curencies"])
                         {
                             <option value="@curency.Id">@curency.IsoCode</option>
                         };

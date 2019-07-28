@@ -11,7 +11,7 @@
             <h1 class="title-single"><span class="color-b">Ask for Loan</span></h1>
             <span class="color-text-a">@Model.Name</span>
             <span class="color-text-a">@Model.InterestRate %</span>
-            <span class="color-text-a">in @Model.CurencyName</span>
+            <span class="color-text-a">in @Model.CurrencyName</span>
             <br />
             <span class="color-text-a">Please insert your desired conditions</span>
         </div>
@@ -49,12 +49,19 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
+                            <label>BankCloud Advice!!!</label>
+                            <label>If you specify an account in another currency, you will be charged for conversion!</label>
+                            <a href="/Users/AccountCreate"><strong>Activate your free @Model.CurrencyName Account from here now!</strong></a>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
                             <label asp-for="AccountId" class="control-label"></label>
                             <select asp-for="AccountId" class="custom-select">
                                 <option value="" selected>Choose Account</option>
                                 @foreach (var account in (List<Account>)ViewData["Accounts"])
                                 {
-                                    <option value="@account.Id">@account.IBAN | @account.Balance | @account.Curency.IsoCode</option>
+                                    <option value="@account.Id">@account.IBAN | @account.Balance | @account.Currency.IsoCode</option>
                                 };
                             </select>
                             <span asp-validation-for="AccountId" class="text-danger"></span>

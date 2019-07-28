@@ -10,6 +10,8 @@ namespace BankCloud.Data.Entities
 
         public string Name { get; set; }
 
+        public string AdUrl { get; set; }//TODO: add this
+
         public decimal InterestRate { get; set; }
 
         public int Period { get; set; }

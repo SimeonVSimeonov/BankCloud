@@ -5,118 +5,213 @@
 }
 
 <section class="section-agents section-t8">
-    <h1>Loan Detail Request</h1>
-
-    <div class="col-md-6">
-        <h4>CreditScoringsOrderedLoanDetailViewModel</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Id)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Id)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Buyer)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Buyer)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Status)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Status)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Period)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Period)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Amount)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Amount)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.InterestRate)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.InterestRate)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.IssuedOn)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.IssuedOn)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.CompletedOn)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.CompletedOn)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Commission)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Commission)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.MonthlyFee)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.MonthlyFee)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Curency)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Curency)
-            </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.AccountForTransfer)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.AccountForTransfer)
-            </dd>
-        </dl>
-    </div>
-    <div class="col-md-6">
-        <table style="width:100%">
-            <tr>
-                <th>IBAN</th>
-                <th>Monthly Income</th>
-                <th>Monthly OutCome</th>
-                <th>Balance</th>
-                <th>Curency Iso</th>
-                <th>Curency Name</th>
-            </tr>
-            @foreach (var account in Model.BuyerAcconts)
-            {
-                <tr>
-                    <td>@account.IBAN</td>
-                    <td>@account.MonthlyIncome</td>
-                    <td>@account.MonthlyOutCome</td>
-                    <td>@account.Balance</td>
-                    <td>@account.CurencyIso</td>
-                    <td>@account.CurencyName</td>
-                </tr>
-            }
-        </table>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">@Model.Name</h1>
+                    <span class="color-text-a">Buyer: @Model.Buyer</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        @if (Model.Status == "Pending")
+                        {
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/PendingRequests">Pending</a>
+                            </li>
+                        }
+                        @if (Model.Status == "Approved")
+                        {
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/ApprovedRequests">Approved</a>
+                            </li>
+                        }
+                        @if (Model.Status == "Rejected")
+                        {
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/RejectedRequests">Rejected</a>
+                            </li>
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.Name
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 </section>
-<div>
-    <a href="/CreditScorings/ApproveRequest/@Model.Id">Approve</a> ||
-    <a href="/CreditScorings/PendingRequests">Back to List</a>
-</div>
+<hr />
+<section class="property-single nav-arrow-b">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="property-price d-flex justify-content-center foo">
+                    <div class="card-header-c d-flex">
+                        <div class="card-box-ico">
+                            <span class="ion-money">@Model.Currency</span>
+                        </div>
+                        <div class="card-title-c align-self-center">
+                            <h5 class="title-c">@Model.Amount</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-summary">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="title-box-d section-t4">
+                                <h3 class="title-d">Quick Summary</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-list">
+                        <ul class="list">
+                            <li class="d-flex justify-content-between">
+                                <strong>Product Name:</strong>
+                                <span>@Model.Name</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Buyer:</strong>
+                                <span>@Model.Buyer</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Issued On:</strong>
+                                <span>@Model.IssuedOn</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Completed On:</strong>
+                                <span>@Model.CompletedOn</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Status:</strong>
+                                <span>@Model.Status</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Interest Rate:</strong>
+                                <span>@Model.InterestRate%</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Amount:</strong>
+                                <span>@Model.Amount @Model.Currency</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Period:</strong>
+                                <span>@Model.Period months</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Charge Absorption:</strong>
+                                <span>@Model.Commission @Model.Currency</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>MonthlyFee:</strong>
+                                <span>@Model.MonthlyFee @Model.Currency</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>DueAmount:</strong>
+                                <span>@Model.Amount</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Curency:</strong>
+                                <span>@Model.CurrencyName</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Account For Transfer:</strong>
+                                <span>@Model.AccountForTransfer</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="row justify-content-between">
+                    <div class="col-md-7 col-lg-7 section-md-t3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="title-box-d">
+                                    <h3 class="title-d">Description</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="property-description">
+                            <p class="description color-text-a">
+                                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit
+                                neque, auctor sit amet
+                                aliquam vel, ullamcorper sit amet ligula. Cras ultricies ligula sed magna dictum porta.
+                                Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt
+                                nibh pulvinar quam id dui posuere blandit.
+                            </p>
+                            <p class="description color-text-a no-margin">
+                                Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec rutrum congue leo eget
+                                malesuada. Quisque velit nisi,
+                                pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="6">Accounts of Buyer: @Model.Buyer</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">IBAN</th>
+                            <th scope="col">Monthly Income</th>
+                            <th scope="col">Monthly OutCome</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Curency Iso</th>
+                            <th scope="col">Curency Name</th>
+                        </tr>
+                    </thead>
+                    @foreach (var account in Model.BuyerAcconts)
+                    {
+                        <tr>
+                            <td>@account.IBAN</td>
+                            <td>@account.MonthlyIncome</td>
+                            <td>@account.MonthlyOutCome</td>
+                            <td>@account.Balance</td>
+                            <td>@account.CurrencyIso</td>
+                            <td>@account.CurrencyName</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="container">
+        <div class="col-md-8 offset-md-2">
+            <div class="text-center">
+                @if (Model.Status == "Pending")
+                {
+                    <div class="form-group">
+                        <a class="btn btn-a" href="/CreditScorings/ApproveRequest/@Model.Id">Approve</a>
+                        <a class="btn btn-a" href="/CreditScorings/RejectRequest/@Model.Id">Reject</a>
+                    </div>
+                    <a href="/CreditScorings/PendingRequests">Back to Pending</a>
+                }
+                @if (Model.Status == "Approved")
+                {
+                    <a href="/CreditScorings/ApprovedRequests">Back to Approved</a>
+                }
+                @if (Model.Status == "Rejected")
+                {
+                    <a href="/CreditScorings/RejectedRequests">Back to Rejected</a>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+

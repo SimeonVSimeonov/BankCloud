@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
@@ -28,12 +26,12 @@ namespace BankCloud.Web.Controllers
         {
             Loan loanFromDb = this.context.Loans
                 .Include(loan => loan.Account)
-                .ThenInclude(account => account.Curency)
+                .ThenInclude(account => account.Currency)
                 .SingleOrDefault(loan => loan.Id == id);
 
             BankUser userFromDb = this.context.Users
                 .Include(user => user.Accounts)
-                .ThenInclude(account => account.Curency)
+                .ThenInclude(account => account.Currency)
                 .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
@@ -47,7 +45,7 @@ namespace BankCloud.Web.Controllers
                 MonthlyFee = decimal
                 .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
                                                                     2, MidpointRounding.AwayFromZero),
-                CurencyName = loanFromDb.Account.Curency.Name,
+                CurrencyName = loanFromDb.Account.Currency.Name,
             };
 
             return View(model);
@@ -61,12 +59,12 @@ namespace BankCloud.Web.Controllers
 
             Loan loanFromDb = this.context.Loans
                 .Include(loan => loan.Account)
-                .ThenInclude(account => account.Curency)
+                .ThenInclude(account => account.Currency)
                 .SingleOrDefault(loan => loan.Id == model.Id);
 
             BankUser userFromDb = this.context.Users
                  .Include(user => user.Accounts)
-                 .ThenInclude(account => account.Curency)
+                 .ThenInclude(account => account.Currency)
                  .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             this.ViewData["Accounts"] = userFromDb.Accounts.ToList();

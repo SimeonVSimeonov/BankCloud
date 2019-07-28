@@ -16,9 +16,9 @@
 
         public string SellerEmail { get; set; }
 
-        public string CurencyIso { get; set; }
+        public string CurrencyIso { get; set; }
 
-        public string CurencyName { get; set; }
+        public string CurrencyName { get; set; }
 
         public decimal Commission { get; set; }
     }

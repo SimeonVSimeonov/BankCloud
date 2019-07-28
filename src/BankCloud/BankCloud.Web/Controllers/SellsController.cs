@@ -30,7 +30,7 @@ namespace BankCloud.Web.Controllers
         public IActionResult LoanSell()
         {
             this.ViewData["Accounts"] = this.context.Accounts
-                .Include(account => account.Curency)
+                .Include(account => account.Currency)
                 .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 .ToList();
 
@@ -41,7 +41,7 @@ namespace BankCloud.Web.Controllers
         public IActionResult LoanSell(SellsLoanInputModel model)
         {
             this.ViewData["Accounts"] = this.context.Accounts
-                .Include(account => account.Curency)
+                .Include(account => account.Currency)
                 .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 .ToList();
 

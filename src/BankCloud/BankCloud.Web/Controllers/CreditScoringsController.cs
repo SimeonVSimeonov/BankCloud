@@ -9,6 +9,8 @@ using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
+using BankCloud.Services.Common;
+using FixerSharp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +34,7 @@ namespace BankCloud.Web.Controllers
         {
             var orderedLoansFromDb = this.context.OrderLoans
                 .Include(ol => ol.Loan)
-                .ThenInclude(oc => oc.Account.Curency)
+                .ThenInclude(oc => oc.Account.Currency)
                 .Include(ol => ol.Buyer)
                 .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
                         && ol.Status == OrderStatus.Pending)
@@ -47,7 +49,59 @@ namespace BankCloud.Web.Controllers
                 Period = order.Period,
                 MonthlyFee = order.MonthlyFee,
                 Commission = order.CostPrice,
-                Curency = order.Loan.Account.Curency.IsoCode,
+                Currency = order.Loan.Account.Currency.IsoCode,
+                Id = order.Id,
+            });
+
+            return View(requestView);
+        }
+
+        public IActionResult ApprovedRequests()
+        {
+            var orderedLoansFromDb = this.context.OrderLoans
+                .Include(ol => ol.Loan)
+                .ThenInclude(oc => oc.Account.Currency)
+                .Include(ol => ol.Buyer)
+                .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                        && ol.Status == OrderStatus.Approved)
+                .OrderByDescending(od => od.IssuedOn)
+                .ToList();
+
+            var requestView = orderedLoansFromDb.Select(order => new CreditScoringsOrderedLoansViewModel
+            {
+                Name = order.Name,
+                Amount = order.Amount,
+                Buyer = order.Buyer.Name,
+                Period = order.Period,
+                MonthlyFee = order.MonthlyFee,
+                Commission = order.CostPrice,
+                Currency = order.Loan.Account.Currency.IsoCode,
+                Id = order.Id,
+            });
+
+            return View(requestView);
+        }
+
+        public IActionResult RejectedRequests()
+        {
+            var orderedLoansFromDb = this.context.OrderLoans
+                .Include(ol => ol.Loan)
+                .ThenInclude(oc => oc.Account.Currency)
+                .Include(ol => ol.Buyer)
+                .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                        && ol.Status == OrderStatus.Rejected)
+                .OrderByDescending(od => od.IssuedOn)
+                .ToList();
+
+            var requestView = orderedLoansFromDb.Select(order => new CreditScoringsOrderedLoansViewModel
+            {
+                Name = order.Name,
+                Amount = order.Amount,
+                Buyer = order.Buyer.Name,
+                Period = order.Period,
+                MonthlyFee = order.MonthlyFee,
+                Commission = order.CostPrice,
+                Currency = order.Loan.Account.Currency.IsoCode,
                 Id = order.Id,
             });
 
@@ -60,12 +114,11 @@ namespace BankCloud.Web.Controllers
             OrderLoan orderedLoanFromDb = this.context.OrderLoans
                 .Include(orderedLoan => orderedLoan.Buyer)
                 .ThenInclude(buyer => buyer.Accounts)
-                .ThenInclude(loan => loan.Curency)
+                .ThenInclude(loan => loan.Currency)
                 .Include(orderedLoan => orderedLoan.Loan)
                 .ThenInclude(loan => loan.Account)
-                .ThenInclude(loanAccount => loanAccount.Curency)
+                .ThenInclude(loanAccount => loanAccount.Currency)
                 .SingleOrDefault(orderedLoan => orderedLoan.Id == id);
-
 
             var buyerAccounts = orderedLoanFromDb.Buyer.Accounts.ToList();
 
@@ -81,18 +134,19 @@ namespace BankCloud.Web.Controllers
                     IBAN = account.IBAN,
                     MonthlyIncome = account.MonthlyIncome,
                     MonthlyOutCome = account.MonthlyOutcome,
-                    CurencyIso = account.Curency.IsoCode,
-                    CurencyName = account.Curency.Name
+                    CurrencyIso = account.Currency.IsoCode,
+                    CurrencyName = account.Currency.Name
                 }),
                 Period = orderedLoanFromDb.Period,
                 IssuedOn = orderedLoanFromDb.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
                 CompletedOn = orderedLoanFromDb.CompletedOn?.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
                 MonthlyFee = orderedLoanFromDb.MonthlyFee,
                 Commission = orderedLoanFromDb.CostPrice,
-                Curency = orderedLoanFromDb.Loan.Account.Curency.IsoCode,
+                Currency = orderedLoanFromDb.Loan.Account.Currency.IsoCode,
+                CurrencyName = orderedLoanFromDb.Loan.Account.Currency.Name,
                 InterestRate = orderedLoanFromDb.InterestRate,
                 Id = orderedLoanFromDb.Id,
-                AccountForTransfer = orderedLoanFromDb.Account.IBAN + " | " + orderedLoanFromDb.Account.Curency.IsoCode,
+                AccountForTransfer = orderedLoanFromDb.Account.IBAN + " | " + orderedLoanFromDb.Account.Currency.IsoCode,
             };
             
             return View(requestView);
@@ -101,30 +155,70 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/CreditScorings/ApproveRequest/{id}")]
         public IActionResult ApproveRequest(string id)
         {
+
             OrderLoan orderedLoanFromDb = this.context.OrderLoans
                 .Include(orderLoan => orderLoan.Account)
-                .ThenInclude(orderedLoanAccount => orderedLoanAccount.Curency)
+                .ThenInclude(orderedLoanAccount => orderedLoanAccount.Currency)
                 .Include(orderLoan => orderLoan.Loan)
                 .ThenInclude(loan => loan.Account)
-                .ThenInclude(loanAccount => loanAccount.Curency)
+                .ThenInclude(loanAccount => loanAccount.Currency)
                 .SingleOrDefault(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
                         && ol.Id == id);
 
+            Account buyerAccount = orderedLoanFromDb.Account;
+            Account sellerAccount = orderedLoanFromDb.Loan.Account;
+
+            if (sellerAccount.Balance < orderedLoanFromDb.Amount)
+            {
+                this.TempData["error"] = GlobalConstants.ERROR_MESSAGE_FOR_INSUFFICIENT_FUNDS;
+
+                return this.Redirect("/Users/Accounts");
+            }
+
+            double orderCost = (double)orderedLoanFromDb.CostPrice;
+            double orderAmount = (double)orderedLoanFromDb.Amount;
+            double orderFee = (double)orderedLoanFromDb.MonthlyFee;
+
+            if (buyerAccount.Currency.IsoCode != sellerAccount.Currency.IsoCode)
+            {
+                ExchangeRate rateUsdGbp = Fixer
+                    .Rate(sellerAccount.Currency.IsoCode,buyerAccount.Currency.IsoCode);
+
+                orderCost = rateUsdGbp.Convert(orderCost);
+                orderAmount = rateUsdGbp.Convert(orderAmount);
+                orderFee = rateUsdGbp.Convert(orderFee);
+            }
+
+            buyerAccount.Balance -= (decimal)orderCost;
+            buyerAccount.Balance += (decimal)orderAmount;
+            buyerAccount.MonthlyOutcome += (decimal)orderFee;
+
+            sellerAccount.Balance += orderedLoanFromDb.CostPrice;
+            sellerAccount.Balance -= orderedLoanFromDb.Amount;
+            sellerAccount.MonthlyIncome += orderedLoanFromDb.MonthlyFee;
+            //TODO: evry m trasfer
             orderedLoanFromDb.CompletedOn = DateTime.UtcNow;
             orderedLoanFromDb.Status = OrderStatus.Approved;
 
-            if (orderedLoanFromDb.Account.Curency.IsoCode != orderedLoanFromDb.Loan.Account.Curency.IsoCode)
-            {
+            this.context.SaveChanges();
 
-            }
+            return Redirect("/CreditScorings/PendingRequests");
+        }
 
-            orderedLoanFromDb.Account.Balance -= orderedLoanFromDb.CostPrice;
-            orderedLoanFromDb.Account.Balance += orderedLoanFromDb.Amount;
-            orderedLoanFromDb.Account.MonthlyOutcome += orderedLoanFromDb.MonthlyFee;
+        [HttpGet("/CreditScorings/RejectRequest/{id}")]
+        public IActionResult RejectRequest(string id)
+        {
+            OrderLoan orderedLoanFromDb = this.context.OrderLoans
+                 .Include(orderLoan => orderLoan.Account)
+                 .ThenInclude(orderedLoanAccount => orderedLoanAccount.Currency)
+                 .Include(orderLoan => orderLoan.Loan)
+                 .ThenInclude(loan => loan.Account)
+                 .ThenInclude(loanAccount => loanAccount.Currency)
+                 .SingleOrDefault(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                         && ol.Id == id);
 
-            orderedLoanFromDb.Loan.Account.Balance += orderedLoanFromDb.CostPrice;
-            orderedLoanFromDb.Loan.Account.Balance -= orderedLoanFromDb.Amount;
-            orderedLoanFromDb.Loan.Account.MonthlyIncome += orderedLoanFromDb.MonthlyFee;
+            orderedLoanFromDb.CompletedOn = DateTime.UtcNow;
+            orderedLoanFromDb.Status = OrderStatus.Rejected;
 
             this.context.SaveChanges();
 

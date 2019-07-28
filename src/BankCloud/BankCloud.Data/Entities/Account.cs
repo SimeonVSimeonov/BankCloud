@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BankCloud.Data.Entities.Enums;
+using System.Collections.Generic;
 
 namespace BankCloud.Data.Entities
 {
@@ -7,6 +8,7 @@ namespace BankCloud.Data.Entities
         public Account()
         {
             this.Loans = new HashSet<Loan>();
+            //this.Мovements = new HashSet<Мovement>();
         }
 
         public string Id { get; set; }
@@ -22,9 +24,10 @@ namespace BankCloud.Data.Entities
         public string BankUserId { get; set; }
         public BankUser BankUser { get; set; }
 
-        public string CurencyId { get; set; }
-        public Curency Curency { get; set; }
+        public string CurrencyId { get; set; }
+        public Currency Currency { get; set; }
 
+        //public ICollection<Мovement> Мovements { get; set; }
         public ICollection<Loan> Loans { get; set; }
     }
 }

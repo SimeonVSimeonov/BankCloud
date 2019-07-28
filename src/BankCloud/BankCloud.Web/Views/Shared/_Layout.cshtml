@@ -136,16 +136,14 @@
                 </div>
             </div>
         </nav>*@
-
-    <partial name="_CookieConsentPartial" />
+    <section class="section-agents section-t8">
+        <partial name="~/Views/Shared/Partials/_ErrorMessagePartial.cshtml" />
+        <partial name="_CookieConsentPartial" />
+    </section>
 
     @RenderBody()
 
     <footer>
-        @*<div class="container">   (class="border-top footer text-muted" for stock footer)
-                &copy; 2019 - BankCloud.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>*@
-
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

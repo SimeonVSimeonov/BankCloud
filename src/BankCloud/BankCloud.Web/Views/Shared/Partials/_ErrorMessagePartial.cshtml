@@ -1,0 +1,9 @@
+﻿@if (this.TempData.ContainsKey("error"))
+{
+    <section class="section-agents section-t8">
+        <div class="alert alert-danger alert-dismissible">
+            <p class="close" data-dismiss="alert" aria-label="close">&times;</p>
+            <strong>Error!!!</strong> @this.TempData["error"]
+        </div>
+    </section>
+}

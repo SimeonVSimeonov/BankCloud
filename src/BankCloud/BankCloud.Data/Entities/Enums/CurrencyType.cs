@@ -1,6 +1,6 @@
 ﻿namespace BankCloud.Data.Entities.Enums
 {
-    public enum CurencyType
+    public enum CurrencyType
     {
         National = 1,
         International = 2,

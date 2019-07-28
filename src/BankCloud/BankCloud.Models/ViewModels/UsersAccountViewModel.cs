@@ -2,6 +2,8 @@
 {
     public class UsersAccountViewModel
     {
+        public string Id { get; set; }
+
         public string IBAN { get; set; }
 
         public decimal MonthlyIncome { get; set; }
@@ -10,9 +12,9 @@
 
         public decimal Balance { get; set; }
 
-        public string CurencyIso { get; set; }
+        public string CurrencyIso { get; set; }
 
-        public string CurencyName { get; set; }
+        public string CurrencyName { get; set; }
 
     }
 }

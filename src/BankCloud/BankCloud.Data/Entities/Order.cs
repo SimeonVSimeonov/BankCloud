@@ -5,7 +5,7 @@
 
 //namespace BankCloud.Data.Entities
 //{
-//    public class Order
+//    public abstract class Order
 //    {
 //        public Order()
 //        {

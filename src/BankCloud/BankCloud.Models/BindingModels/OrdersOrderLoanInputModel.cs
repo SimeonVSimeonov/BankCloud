@@ -29,7 +29,7 @@ namespace BankCloud.Models.BindingModels
         public decimal Commission { get; set; }
 
         //[Required]
-        public string CurencyName { get; set; }
+        public string CurrencyName { get; set; }
 
         [Required]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]

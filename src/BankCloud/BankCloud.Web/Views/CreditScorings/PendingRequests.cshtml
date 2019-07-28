@@ -1,72 +1,100 @@
 ﻿@model IEnumerable<BankCloud.Models.ViewModels.CreditScoringsOrderedLoansViewModel>
 
-    @{
+@{
     ViewData["Title"] = "PendingRequests";
-    }
-    <section>
-        <h1>PendingRequests</h1>
+}
 
-        <p>
-            <a asp-action="Create">Create New</a>
-        </p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Buyer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Period)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Amount)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Commission)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MonthlyFee)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Curency)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Buyer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Period)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Commission)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MonthlyFee)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Curency)
-                    </td>
-                    <td>
-                        <div class="price-box d-flex">
-                            <a href="/CreditScorings/DetailRequest/@item.Id"><span class="price-a">Details</span></a>
+<section class="section-agents section-t8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">Your Pending Sells</h1>
+                    <span class="color-text-a">Grid Loans</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/CreditScorings/MySells">Back</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="property-grid grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="grid-option">
+                    @*<form>
+                            <select class="custom-select">
+                                <option selected>All</option>
+                                <option value="1">New to Old</option>
+                                <option value="2">Old  to New</option>
+                            </select>
+                        </form>*@
+                </div>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
                         </div>
-                    </td>
-                </tr>
-                   }
-            </tbody>
-        </table>
-    </section>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="/CreditScorings/DetailRequest/@item.Id">
+                                            Loan
+                                            <br /> @item.Name
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex">
+                                        <a href="/CreditScorings/DetailRequest/@item.Id"><span class="price-a">Details</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Amount
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Monthly Fee</h4>
+                                            <span>
+                                                @item.MonthlyFee
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Currency</h4>
+                                            <span>
+                                                @item.Currency
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Period</h4>
+                                            <span>
+                                                @item.Period months
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

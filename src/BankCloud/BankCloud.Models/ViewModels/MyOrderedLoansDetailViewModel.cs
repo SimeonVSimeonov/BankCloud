@@ -25,7 +25,7 @@ namespace BankCloud.Models.ViewModels
 
         public string CompletedOn { get; set; }
 
-        public string CurencyIso { get; set; }
+        public string CurrencyIso { get; set; }
 
         public decimal Commission { get; set; }
 
