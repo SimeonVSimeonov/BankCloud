@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels
 {
@@ -30,6 +31,8 @@ namespace BankCloud.Models.BindingModels
 
         //[Required]
         public string CurrencyName { get; set; }
+
+        public ICollection<string> AccountCurrenciesNames { get; set; }
 
         [Required]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]

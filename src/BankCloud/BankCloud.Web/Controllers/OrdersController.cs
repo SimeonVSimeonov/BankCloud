@@ -5,6 +5,7 @@ using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
+using BankCloud.Services.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,8 @@ namespace BankCloud.Web.Controllers
         [Authorize]
         public IActionResult OrderLoan(string id)
         {
-            Loan loanFromDb = this.context.Loans
+            Product loanFromDb = this.context.Products
+                .Where(product => product.GetType().Name == "Loan")
                 .Include(loan => loan.Account)
                 .ThenInclude(account => account.Currency)
                 .SingleOrDefault(loan => loan.Id == id);
@@ -33,6 +35,8 @@ namespace BankCloud.Web.Controllers
                 .Include(user => user.Accounts)
                 .ThenInclude(account => account.Currency)
                 .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var userAccountCurrencyNames = userFromDb.Accounts.Select(x => x.Currency.Name).ToList();
 
             this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
 
@@ -46,6 +50,7 @@ namespace BankCloud.Web.Controllers
                 .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
                                                                     2, MidpointRounding.AwayFromZero),
                 CurrencyName = loanFromDb.Account.Currency.Name,
+                AccountCurrenciesNames = userAccountCurrencyNames,
             };
 
             return View(model);
@@ -57,7 +62,8 @@ namespace BankCloud.Web.Controllers
         {
             decimal monthlyFee = 0m;
 
-            Loan loanFromDb = this.context.Loans
+            Product loanFromDb = this.context.Products
+                .Where(product => product.GetType().Name == "Loan")
                 .Include(loan => loan.Account)
                 .ThenInclude(account => account.Currency)
                 .SingleOrDefault(loan => loan.Id == model.Id);
@@ -77,9 +83,10 @@ namespace BankCloud.Web.Controllers
             }
 
 
-            var orderLoan = new OrderLoan()
+            Order orderLoan = new OrderLoan()
             {
-                BuyerId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                
+                //BuyerId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 IssuedOn = DateTime.UtcNow,
                 Status = OrderStatus.Pending,
                 CostPrice = loanFromDb.Commission * loanFromDb.Amount / 100,
@@ -99,8 +106,8 @@ namespace BankCloud.Web.Controllers
                 return this.Redirect("/Users/AccountActivate");
             }
 
-            if (!ModelState.IsValid || model.Amount > loanFromDb.Amount 
-                || model.Period > loanFromDb.Period 
+            if (!ModelState.IsValid || model.Amount > loanFromDb.Amount
+                || model.Period > loanFromDb.Period
                 || model.InterestRate != loanFromDb.InterestRate)
             {
                 model.Name = loanFromDb.Name;
@@ -108,7 +115,7 @@ namespace BankCloud.Web.Controllers
                 return this.View(model);
             }
 
-            this.context.OrderLoans.Add(orderLoan);
+            this.context.Orders.Add(orderLoan);
 
             this.context.SaveChanges();
 

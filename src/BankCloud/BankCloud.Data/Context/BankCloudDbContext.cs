@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BankCloud.Data.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using BankCloud.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,20 +11,8 @@ namespace BankCloud.Data.Context
         public DbSet<CreditScoring> CreditScorings { get; set; }
         public DbSet<Currency> Currencies { get; set; }
 
-        public DbSet<Loan> Loans { get; set; }
-        public DbSet<OrderLoan> OrderLoans { get; set; }
-
-        public DbSet<Insurance> Insurances { get; set; }
-        public DbSet<OrderInsurances> OrderInsurances { get; set; }
-
-        public DbSet<Save> Saves { get; set; }
-        public DbSet<OrderSaves> OrderSaves { get; set; }
-
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<OrderPayments> OrderPayments { get; set; }
-
-        public DbSet<Investment> Investments { get; set; }
-        public DbSet<OrderInvestments> OrderInvestments { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public BankCloudDbContext(DbContextOptions<BankCloudDbContext> options)
             : base(options)
@@ -51,51 +35,25 @@ namespace BankCloud.Data.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            //builder.Entity<CreditScoring>()
-            //    .HasOne(credit => credit.Order)
-            //    .WithOne()
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>().ToTable("Products");
 
-            builder.Entity<OrderLoan>()
-                .HasOne(ol => ol.Loan)
-                .WithMany()
-                .HasForeignKey(x => x.LoanId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>()
+                    .ToTable("Products")
+                    .HasDiscriminator<string>("ProductType")
+                    .HasValue<Loan>("loan")
+                    .HasValue<Save>("save")
+                    .HasValue<Insurance>("insurance")
+                    .HasValue<Investment>("investment");
 
-            builder.Entity<Loan>()
-                .HasOne(a => a.Account)
-                .WithMany(a => a.Loans)
-                .HasForeignKey(x => x.Id)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Order>().ToTable("Orders");
 
-            builder.Entity<Account>()
-                .HasMany(x => x.Loans)
-                .WithOne(x => x.Account)
-                .HasForeignKey(x => x.AccountId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //builder.Entity<Account>()
-            //    .HasMany(x => x.Loans)
-            //    .WithOne(x => x.Account)
-            //    .HasForeignKey(x => x.)
-
-            builder.Entity<CreditScoring>()
-                .HasOne(credit => credit.Buyer)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<BankUser>()
-               .HasKey(user => user.Id);
-
-            builder.Entity<BankUser>()
-                .HasMany(user => user.CreditScorings)
-                .WithOne(credit => credit.Buyer)
-                .HasForeignKey(credit => credit.BuyerId);
-
-            //builder.Entity<BankUser>()
-            //    .HasMany(user => user.Orders)
-            //    .WithOne(order => order.Contractor)
-            //    .HasForeignKey(order => order.ContractorId);
+            builder.Entity<Order>()
+                    .ToTable("Orders")
+                    .HasDiscriminator<string>("OrderType")
+                    .HasValue<OrderLoan>("orderloan")
+                    .HasValue<OrderSave>("ordersave")
+                    .HasValue<OrderInsurance>("orderinsurance")
+                    .HasValue<OrderInvestment>("orderinvestment");
 
             base.OnModelCreating(builder);
         }

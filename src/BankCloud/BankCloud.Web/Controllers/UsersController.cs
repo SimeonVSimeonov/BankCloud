@@ -148,8 +148,9 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult ProductLoans()
         {
-            List<Loan> loanFromDb = this.context.Loans
-                .Include(curency => curency.Account.Currency)
+            List<Product> loanFromDb = this.context.Products
+                .Where(product => product.GetType().Name == "Loan")
+                .Include(loan => loan.Account.Currency)
                 .Where(loan => loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
                 && loan.IsDeleted == false)
                 .ToList();
@@ -170,24 +171,24 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Users/ProductLoanDetails/{id}")]
         public IActionResult ProductLoanDetails(string id)
         {
-            Loan loan = this.context.Loans
-               .Where(loanFromDb => loanFromDb.Id == id)
+            Product loanFromDb = this.context.Products
+               .Where(product => product.GetType().Name == "Loan" && product.Id == id)
                .Include(curency => curency.Account.Currency)
                .Include(user => user.Seller)
                .SingleOrDefault();
 
-            ProductsLoanDetailsViewModel view = new ProductsLoanDetailsViewModel()
+            var view = new ProductsLoanDetailsViewModel()
             {
-                Id = loan.Id,
-                Amount = loan.Amount,
-                InterestRate = loan.InterestRate,
-                Name = loan.Name,
-                Period = loan.Period,
-                CurrencyIso = loan.Account.Currency.IsoCode,
-                CurrencyName = loan.Account.Currency.Name,
-                Commission = loan.Commission,
-                Seller = loan.Seller.Name,
-                SellerEmail = loan.Seller.Email
+                Id = loanFromDb.Id,
+                Amount = loanFromDb.Amount,
+                InterestRate = loanFromDb.InterestRate,
+                Name = loanFromDb.Name,
+                Period = loanFromDb.Period,
+                CurrencyIso = loanFromDb.Account.Currency.IsoCode,
+                CurrencyName = loanFromDb.Account.Currency.Name,
+                Commission = loanFromDb.Commission,
+                Seller = loanFromDb.Seller.Name,
+                SellerEmail = loanFromDb.Seller.Email
             };
 
 
@@ -201,11 +202,11 @@ namespace BankCloud.Web.Controllers
                 return NotFound();
             }
 
-            Loan loanFromDb = this.context.Loans
-                .Where(loan => loan.Id == id)
-                .Include(curency => curency.Account.Currency)
-                .Include(user => user.Seller)
-                .SingleOrDefault();
+            Product loanFromDb = this.context.Products
+               .Where(product => product.GetType().Name == "Loan" && product.Id == id)
+               .Include(curency => curency.Account.Currency)
+               .Include(user => user.Seller)
+               .SingleOrDefault();
 
             if (loanFromDb == null)
             {
@@ -231,10 +232,11 @@ namespace BankCloud.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult LoanDeleteConfirmed(string id)
         {
-            Loan loan = this.context.Loans.Find(id);
-            var pendingLoanIds = this.context.OrderLoans
+            Product loan = this.context.Products.Find(id);
+
+            var pendingLoanIds = this.context.Orders
                 .Where(orderedLoan => orderedLoan.Status == OrderStatus.Pending)
-                .Select(orderedLoan => orderedLoan.LoanId);
+                .Select(orderedLoan => orderedLoan.Id);
 
             if (pendingLoanIds.Contains(loan.Id))
             {
@@ -249,10 +251,11 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult ArchivedProductLoans()
         {
-            List<Loan> loanFromDb = this.context.Loans
-                .Include(curency => curency.Account.Currency)
-                .Where(loan => loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-                && loan.IsDeleted == true)
+            List<Product> loanFromDb = this.context.Products
+                .Include(product => product.Account.Currency)
+                .Where(product => product.GetType().Name == "Loan" 
+                && product.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
+                && product.IsDeleted == true)
                 .ToList();
 
             var view = loanFromDb.Select(loan => new ProductsLoansViewModel
@@ -271,7 +274,7 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Users/RestoreProductloan/{id}")]
         public IActionResult RestoreProductloan(string id)
         {
-            Loan loanFromDb = this.context.Loans
+            Product loanFromDb = this.context.Products
                 .SingleOrDefault(loan => loan.Id == id);
 
             loanFromDb.IsDeleted = false;
@@ -283,11 +286,11 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult OrderedLoans(UsersOrderedLoansViewModel model)
         {
-            List<OrderLoan> AllOrderLoansFormDb = this.context
-                .OrderLoans
-                .Include(orderLoan => orderLoan.Loan)
-                .ThenInclude(loan => loan.Account.Currency)
-                .Where(orderLoan => orderLoan.BuyerId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            List<Order> AllOrderLoansFormDb = this.context
+                .Orders.Where(order => order.GetType().Name == "OrderLoan")
+                //.Include(orderLoan => orderLoan.)
+                .Include(orderLoan => orderLoan.Account.Currency)
+                .Where(orderLoan => orderLoan.Account.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 //&& orderLoan.LoanId != null)
                 .ToList();
 
@@ -297,10 +300,10 @@ namespace BankCloud.Web.Controllers
                     Amount = loanFromDb.Amount,
                     MonthlyFee = loanFromDb.MonthlyFee,
                     Period = loanFromDb.Period,
-                    Name = loanFromDb.Loan.Name,
+                    Name = loanFromDb.Name,
                     Id = loanFromDb.Id,
                     Status = loanFromDb.Status.ToString(),
-                    CurrencyIso = loanFromDb.Loan.Account.Currency.IsoCode
+                    CurrencyIso = loanFromDb.Account.Currency.IsoCode
                 });
 
             return View(viewAllOrderLoans);
@@ -309,14 +312,13 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Users/OrderedLoanDetails/{id}")]
         public IActionResult OrderedLoanDetails(string id)
         {
-            OrderLoan orderLoanFromDB = this.context
-                .OrderLoans
+            Order orderLoanFromDB = this.context
+                .Orders.Where(order => order.GetType().Name == "OrderLoan")
                 .Include(orderLoan => orderLoan.Account)
                 .ThenInclude(orderLoan => orderLoan.Currency)
-                .Include(orderLoan => orderLoan.Loan)
-                .ThenInclude(loan => loan.Seller)
-                .Include(orderLoan => orderLoan.Loan)
-                .ThenInclude(loan => loan.Account.Currency)
+                //.Include(orderLoan => orderLoan.Loan)
+                .Include(orderLoan => orderLoan.Account)
+                .ThenInclude(loan => loan.BankUser)
                 .SingleOrDefault(orderLoan => orderLoan.Id == id);
 
             var detailOrderLoan = new MyOrderedLoansDetailViewModel()
@@ -326,12 +328,12 @@ namespace BankCloud.Web.Controllers
                 Amount = orderLoanFromDB.Amount,
                 MonthlyFee = orderLoanFromDB.MonthlyFee,
                 Commission = orderLoanFromDB.CostPrice,
-                Seller = orderLoanFromDB.Loan.Seller.Name,
+                Seller = orderLoanFromDB.Account.BankUser.Name,
                 InterestRate = orderLoanFromDB.InterestRate,
                 IssuedOn = orderLoanFromDB.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
                 Status = orderLoanFromDB.Status.ToString(),
                 CompletedOn = orderLoanFromDB.CompletedOn.ToString(),
-                CurrencyIso = orderLoanFromDB.Loan.Account.Currency.IsoCode,
+                //CurrencyIso = orderLoanFromDB.Loan.Account.Currency.IsoCode,
                 DueAmount = orderLoanFromDB.MonthlyFee * orderLoanFromDB.Period,
                 Account = orderLoanFromDB.Account.IBAN + " | " + orderLoanFromDB.Account.Currency.Name
             };

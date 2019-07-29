@@ -51,7 +51,11 @@
                         <div class="form-group">
                             <label>BankCloud Advice!!!</label>
                             <label>If you specify an account in another currency, you will be charged for conversion!</label>
-                            <a href="/Users/AccountCreate"><strong>Activate your free @Model.CurrencyName Account from here now!</strong></a>
+                            @if (!Model.AccountCurrenciesNames.Contains(Model.CurrencyName))
+                            {
+                                <a href="/Users/AccountCreate"><strong>Activate your free @Model.CurrencyName Account from here now!</strong></a>
+                            }
+
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">

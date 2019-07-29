@@ -5,12 +5,6 @@ namespace BankCloud.Data.Entities
 {
     public class Account
     {
-        public Account()
-        {
-            this.Loans = new HashSet<Loan>();
-            //this.Мovements = new HashSet<Мovement>();
-        }
-
         public string Id { get; set; }
 
         public string IBAN { get; set; }
@@ -26,8 +20,5 @@ namespace BankCloud.Data.Entities
 
         public string CurrencyId { get; set; }
         public Currency Currency { get; set; }
-
-        //public ICollection<Мovement> Мovements { get; set; }
-        public ICollection<Loan> Loans { get; set; }
     }
 }

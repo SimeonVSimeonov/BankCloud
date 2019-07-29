@@ -24,22 +24,24 @@ namespace BankCloud.Web.Controllers
             return View();
         }
 
-        public IActionResult Categories()
+        public IActionResult Categories() //TODO: refactor for all categories
         {
-            int loansCount = this.context.Loans.Count();
-            decimal loanWhitMaxAmount = this.context.Loans.Max(x => x.Amount);
-            var maxLoanPeriod = this.context.Loans.Max(x => x.Period);
-            var minLoanRate = this.context.Loans.Min(x => x.InterestRate);
+            //int loansCount = this.context.Loans.Count();
+            //decimal loanWhitMaxAmount = this.context.Loans.Max(x => x.Amount);
+            //var maxLoanPeriod = this.context.Loans.Max(x => x.Period);
+            //var minLoanRate = this.context.Loans.Min(x => x.InterestRate);
 
-            var loanViewCategories = new HomeCategoriesViewModel()
-            {
-                LoansCount = loansCount,
-                MaxLoanAmount = loanWhitMaxAmount,
-                MaxLoanPeriod = maxLoanPeriod,
-                MinLoanRate = minLoanRate,
-            };
+            //var loanViewCategories = new HomeCategoriesViewModel()
+            //{
+            //    LoansCount = loansCount,
+            //    MaxLoanAmount = loanWhitMaxAmount,
+            //    MaxLoanPeriod = maxLoanPeriod,
+            //    MinLoanRate = minLoanRate,
+            //};
 
-            return View(loanViewCategories);
+            //return View(loanViewCategories);
+
+            return View();
         }
 
         public IActionResult Privacy()

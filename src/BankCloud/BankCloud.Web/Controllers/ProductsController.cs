@@ -21,9 +21,9 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult Loans()
         {
-            var loanFromDb = this.context.Loans
-                .Where(loan => loan.IsDeleted == false)
-                .Include(curency => curency.Account.Currency)
+            List<Product> loanFromDb = this.context.Products
+                .Where(product => product.GetType().Name == "Loan" && product.IsDeleted == false)
+                .Include(loan => loan.Account.Currency)
                 .ToList();
 
             var view = loanFromDb.Select(loan => new ProductsLoansViewModel
@@ -42,24 +42,24 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Products/LoanDetails/{id}")]
         public IActionResult LoanDetails(string id)
         {
-            Loan loan = this.context.Loans
-                .Where(loanFromDb => loanFromDb.Id == id)
-                .Include(curency => curency.Account.Currency)
-                .Include(user => user.Seller)
+            Product loanFromDb = this.context.Products
+                .Where(loan => loan.Id == id)
+                .Include(loan => loan.Account.Currency)
+                .Include(loan => loan.Seller)
                 .SingleOrDefault();
 
             ProductsLoanDetailsViewModel viewModel = new ProductsLoanDetailsViewModel()
             {
-                Id = loan.Id,
-                Amount = loan.Amount,
-                InterestRate = loan.InterestRate,
-                Name = loan.Name,
-                Period = loan.Period,
-                CurrencyIso = loan.Account.Currency.IsoCode,
-                CurrencyName = loan.Account.Currency.Name,
-                Commission = loan.Commission,
-                Seller = loan.Seller.Name,
-                SellerEmail = loan.Seller.Email
+                Id = loanFromDb.Id,
+                Amount = loanFromDb.Amount,
+                InterestRate = loanFromDb.InterestRate,
+                Name = loanFromDb.Name,
+                Period = loanFromDb.Period,
+                CurrencyIso = loanFromDb.Account.Currency.IsoCode,
+                CurrencyName = loanFromDb.Account.Currency.Name,
+                Commission = loanFromDb.Commission,
+                Seller = loanFromDb.Seller.Name,
+                SellerEmail = loanFromDb.Seller.Email
             };
 
 

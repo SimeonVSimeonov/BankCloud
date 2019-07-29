@@ -1,35 +1,39 @@
-﻿//using BankCloud.Data.Entities.Enums;
-//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel.DataAnnotations;
+﻿using BankCloud.Data.Entities.Enums;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-//namespace BankCloud.Data.Entities
-//{
-//    public abstract class Order
-//    {
-//        public Order()
-//        {
-//            this.OrderLoans = new HashSet<OrderLoans>();
-//            this.OrderInsurances = new HashSet<OrderInsurances>();
-//        }
+namespace BankCloud.Data.Entities
+{
+    public abstract class Order
+    {
+        public string Id { get; set; }
 
-//        public string Id { get; set; }
+        public string Name { get; set; }
 
-//        public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
+        public decimal InterestRate { get; set; }
 
-//        public DateTime? CompletedOn { get; set; }
+        public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
 
-//        public decimal CostPrice { get; set; }
+        public DateTime? CompletedOn { get; set; }
 
-//        [Required]
-//        public string ContractorId { get; set; }
-//        public BankUser Contractor { get; set; }
+        public decimal CostPrice { get; set; }
 
-//        public ICollection<OrderLoans> OrderLoans { get; set; }
-//        public ICollection<OrderInsurances> OrderInsurances { get; set; }
+        public decimal Amount { get; set; }
 
-//        [Required]
-//        public OrderStatus Status { get; set; }
+        public decimal MonthlyFee { get; set; }
 
-//    }
-//}
+        public int Period { get; set; }
+
+        //[Required]
+        //public string BuyerId { get; set; }
+        //public BankUser Buyer { get; set; }
+
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
+
+        [Required]
+        public OrderStatus Status { get; set; }
+    }
+}

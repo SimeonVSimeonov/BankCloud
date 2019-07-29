@@ -45,17 +45,18 @@ namespace BankCloud.Web.Controllers
                 .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 .ToList();
 
-            var userAcc = this.context.Accounts
-                .Where(x => x.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                .Select(x => x.Id)
+            var userAccountIds = this.context.Accounts
+                .Where(account => account.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Select(account => account.Id)
                 .ToList();
 
-            if (!userAcc.Contains(model.AccountId))
+            if (!userAccountIds.Contains(model.AccountId))
             {
+                //TODO: check if need this?
                 return this.Redirect("/Sells/LoanSell");
             }
 
-            Loan loan = new Loan
+            Product loan = new Loan
             {
 
                 Amount = model.Amount,
@@ -72,7 +73,7 @@ namespace BankCloud.Web.Controllers
                 return this.View(model);
             }
 
-            context.Loans.Add(loan);
+            context.Products.Add(loan);
             context.SaveChanges();
 
             return Redirect("/Products/Loans");

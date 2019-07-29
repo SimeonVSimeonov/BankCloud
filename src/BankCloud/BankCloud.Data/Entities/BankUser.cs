@@ -11,11 +11,12 @@ namespace BankCloud.Data.Entities
             this.Accounts = new HashSet<Account>();
             this.CreditScorings = new HashSet<CreditScoring>();
 
-            this.OrderedInsurances = new HashSet<OrderInsurances>();
-            this.OrderedLoans = new HashSet<OrderLoan>();
-            this.OrderedSaves = new HashSet<OrderSaves>();
-            this.OrderedInvestments = new HashSet<OrderInvestments>();
-            this.OrderedPayments = new HashSet<OrderPayments>();
+            //this.OrderedInsurances = new HashSet<OrderInsurance>();
+            //this.OrderedLoans = new HashSet<OrderLoan>();
+            //this.OrderedSaves = new HashSet<OrderSave>();
+            //this.OrderedInvestments = new HashSet<OrderInvestment>();
+            //this.OrderedPayments = new HashSet<OrderPayment>();
+            this.Orders = new HashSet<Order>();
         }
 
         [Required]
@@ -23,13 +24,10 @@ namespace BankCloud.Data.Entities
 
         public string Middlename { get; set; }
 
-        //[Required] TODO:
         public string Surname { get; set; }
 
-        //[Required] TODO:
         public string IdentityNumber { get; set; }
 
-        //[Required] TODO:
         public string AddressId { get; set; }
         public Address Address { get; set; }
 
@@ -41,12 +39,12 @@ namespace BankCloud.Data.Entities
 
         public ICollection<CreditScoring> CreditScorings { get; set; }
 
-        public ICollection<OrderInsurances> OrderedInsurances { get; set; }
-        public ICollection<OrderLoan> OrderedLoans { get; set; }
-        public ICollection<OrderSaves> OrderedSaves { get; set; }
-        public ICollection<OrderInvestments> OrderedInvestments { get; set; }
-        public ICollection<OrderPayments> OrderedPayments { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
-
+        //public ICollection<OrderInsurance> OrderedInsurances { get; set; }
+        //public ICollection<OrderLoan> OrderedLoans { get; set; }
+        //public ICollection<OrderSave> OrderedSaves { get; set; }
+        //public ICollection<OrderInvestment> OrderedInvestments { get; set; }
+        //public ICollection<OrderPayment> OrderedPayments { get; set; }
     }
 }

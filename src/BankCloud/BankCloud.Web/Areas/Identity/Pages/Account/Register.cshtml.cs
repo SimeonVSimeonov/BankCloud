@@ -18,21 +18,17 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly RoleManager<BankUserRole> _roleManager;
         private readonly SignInManager<BankUser> _signInManager;
-        private readonly RoleManager<BankUserRole> _RoleManager;
         private readonly UserManager<BankUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            RoleManager<BankUserRole> _roleManager,
             UserManager<BankUser> userManager,
             SignInManager<BankUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
-            _RoleManager = _roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
