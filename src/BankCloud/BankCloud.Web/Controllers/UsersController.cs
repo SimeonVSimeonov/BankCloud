@@ -5,12 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Common;
+using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +23,15 @@ namespace BankCloud.Web.Controllers
     public class UsersController : Controller
     {
         private readonly BankCloudDbContext context;
+        private readonly IMapper mapper;
+        private readonly IOrdersService ordersService;
 
-        public UsersController(BankCloudDbContext context)
+        public UsersController(BankCloudDbContext context,
+            IOrdersService ordersService, IMapper mapper)
         {
             this.context = context;
+            this.ordersService = ordersService;
+            this.mapper = mapper;
         }
 
         public IActionResult Products(string id)
@@ -36,8 +43,6 @@ namespace BankCloud.Web.Controllers
         {
             var userAccountsFromDb = this.context.Accounts
                 .Where(account => account.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-
 
             var viewAccounts = userAccountsFromDb.Select(accounts =>
             new UsersAccountViewModel
@@ -234,7 +239,7 @@ namespace BankCloud.Web.Controllers
         {
             Product loan = this.context.Products.Find(id);
 
-            var pendingLoanIds = this.context.Orders
+            var pendingLoanIds = this.context.OrdersLoans
                 .Where(orderedLoan => orderedLoan.Status == OrderStatus.Pending)
                 .Select(orderedLoan => orderedLoan.Id);
 
@@ -244,9 +249,9 @@ namespace BankCloud.Web.Controllers
             }
 
             loan.IsDeleted = true;
-            //this.context.Loans.Remove(loan);
             this.context.SaveChanges();
             return Redirect("/Users/ProductLoans");
+
         }
 
         public IActionResult ArchivedProductLoans()
@@ -263,7 +268,7 @@ namespace BankCloud.Web.Controllers
                 Id = loan.Id,
                 Name = loan.Name,
                 Amount = loan.Amount,
-                Currency = loan.Account.Currency.IsoCode,
+                //Currency = loan.Account.Currency.IsoCode,
                 InterestRate = loan.InterestRate,
                 Period = loan.Period,
             });
@@ -284,27 +289,12 @@ namespace BankCloud.Web.Controllers
             return this.Redirect("/Users/ProductLoans");
         }
 
-        public IActionResult OrderedLoans(UsersOrderedLoansViewModel model)
+        public IActionResult OrderedLoans()
         {
-            List<Order> AllOrderLoansFormDb = this.context
-                .Orders.Where(order => order.GetType().Name == "OrderLoan")
-                //.Include(orderLoan => orderLoan.)
-                .Include(orderLoan => orderLoan.Account.Currency)
-                .Where(orderLoan => orderLoan.Account.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                //&& orderLoan.LoanId != null)
-                .ToList();
+            IEnumerable<OrderLoan> userOrderedLoanFromDB = this.ordersService.GetOrderedLoansByUser();
 
-            var viewAllOrderLoans = AllOrderLoansFormDb
-                .Select(loanFromDb => new UsersOrderedLoansViewModel
-                {
-                    Amount = loanFromDb.Amount,
-                    MonthlyFee = loanFromDb.MonthlyFee,
-                    Period = loanFromDb.Period,
-                    Name = loanFromDb.Name,
-                    Id = loanFromDb.Id,
-                    Status = loanFromDb.Status.ToString(),
-                    CurrencyIso = loanFromDb.Account.Currency.IsoCode
-                });
+           var viewAllOrderLoans = this.mapper
+                .Map<List<UsersOrderedLoansViewModel>>(userOrderedLoanFromDB);
 
             return View(viewAllOrderLoans);
         }
@@ -312,33 +302,16 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Users/OrderedLoanDetails/{id}")]
         public IActionResult OrderedLoanDetails(string id)
         {
-            Order orderLoanFromDB = this.context
-                .Orders.Where(order => order.GetType().Name == "OrderLoan")
-                .Include(orderLoan => orderLoan.Account)
-                .ThenInclude(orderLoan => orderLoan.Currency)
-                //.Include(orderLoan => orderLoan.Loan)
-                .Include(orderLoan => orderLoan.Account)
-                .ThenInclude(loan => loan.BankUser)
-                .SingleOrDefault(orderLoan => orderLoan.Id == id);
+            OrderLoan userOrderedLoanFromDB = this.ordersService.GetOrderLoanById(id);
 
-            var detailOrderLoan = new MyOrderedLoansDetailViewModel()
-            {
-                Name = orderLoanFromDB.Name,
-                Period = orderLoanFromDB.Period,
-                Amount = orderLoanFromDB.Amount,
-                MonthlyFee = orderLoanFromDB.MonthlyFee,
-                Commission = orderLoanFromDB.CostPrice,
-                Seller = orderLoanFromDB.Account.BankUser.Name,
-                InterestRate = orderLoanFromDB.InterestRate,
-                IssuedOn = orderLoanFromDB.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
-                Status = orderLoanFromDB.Status.ToString(),
-                CompletedOn = orderLoanFromDB.CompletedOn.ToString(),
-                //CurrencyIso = orderLoanFromDB.Loan.Account.Currency.IsoCode,
-                DueAmount = orderLoanFromDB.MonthlyFee * orderLoanFromDB.Period,
-                Account = orderLoanFromDB.Account.IBAN + " | " + orderLoanFromDB.Account.Currency.Name
-            };
+            var detailOrderLoan = this.mapper
+                .Map<OrderedLoansDetailViewModel>(userOrderedLoanFromDB);
+
+            detailOrderLoan.Account = userOrderedLoanFromDB.Account.IBAN + " | " + userOrderedLoanFromDB.Account.Currency.Name;
+            detailOrderLoan.DueAmount = userOrderedLoanFromDB.MonthlyFee * userOrderedLoanFromDB.Period;
 
             return View(detailOrderLoan);
+
         }
     }
 }

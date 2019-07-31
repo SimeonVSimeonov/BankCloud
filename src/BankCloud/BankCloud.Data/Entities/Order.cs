@@ -18,17 +18,13 @@ namespace BankCloud.Data.Entities
 
         public DateTime? CompletedOn { get; set; }
 
-        public decimal CostPrice { get; set; }
+        public decimal Commission { get; set; }
 
         public decimal Amount { get; set; }
 
         public decimal MonthlyFee { get; set; }
 
         public int Period { get; set; }
-
-        //[Required]
-        //public string BuyerId { get; set; }
-        //public BankUser Buyer { get; set; }
 
         public string AccountId { get; set; }
         public Account Account { get; set; }

@@ -1,38 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Models.BindingModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using BankCloud.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using BankCloud.Services.Interfaces;
+using AutoMapper;
 
 namespace BankCloud.Web.Controllers
 {
     public class SellsController : Controller
     {
-        private readonly BankCloudDbContext context;
-        private readonly UserManager<BankUser> userManager;
+        private readonly IMapper mapper;
+        private readonly IAccountsService accountsService;
+        private readonly IProductsService productsService;
 
 
-        public SellsController(
-            BankCloudDbContext context, 
-            UserManager<BankUser> userManager)
+        public SellsController(IAccountsService accountsService, IMapper mapper, 
+            IProductsService productsService)
         {
-            this.context = context;
-            this.userManager = userManager;
+            this.accountsService = accountsService;
+            this.mapper = mapper;
+            this.productsService = productsService;
         }
 
         public IActionResult LoanSell()
         {
-            this.ViewData["Accounts"] = this.context.Accounts
-                .Include(account => account.Currency)
-                .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                .ToList();
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
 
             return View();
         }
@@ -40,41 +34,23 @@ namespace BankCloud.Web.Controllers
         [HttpPost]
         public IActionResult LoanSell(SellsLoanInputModel model)
         {
-            this.ViewData["Accounts"] = this.context.Accounts
-                .Include(account => account.Currency)
-                .Where(accoun => accoun.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                .ToList();
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
 
-            var userAccountIds = this.context.Accounts
-                .Where(account => account.BankUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                .Select(account => account.Id)
-                .ToList();
+            var userAccountsIds = this.accountsService.GetUserAccountsIds();
 
-            if (!userAccountIds.Contains(model.AccountId))
+            if (!userAccountsIds.Contains(model.AccountId))
             {
-                //TODO: check if need this?
                 return this.Redirect("/Sells/LoanSell");
             }
-
-            Product loan = new Loan
-            {
-
-                Amount = model.Amount,
-                InterestRate = model.InterestRate,
-                SellerID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                Period = model.Period,
-                Name = model.Name,
-                AccountId = model.AccountId,
-                Commission = model.Commission,
-            };
-
+            
+            Loan loan = this.mapper.Map<Loan>(model);
+            
             if (!ModelState.IsValid)
             {
                 return this.View(model);
             }
 
-            context.Products.Add(loan);
-            context.SaveChanges();
+            this.productsService.AddProduct(loan);
 
             return Redirect("/Products/Loans");
         }

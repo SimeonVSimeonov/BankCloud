@@ -12,7 +12,11 @@ namespace BankCloud.Data.Context
         public DbSet<Currency> Currencies { get; set; }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        //public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLoan> OrdersLoans { get; set; }
+        public DbSet<OrderSave> OrdersSaves { get; set; }
+        public DbSet<OrderInsurance> OrdersInsurances { get; set; }
+        public DbSet<OrderInvestment> OrdersInvestments { get; set; }
 
         public BankCloudDbContext(DbContextOptions<BankCloudDbContext> options)
             : base(options)
@@ -45,15 +49,20 @@ namespace BankCloud.Data.Context
                     .HasValue<Insurance>("insurance")
                     .HasValue<Investment>("investment");
 
-            builder.Entity<Order>().ToTable("Orders");
+            //builder.Entity<Order>().ToTable("Orders");
 
-            builder.Entity<Order>()
-                    .ToTable("Orders")
-                    .HasDiscriminator<string>("OrderType")
-                    .HasValue<OrderLoan>("orderloan")
-                    .HasValue<OrderSave>("ordersave")
-                    .HasValue<OrderInsurance>("orderinsurance")
-                    .HasValue<OrderInvestment>("orderinvestment");
+            //builder.Entity<Order>()
+            //        .ToTable("Orders")
+            //        .HasDiscriminator<string>("OrderType")
+            //        .HasValue<OrderLoan>("orderloan")
+            //        .HasValue<OrderSave>("ordersave")
+            //        .HasValue<OrderInsurance>("orderinsurance")
+            //        .HasValue<OrderInvestment>("orderinvestment");
+
+            //builder.Entity<OrderLoan>().ToTable("OrdersLoans");
+            //builder.Entity<OrderSave>().ToTable("OrdersSaves");
+            //builder.Entity<OrderInsurance>().ToTable("OrdersInsurances");
+            //builder.Entity<OrderInvestment>().ToTable("OrdersInvestments");
 
             base.OnModelCreating(builder);
         }

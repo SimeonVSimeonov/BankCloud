@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190731201634_NewPath.cs" />
+    <Compile Remove="Migrations\20190731201634_NewPath.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Entities\Interfaces\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

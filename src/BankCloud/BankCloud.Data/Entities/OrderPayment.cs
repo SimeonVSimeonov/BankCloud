@@ -6,6 +6,7 @@ using System.Text;
 
 namespace BankCloud.Data.Entities
 {
+    
     public class OrderPayment
     {
         public string Id { get; set; }

@@ -1,6 +1,4 @@
-﻿using BankCloud.Data.Entities.Enums;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankCloud.Data.Entities
 {

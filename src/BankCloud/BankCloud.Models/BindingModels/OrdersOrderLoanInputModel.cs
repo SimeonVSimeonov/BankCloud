@@ -8,7 +8,6 @@ namespace BankCloud.Models.BindingModels
         [Required]
         public string Id { get; set; }
 
-        //[Required]
         public string Name { get; set; }
 
         [Required]
@@ -29,10 +28,11 @@ namespace BankCloud.Models.BindingModels
         [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]
         public decimal Commission { get; set; }
 
-        //[Required]
         public string CurrencyName { get; set; }
 
-        public ICollection<string> AccountCurrenciesNames { get; set; }
+        public string BuyerId { get; set; }
+
+        public ICollection<string> UserCurrencyTypes { get; set; }
 
         [Required]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]

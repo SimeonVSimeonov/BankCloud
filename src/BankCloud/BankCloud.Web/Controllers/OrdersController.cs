@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
 using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Services.Common;
+using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,110 +16,79 @@ namespace BankCloud.Web.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly BankCloudDbContext context;
+        
+        private readonly IMapper mapper;
+        private readonly IProductsService productsService;
+        private readonly IUsersService usersService;
+        private readonly IAccountsService accountsService;
+        private readonly IOrdersService ordersService;
 
-        public OrdersController(BankCloudDbContext context)
+        public OrdersController(IProductsService productsService, IUsersService usersService,
+            IMapper mapper, IAccountsService accountsService, IOrdersService ordersService)
         {
-            this.context = context;
+            
+            this.productsService = productsService;
+            this.usersService = usersService;
+            this.mapper = mapper;
+            this.accountsService = accountsService;
+            this.ordersService = ordersService;
         }
 
         [HttpGet("/Orders/OrderLoan/{id}")]
         [Authorize]
         public IActionResult OrderLoan(string id)
         {
-            Product loanFromDb = this.context.Products
-                .Where(product => product.GetType().Name == "Loan")
-                .Include(loan => loan.Account)
-                .ThenInclude(account => account.Currency)
-                .SingleOrDefault(loan => loan.Id == id);
+            Product loanFromDb = this.productsService.GetProductById(id);
 
-            BankUser userFromDb = this.context.Users
-                .Include(user => user.Accounts)
-                .ThenInclude(account => account.Currency)
-                .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BankUser userFromDb = this.usersService.GetCurrentUser();
 
-            var userAccountCurrencyNames = userFromDb.Accounts.Select(x => x.Currency.Name).ToList();
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
 
-            this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
+            var view = this.mapper.Map<OrdersOrderLoanInputModel>(loanFromDb);
 
-            OrdersOrderLoanInputModel model = new OrdersOrderLoanInputModel()
-            {
-                Name = loanFromDb.Name,
-                Amount = loanFromDb.Amount,
-                Period = loanFromDb.Period,
-                InterestRate = loanFromDb.InterestRate,
-                MonthlyFee = decimal
-                .Round(((loanFromDb.Amount / loanFromDb.Period) * ((loanFromDb.InterestRate / 100) + 1)),
-                                                                    2, MidpointRounding.AwayFromZero),
-                CurrencyName = loanFromDb.Account.Currency.Name,
-                AccountCurrenciesNames = userAccountCurrencyNames,
-            };
+            view.UserCurrencyTypes = this.accountsService.GetUserAccounts()
+                .Select(x => x.Currency.Name).ToList();
 
-            return View(model);
+            view.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
+
+            return View(view);
         }
 
         [HttpPost]
         [Authorize]
         public IActionResult OrderLoan(OrdersOrderLoanInputModel model)
         {
-            decimal monthlyFee = 0m;
+            Product loanFromDb = this.productsService.GetProductById(model.Id);
 
-            Product loanFromDb = this.context.Products
-                .Where(product => product.GetType().Name == "Loan")
-                .Include(loan => loan.Account)
-                .ThenInclude(account => account.Currency)
-                .SingleOrDefault(loan => loan.Id == model.Id);
+            BankUser userFromDb = this.usersService.GetCurrentUser();
 
-            BankUser userFromDb = this.context.Users
-                 .Include(user => user.Accounts)
-                 .ThenInclude(account => account.Currency)
-                 .SingleOrDefault(user => user.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            this.ViewData["Accounts"] = userFromDb.Accounts.ToList();
-
-            if (model.Period != 0)
-            {
-                monthlyFee = decimal
-                  .Round(((model.Amount / model.Period) * ((loanFromDb.InterestRate / 100) + 1)),
-                                                                      2, MidpointRounding.AwayFromZero);
-            }
-
-
-            Order orderLoan = new OrderLoan()
-            {
-                
-                //BuyerId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                IssuedOn = DateTime.UtcNow,
-                Status = OrderStatus.Pending,
-                CostPrice = loanFromDb.Commission * loanFromDb.Amount / 100,
-                LoanId = loanFromDb.Id,
-                Amount = model.Amount,
-                Name = loanFromDb.Name,
-                InterestRate = loanFromDb.InterestRate,
-                Period = model.Period,
-                MonthlyFee = monthlyFee,
-                AccountId = model.AccountId,
-            };
-
-            //TODO: add message for invalid parameters
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
+            
+            OrderLoan order = this.mapper.Map<OrderLoan>(model);
 
             if (!userFromDb.Accounts.Any())
             {
                 return this.Redirect("/Users/AccountActivate");
             }
-
+            //TODO: add message for invalid parameters
             if (!ModelState.IsValid || model.Amount > loanFromDb.Amount
                 || model.Period > loanFromDb.Period
                 || model.InterestRate != loanFromDb.InterestRate)
             {
                 model.Name = loanFromDb.Name;
-                //model.CurencyName = loanFromDb.Account.Curency.Name;
+                model.CurrencyName = loanFromDb.Account.Currency.Name;
+                model.UserCurrencyTypes = this.accountsService.GetUserAccounts()
+                .Select(x => x.Currency.Name).ToList();
                 return this.View(model);
             }
 
-            this.context.Orders.Add(orderLoan);
+            //order.BuyerId = userFromDb.Id;//TODO: ???
+            order.Commission = BankCloudCalculator.CalculateCommission(loanFromDb);
+            order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
+            order.Status = OrderStatus.Pending;
+            order.Name = loanFromDb.Name;
 
-            this.context.SaveChanges();
+            this.ordersService.AddOrderLoan(order);
 
             return this.Redirect("/Users/OrderedLoans");
         }

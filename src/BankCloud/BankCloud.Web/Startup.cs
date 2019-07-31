@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BankCloud.Data.Context;
@@ -15,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BankCloud.Data.Entities;
 using FixerSharp;
+using AutoMapper;
+using BankCloud.Services.Interfaces;
+using BankCloud.Services;
 
 namespace BankCloud.Web
 {
@@ -46,6 +45,15 @@ namespace BankCloud.Web
                 .AddEntityFrameworkStores<BankCloudDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddHttpContextAccessor();
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IAccountsService, AccountsService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("MessagesCORSPolicy",
@@ -55,12 +63,25 @@ namespace BankCloud.Web
                         .AllowAnyHeader();
                     });
             });
+            //TODO
+            
+            //services.AddAuthentication().AddFacebook(facebookOptions =>
+            //{
+            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            //});
+            //TODO
+            //services.AddAuthentication().AddGoogle(googleOptions =>
+            //{
+            //    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+            //    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            //});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMapper mapper)
         {
             if (env.IsDevelopment())
             {

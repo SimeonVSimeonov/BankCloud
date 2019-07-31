@@ -1,40 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BankCloud.Data.Context;
-using BankCloud.Data.Entities;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using BankCloud.Models.ViewModels;
+using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankCloud.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly BankCloudDbContext context;
+        private readonly IMapper mapper;
+        private readonly IProductsService productsService;
 
-        public ProductsController(BankCloudDbContext context)
+        public ProductsController(IProductsService productsService, IMapper mapper)
         {
-            this.context = context;
+            this.productsService = productsService;
+            this.mapper = mapper;
         }
 
         public IActionResult Loans()
         {
-            List<Product> loanFromDb = this.context.Products
-                .Where(product => product.GetType().Name == "Loan" && product.IsDeleted == false)
-                .Include(loan => loan.Account.Currency)
-                .ToList();
+            var loansFromDb = this.productsService.GetAllActiveLoans();
 
-            var view = loanFromDb.Select(loan => new ProductsLoansViewModel
-            {
-                Id = loan.Id,
-                Name = loan.Name,
-                Amount = loan.Amount,
-                Currency = loan.Account.Currency.IsoCode,
-                InterestRate = loan.InterestRate,
-                Period = loan.Period,
-            });
+            var view = mapper.Map<List<ProductsLoansViewModel>>(loansFromDb);
 
             return View(view);
         }
@@ -42,29 +29,13 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/Products/LoanDetails/{id}")]
         public IActionResult LoanDetails(string id)
         {
-            Product loanFromDb = this.context.Products
-                .Where(loan => loan.Id == id)
-                .Include(loan => loan.Account.Currency)
-                .Include(loan => loan.Seller)
-                .SingleOrDefault();
+            var loanFromDb = this.productsService.GetProductById(id);
 
-            ProductsLoanDetailsViewModel viewModel = new ProductsLoanDetailsViewModel()
-            {
-                Id = loanFromDb.Id,
-                Amount = loanFromDb.Amount,
-                InterestRate = loanFromDb.InterestRate,
-                Name = loanFromDb.Name,
-                Period = loanFromDb.Period,
-                CurrencyIso = loanFromDb.Account.Currency.IsoCode,
-                CurrencyName = loanFromDb.Account.Currency.Name,
-                Commission = loanFromDb.Commission,
-                Seller = loanFromDb.Seller.Name,
-                SellerEmail = loanFromDb.Seller.Email
-            };
+            var view = mapper.Map<ProductsLoanDetailsViewModel>(loanFromDb);
 
-
-            return this.View(viewModel);
+            return this.View(view);
         }
 
+        //TODO add other products!!!
     }
 }
