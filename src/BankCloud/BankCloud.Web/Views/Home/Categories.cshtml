@@ -1,4 +1,4 @@
-﻿@model BankCloud.Models.ViewModels.HomeCategoriesViewModel;
+﻿@model List<BankCloud.Models.ViewModels.HomeCategoriesViewModel>;
 
 @{
     ViewData["Title"] = "Categories";
@@ -57,21 +57,21 @@
                             <div class="card-footer-a">
                                 <ul class="card-info d-flex justify-content-around">
                                     <li>
-                                        <h4 class="card-info-title">Loans</h4>
+                                        <h4 class="card-info-title">Over</h4>
                                         <span>
-                                            @Model.LoansCount
+                                            @(Model.Where(x => x.Type == "Loan").Count() - 1) loans
                                         </span>
                                     </li>
                                     <li>
                                         <h4 class="card-info-title">Interest Rates To</h4>
                                         <span>
-                                            @Model.MinLoanRate %
+                                            @(Model.Where(x => x.Type == "Loan").Select(x => x.InterestRate).Min()) %
                                         </span>
                                     </li>
                                     <li>
                                         <h4 class="card-info-title">Relaxed Conditions To</h4>
                                         <span>
-                                            @Model.MaxLoanPeriod months
+                                            @(Model.Where(x => x.Type == "Loan").Select(x => x.Period).Max()) months
                                         </span>
                                     </li>
                                 </ul>

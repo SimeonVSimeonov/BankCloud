@@ -88,7 +88,6 @@ namespace BankCloud.Web.Controllers
                 return this.View(model);
             }
 
-            //order.BuyerId = userFromDb.Id;//TODO: ???
             order.Commission = BankCloudCalculator.CalculateCommission(loanFromDb);
             order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
             order.Status = OrderStatus.Pending;

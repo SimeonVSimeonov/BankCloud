@@ -2,13 +2,16 @@
 {
     public class HomeCategoriesViewModel
     {
-        public decimal MaxLoanAmount { get; set; }
 
-        public decimal MinLoanRate { get; set; }
+        public string Type { get; set; }
 
-        public int LoansCount { get; set; }
+        public decimal InterestRate { get; set; }
 
-        public int MaxLoanPeriod { get; set; }
+        public int Period { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public decimal Commission { get; set; }
 
     }
 }

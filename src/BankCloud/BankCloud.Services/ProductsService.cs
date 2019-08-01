@@ -16,12 +16,39 @@ namespace BankCloud.Services
             this.context = context;
         }
 
+        public IEnumerable<Product> GetAllActiveProducts()
+        {
+            return this.context.Products
+                .Where(product => product.IsDeleted == false)
+                .Include(loan => loan.Account.Currency);
+        }
+
         public IEnumerable<Product> GetAllActiveLoans()
         {
             return this.context.Products
                 .Where(product => product.GetType().Name == "Loan" && product.IsDeleted == false)
-                .Include(loan => loan.Account.Currency)
-                .ToList();
+                .Include(loan => loan.Account.Currency);
+        }
+
+        public IEnumerable<Product> GetAllActiveSaves()
+        {
+            return this.context.Products
+                .Where(product => product.GetType().Name == "Saves" && product.IsDeleted == false)
+                .Include(loan => loan.Account.Currency);
+        }
+
+        public IEnumerable<Product> GetAllActiveInsurance()
+        {
+            return this.context.Products
+                .Where(product => product.GetType().Name == "Insurance" && product.IsDeleted == false)
+                .Include(loan => loan.Account.Currency);
+        }
+
+        public IEnumerable<Product> GetAllActiveInvestment()
+        {
+            return this.context.Products
+                .Where(product => product.GetType().Name == "Investment" && product.IsDeleted == false)
+                .Include(loan => loan.Account.Currency);
         }
 
         public Product GetProductById(string id)
@@ -31,7 +58,6 @@ namespace BankCloud.Services
                 .Include(loan => loan.Account)
                 .ThenInclude(account => account.BankUser)
                 .Include(loan => loan.Account.Currency)
-                //.Include(loan => loan.Seller) //TODO check if need Seller Prop?
                 .SingleOrDefault();
         }
 

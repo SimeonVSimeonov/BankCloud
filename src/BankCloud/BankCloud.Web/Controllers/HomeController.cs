@@ -1,47 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BankCloud.Web.Models;
-using BankCloud.Data.Context;
 using BankCloud.Models.ViewModels;
+using BankCloud.Services.Interfaces;
+using AutoMapper;
 
 namespace BankCloud.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly BankCloudDbContext context;
+        private readonly IMapper mapper;
+        private readonly IProductsService productsService;
 
-        public HomeController(BankCloudDbContext context)
+        public HomeController(IProductsService productsService, IMapper mapper)
         {
-            this.context = context;
+            this.productsService = productsService;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var productsFromDb = this.productsService.GetAllActiveProducts();
+
+            var view = this.mapper.Map<List<HomeCategoriesViewModel>>(productsFromDb);
+
+            return View(view);
         }
 
-        public IActionResult Categories() //TODO: refactor for all categories
+        public IActionResult Categories()
         {
-            //int loansCount = this.context.Loans.Count();
-            //decimal loanWhitMaxAmount = this.context.Loans.Max(x => x.Amount);
-            //var maxLoanPeriod = this.context.Loans.Max(x => x.Period);
-            //var minLoanRate = this.context.Loans.Min(x => x.InterestRate);
+            var productsFromDb = this.productsService.GetAllActiveProducts();
 
-            //var loanViewCategories = new HomeCategoriesViewModel()
-            //{
-            //    LoansCount = loansCount,
-            //    MaxLoanAmount = loanWhitMaxAmount,
-            //    MaxLoanPeriod = maxLoanPeriod,
-            //    MinLoanRate = minLoanRate,
-            //};
+            var view = this.mapper.Map<List<HomeCategoriesViewModel>>(productsFromDb);
 
-            //return View(loanViewCategories);
-
-            return View();
+            return View(view);
         }
 
         public IActionResult Privacy()
