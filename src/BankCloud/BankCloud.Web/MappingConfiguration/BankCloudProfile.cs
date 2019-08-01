@@ -33,6 +33,22 @@ namespace BankCloud.Web.MappingConfiguration
             CreateMap<OrderLoan, OrderedLoansDetailViewModel>()
                 .ForMember(x => x.Seller, y => y.MapFrom(src => src.Loan.Account.BankUser))
                 .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Loan.Account.Currency.IsoCode));
+
+            CreateMap<Account, UsersAccountViewModel>()
+                .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Currency.IsoCode));
+
+            CreateMap<AccountInputModel, Account>()
+                .ForMember(x => x.CurrencyId, y => y.MapFrom(src => src.Currency))
+                .ForMember(x => x.Currency, opt => opt.Ignore());
+
+            CreateMap<AccountActivateInputModel, Account>();
+
+            CreateMap<AccountActivateInputModel, Address>();
+
+            CreateMap<AccountActivateInputModel, BankUser>();
+
+            CreateMap<AddressInputModel, Address>();
+
         }
     }
 }

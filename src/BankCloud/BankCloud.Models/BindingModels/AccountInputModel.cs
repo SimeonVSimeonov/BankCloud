@@ -4,7 +4,7 @@
     {
         public string IBAN { get; set; }
 
-        public decimal Charge { get; set; }
+        //public decimal Charge { get; set; }
 
         public decimal MonthlyIncome { get; set; }
 

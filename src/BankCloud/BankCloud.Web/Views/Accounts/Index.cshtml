@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BankCloud.Models.ViewModels.UsersAccountViewModel>
 
 @{
-    ViewData["Title"] = "Accounts";
+    ViewData["Title"] = "Index";
 }
 
 <section class="section-agents section-t8">
@@ -17,7 +17,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-between">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a asp-action="AccountCreate">Create New</a>
+                            <a href="/Accounts/Create">Create New</a>
                         </li>
                     </ol>
                     <ol class="breadcrumb">
@@ -89,12 +89,6 @@
                                                 @item.MonthlyOutCome
                                             </span>
                                         </li>
-                                        @*<li>
-                                                <h4 class="card-info-title">Period</h4>
-                                                <span>
-                                                    @item.Period months
-                                                </span>
-                                            </li>*@
                                     </ul>
                                 </div>
                             </div>

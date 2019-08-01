@@ -1,4 +1,5 @@
 ﻿using BankCloud.Data.Entities;
+using BankCloud.Models.BindingModels;
 using System.Collections.Generic;
 
 namespace BankCloud.Services.Interfaces
@@ -8,5 +9,9 @@ namespace BankCloud.Services.Interfaces
         IEnumerable<Account> GetUserAccounts();
 
         IEnumerable<string> GetUserAccountsIds();
+
+        IEnumerable<Currency> GetCurrencies();
+
+        void AddAccountToUser(Account account);
     }
 }

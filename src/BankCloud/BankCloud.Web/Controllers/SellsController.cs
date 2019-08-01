@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BankCloud.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankCloud.Web.Controllers
 {
@@ -24,14 +25,24 @@ namespace BankCloud.Web.Controllers
             this.productsService = productsService;
         }
 
+        [Authorize]
         public IActionResult LoanSell()
         {
-            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
+            var userAccounts = this.accountsService.GetUserAccounts();
+
+            this.ViewData["Accounts"] = userAccounts;
+            
+            if (!userAccounts.Any())
+            {
+                return this.Redirect("/Accounts/Activate");
+            }
 
             return View();
         }
 
         [HttpPost]
+        [Authorize]
+        [AutoValidateAntiforgeryToken]
         public IActionResult LoanSell(SellsLoanInputModel model)
         {
             this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();

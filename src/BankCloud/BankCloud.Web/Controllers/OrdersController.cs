@@ -34,13 +34,18 @@ namespace BankCloud.Web.Controllers
             this.ordersService = ordersService;
         }
 
-        [HttpGet("/Orders/OrderLoan/{id}")]
         [Authorize]
+        [HttpGet("/Orders/OrderLoan/{id}")]
         public IActionResult OrderLoan(string id)
         {
             Product loanFromDb = this.productsService.GetProductById(id);
 
             BankUser userFromDb = this.usersService.GetCurrentUser();
+
+            if (!userFromDb.Accounts.Any())
+            {
+                return this.Redirect("/Accounts/Activate");
+            }
 
             this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
 
@@ -54,8 +59,9 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
-        [HttpPost]
         [Authorize]
+        [AutoValidateAntiforgeryToken]
+        [HttpPost]
         public IActionResult OrderLoan(OrdersOrderLoanInputModel model)
         {
             Product loanFromDb = this.productsService.GetProductById(model.Id);
@@ -68,7 +74,7 @@ namespace BankCloud.Web.Controllers
 
             if (!userFromDb.Accounts.Any())
             {
-                return this.Redirect("/Users/AccountActivate");
+                return this.Redirect("/Accounts/Activate");
             }
             //TODO: add message for invalid parameters
             if (!ModelState.IsValid || model.Amount > loanFromDb.Amount

@@ -1,0 +1,61 @@
+﻿@model BankCloud.Models.BindingModels.AccountInputModel
+@using BankCloud.Data.Entities;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="section-agents section-t8">
+    <div class="container-fluid text-center">
+        <div class="title-single-box">
+            <h1 class="title-single"><span class="color-b">Create New Account</span></h1>
+            <span class="color-text-a">Please insert your conditions</span>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="col-md-5 mx-auto">
+                <form asp-action="Loan" class="form-a fa-sign-in">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @*TODO: Add payment method*@
+                    @*<div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Charge" class="control-label"></label>
+                            <input asp-for="Charge" class="form-control" />
+                            <span asp-validation-for="Charge" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="MonthlyIncome" class="control-label"></label>
+                            <input asp-for="MonthlyIncome" class="form-control" />
+                            <span asp-validation-for="MonthlyIncome" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Currency" class="control-label"></label>
+                            <select asp-for="Currency" class="custom-select">
+                                <option selected>Curency</option>
+                                @foreach (var currency in (List<Currency>)ViewData["Curencies"])
+                                {
+                                <option value="@currency.Id">@currency.IsoCode</option>
+                                };
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-a" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a href="/Accounts/Index">Back to List</a>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
