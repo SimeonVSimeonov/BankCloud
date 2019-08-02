@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using BankCloud.Services.Interfaces;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace BankCloud.Services
 {
     public class ProductsService : IProductsService
     {
         private readonly BankCloudDbContext context;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ProductsService(BankCloudDbContext context)
+        public ProductsService(BankCloudDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<Product> GetAllActiveProducts()
@@ -21,6 +25,32 @@ namespace BankCloud.Services
             return this.context.Products
                 .Where(product => product.IsDeleted == false)
                 .Include(loan => loan.Account.Currency);
+        }
+
+        public IEnumerable<Product> GetAllAgentActiveLoans()
+        {
+            var currentAgentId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Products
+               .Include(product => product.Account)
+               .ThenInclude(account => account.Currency)
+               .Where(product => product.GetType().Name == "Loan" &&
+               product.Account.BankUserId == currentAgentId &&
+               product.IsDeleted == false);
+        }
+
+        public IEnumerable<Product> GetAllAgentArchivedLoans()
+        {
+            var currentAgentId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Products
+               .Include(product => product.Account)
+               .ThenInclude(account => account.Currency)
+               .Where(product => product.GetType().Name == "Loan" &&
+               product.Account.BankUserId == currentAgentId &&
+               product.IsDeleted == true);
         }
 
         public IEnumerable<Product> GetAllActiveLoans()
@@ -70,6 +100,32 @@ namespace BankCloud.Services
 
             context.Products.Add(product);
             context.SaveChanges();
+        }
+
+        public void ArchiveProduct(string id)
+        {
+            Product product = this.context.Products.Find(id);
+
+            if (product == null)
+            {
+                return;
+            }
+
+            product.IsDeleted = true;
+            this.context.SaveChanges();
+        }
+
+        public void RestoreProduct(string id)
+        {
+            Product product = this.context.Products.Find(id);
+
+            if (product == null)
+            {
+                return;
+            }
+
+            product.IsDeleted = false;
+            this.context.SaveChanges();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace BankCloud.Web.Controllers
             this.productsService = productsService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Agent")]
         public IActionResult LoanSell()
         {
             var userAccounts = this.accountsService.GetUserAccounts();
@@ -41,7 +41,7 @@ namespace BankCloud.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Agent")]
         [AutoValidateAntiforgeryToken]
         public IActionResult LoanSell(SellsLoanInputModel model)
         {
@@ -65,5 +65,7 @@ namespace BankCloud.Web.Controllers
 
             return Redirect("/Products/Loans");
         }
+
+        //TODO: add other categories
     }
 }

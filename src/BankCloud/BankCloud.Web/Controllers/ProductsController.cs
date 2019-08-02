@@ -17,6 +17,7 @@ namespace BankCloud.Web.Controllers
             this.mapper = mapper;
         }
 
+        
         public IActionResult Loans()
         {
             var loansFromDb = this.productsService.GetAllActiveLoans();

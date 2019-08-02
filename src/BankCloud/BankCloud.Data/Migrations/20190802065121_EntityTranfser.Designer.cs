@@ -4,14 +4,16 @@ using BankCloud.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankCloud.Data.Migrations
 {
     [DbContext(typeof(BankCloudDbContext))]
-    partial class BankCloudDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190802065121_EntityTranfser")]
+    partial class EntityTranfser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,9 +291,13 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Transfer");
                 });
@@ -511,6 +517,10 @@ namespace BankCloud.Data.Migrations
                     b.HasOne("BankCloud.Data.Entities.Account", "Account")
                         .WithMany("Transfers")
                         .HasForeignKey("AccountId");
+
+                    b.HasOne("BankCloud.Data.Entities.BankUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

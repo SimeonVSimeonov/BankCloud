@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
-using BankCloud.Data.Entities.Enums;
-using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
-using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,74 +14,50 @@ namespace BankCloud.Web.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly BankCloudDbContext context;
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
+        private readonly IUsersService usersService;
+        private readonly IProductsService productsService;
 
-        public UsersController(BankCloudDbContext context,
+        public UsersController(IUsersService usersService, IProductsService productsService,
             IOrdersService ordersService, IMapper mapper)
         {
-            this.context = context;
+            this.usersService = usersService;
             this.ordersService = ordersService;
             this.mapper = mapper;
+            this.productsService = productsService;
         }
 
+        [Authorize]
         public IActionResult Products(string id)
         {
             return View();
         }
 
 
-
+        [Authorize(Roles = "Agent")]
         public IActionResult ProductLoans()
         {
-            List<Product> loanFromDb = this.context.Products
-                .Where(product => product.GetType().Name == "Loan")
-                .Include(loan => loan.Account.Currency)
-                .Where(loan => loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-                && loan.IsDeleted == false)
-                .ToList();
+            var agentLoansFromDb = this.productsService.GetAllAgentActiveLoans();
 
-            var view = loanFromDb.Select(loan => new ProductsLoansViewModel
-            {
-                Id = loan.Id,
-                Name = loan.Name,
-                Amount = loan.Amount,
-                Currency = loan.Account.Currency.IsoCode,
-                InterestRate = loan.InterestRate,
-                Period = loan.Period,
-            });
+            var view = this.mapper.Map<List<ProductsLoansViewModel>>(agentLoansFromDb);
 
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpGet("/Users/ProductLoanDetails/{id}")]
         public IActionResult ProductLoanDetails(string id)
         {
-            Product loanFromDb = this.context.Products
-               .Where(product => product.GetType().Name == "Loan" && product.Id == id)
-               .Include(curency => curency.Account.Currency)
-               .Include(user => user.Seller)
-               .SingleOrDefault();
+            Product product = this.productsService.GetProductById(id);
 
-            var view = new ProductsLoanDetailsViewModel()
-            {
-                Id = loanFromDb.Id,
-                Amount = loanFromDb.Amount,
-                InterestRate = loanFromDb.InterestRate,
-                Name = loanFromDb.Name,
-                Period = loanFromDb.Period,
-                CurrencyIso = loanFromDb.Account.Currency.IsoCode,
-                CurrencyName = loanFromDb.Account.Currency.Name,
-                Commission = loanFromDb.Commission,
-                Seller = loanFromDb.Seller.Name,
-                SellerEmail = loanFromDb.Seller.Email
-            };
-
+            var view = this.mapper.Map<ProductsLoanDetailsViewModel>(product);
 
             return this.View(view);
         }
 
+        [Authorize(Roles = "Agent")]
+        [AutoValidateAntiforgeryToken]
         public IActionResult LoanDelete(string id)
         {
             if (id == null)
@@ -97,88 +65,59 @@ namespace BankCloud.Web.Controllers
                 return NotFound();
             }
 
-            Product loanFromDb = this.context.Products
-               .Where(product => product.GetType().Name == "Loan" && product.Id == id)
-               .Include(curency => curency.Account.Currency)
-               .Include(user => user.Seller)
-               .SingleOrDefault();
+            Product product = this.productsService.GetProductById(id);
 
-            if (loanFromDb == null)
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var view = new ProductsLoanDetailsViewModel()
-            {
-                Id = loanFromDb.Id,
-                Name = loanFromDb.Name,
-                Amount = loanFromDb.Amount,
-                InterestRate = loanFromDb.InterestRate,
-                Commission = loanFromDb.Commission,
-                Period = loanFromDb.Period,
-                CurrencyIso = loanFromDb.Account.Currency.IsoCode,
-                CurrencyName = loanFromDb.Account.Currency.Name,
-            };
+            var view = this.mapper.Map<ProductsLoanDetailsViewModel>(product);
 
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpPost, ActionName("LoanDelete")]
         [ValidateAntiForgeryToken]
         public IActionResult LoanDeleteConfirmed(string id)
         {
-            Product loan = this.context.Products.Find(id);
 
-            var pendingLoanIds = this.context.OrdersLoans
-                .Where(orderedLoan => orderedLoan.Status == OrderStatus.Pending)
-                .Select(orderedLoan => orderedLoan.Id);
+            var pendingLoanIds = this.ordersService.GetAgentOrderLoansIds();
 
-            if (pendingLoanIds.Contains(loan.Id))
+            if (pendingLoanIds.Contains(id))
             {
                 return this.Redirect("/CreditScorings/PendingRequests");
             }
 
-            loan.IsDeleted = true;
-            this.context.SaveChanges();
+            this.productsService.ArchiveProduct(id);
+            
             return Redirect("/Users/ProductLoans");
 
         }
 
+        [Authorize(Roles = "Agent")]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ArchivedProductLoans()
         {
-            List<Product> loanFromDb = this.context.Products
-                .Include(product => product.Account.Currency)
-                .Where(product => product.GetType().Name == "Loan" 
-                && product.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-                && product.IsDeleted == true)
-                .ToList();
+            var loanFromDb = this.productsService.GetAllAgentArchivedLoans();
 
-            var view = loanFromDb.Select(loan => new ProductsLoansViewModel
-            {
-                Id = loan.Id,
-                Name = loan.Name,
-                Amount = loan.Amount,
-                //Currency = loan.Account.Currency.IsoCode,
-                InterestRate = loan.InterestRate,
-                Period = loan.Period,
-            });
+            var view = this.mapper.Map<List<ProductsLoansViewModel>>(loanFromDb);
 
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpGet("/Users/RestoreProductloan/{id}")]
+        [AutoValidateAntiforgeryToken]
         public IActionResult RestoreProductloan(string id)
         {
-            Product loanFromDb = this.context.Products
-                .SingleOrDefault(loan => loan.Id == id);
-
-            loanFromDb.IsDeleted = false;
-
-            this.context.SaveChanges();
+            this.productsService.RestoreProduct(id);
 
             return this.Redirect("/Users/ProductLoans");
         }
 
+        [Authorize]
         public IActionResult OrderedLoans()
         {
             IEnumerable<OrderLoan> userOrderedLoanFromDB = this.ordersService.GetOrderedLoansByUser();
@@ -189,6 +128,7 @@ namespace BankCloud.Web.Controllers
             return View(viewAllOrderLoans);
         }
 
+        [Authorize]
         [HttpGet("/Users/OrderedLoanDetails/{id}")]
         public IActionResult OrderedLoanDetails(string id)
         {

@@ -1,43 +1,58 @@
 ﻿@model BankCloud.Models.BindingModels.AccountsChargeInputModel
+@using BankCloud.Data.Entities.Enums;
+@using BankCloud.Web.Extensions;
 
 @{
     ViewData["Title"] = "Charge";
 }
 
 <section class="section-agents section-t8">
-
-    <h1>Charge</h1>
-
-    <h4>AccountsChargeInputModel</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Charge">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Id" class="control-label"></label>
-                    <input asp-for="Id" class="form-control" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Amount" class="control-label"></label>
-                    <input asp-for="Amount" class="form-control" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ChargeType" class="control-label"></label>
-                    <input asp-for="ChargeType" class="form-control" />
-                    <span asp-validation-for="ChargeType" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
+    <div class="container-fluid text-center">
+        <div class="title-single-box">
+            <h1 class="title-single"><span class="color-b">Charge Your Account</span></h1>
+            <span class="color-text-a">Please insert your conditions</span>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="col-md-5 mx-auto">
+                <form asp-action="Charge" class="form-a fa-sign-in">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Account" class="control-label"></label>
+                        <input asp-for="Account" class="form-control" />
+                        <span asp-validation-for="Account" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Type" class="control-label"></label>
+                        <select asp-for="Type" class="custom-select">
+                            <option value="" selected>Choose Account</option>
+                            @foreach (var item in Enum.GetValues(typeof(TransferType)).Cast
+                           <TransferType>
+                               ())
+                            {
+                                <option value="@item">@item.ToDescription()</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Apply" class="btn btn-a" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
         </div>
     </div>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
-
 </section>

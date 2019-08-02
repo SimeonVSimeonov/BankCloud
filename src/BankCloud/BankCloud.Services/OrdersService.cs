@@ -1,5 +1,6 @@
 ﻿using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
+using BankCloud.Data.Entities.Enums;
 using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,17 @@ namespace BankCloud.Services
             context.SaveChanges();
         }
 
+        public IEnumerable<string> GetAgentOrderLoansIds()
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.OrdersLoans
+                .Where(orderedLoan => orderedLoan.Status == OrderStatus.Pending &&
+                    orderedLoan.Account.BankUserId == userId)
+                .Select(orderedLoan => orderedLoan.Id);
+        }
+
         public IEnumerable<OrderLoan> GetOrderedLoansByUser()
         {
             string userId = httpContextAccessor.HttpContext.User
@@ -55,15 +67,6 @@ namespace BankCloud.Services
                 .ThenInclude(account => account.Currency)
                 .Include(orderLoan => orderLoan.Loan.Account.BankUser)
                 .SingleOrDefault(orderLoan => orderLoan.Id == id);
-
-            /*   //Order orderLoanFromDB = this.context
-            //    .OrdersLoans.Where(order => order.GetType().Name == "OrderLoan")
-            //    .Include(orderLoan => orderLoan.Account)
-            //    .ThenInclude(orderLoan => orderLoan.Currency)
-            //    //.Include(orderLoan => orderLoan.Loan)
-            //    .Include(orderLoan => orderLoan.Account)
-            //    .ThenInclude(loan => loan.BankUser)
-            //    .SingleOrDefault(orderLoan => orderLoan.Id == id);*/
         }
     }
 }

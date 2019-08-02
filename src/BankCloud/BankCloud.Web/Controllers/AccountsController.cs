@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BankCloud.Data.Entities;
+using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Common;
@@ -29,8 +30,31 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult Charge()
         {
-
             return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Charge(AccountsChargeInputModel model)
+        {
+            if (model.Type == TransferType.BankCloud)
+            {
+                var accuser = this.accountsService.GetUserAccounts();
+
+                if (accuser.Any(x => x.IBAN == model.Account.ToString()))
+                {
+                    ;
+                }
+
+            }
+
+            if (model.Type == TransferType.Card)
+            {
+                ;
+            }
+
+            return Redirect("Accounts");
         }
 
         [Authorize]

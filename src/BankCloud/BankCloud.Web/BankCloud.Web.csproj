@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -42,6 +42,11 @@
     <ProjectReference Include="..\BankCloud.Data\BankCloud.Data.csproj" />
     <ProjectReference Include="..\BankCloud.Models\BankCloud.Models.csproj" />
     <ProjectReference Include="..\BankCloud.Services\BankCloud.Services.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
 </Project>

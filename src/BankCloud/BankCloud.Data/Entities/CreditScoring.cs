@@ -17,10 +17,6 @@ namespace BankCloud.Data.Entities
 
         public decimal CostPrice { get; set; }
 
-        //[Required]
-        //public string OrderId { get; set; }
-        //public Order Order { get; set; }
-
         [Required]
         public string BuyerId { get; set; }
         public BankUser Buyer { get; set; }

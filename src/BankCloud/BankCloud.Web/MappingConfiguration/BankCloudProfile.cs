@@ -51,9 +51,11 @@ namespace BankCloud.Web.MappingConfiguration
 
             CreateMap<Product, HomeCategoriesViewModel>()
                 .ForMember(x => x.Type, y => y.MapFrom(src => src.GetType().Name));
-            //CreateMap<Save, HomeCategoriesViewModel>();
-            //CreateMap<Investment, HomeCategoriesViewModel>();
-            //CreateMap<Insurance, HomeCategoriesViewModel>();
+
+            CreateMap<Product, ProductsLoansViewModel>()
+                .ForMember(x => x.Currency, y => y.MapFrom(src => src.Account.Currency.IsoCode));
+
+            CreateMap<Product, ProductsLoanDetailsViewModel>();
             
         }
     }

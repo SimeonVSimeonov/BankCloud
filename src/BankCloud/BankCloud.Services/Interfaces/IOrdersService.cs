@@ -11,6 +11,8 @@ namespace BankCloud.Services.Interfaces
 
         IEnumerable<OrderLoan> GetOrderedLoansByUser();
 
+        IEnumerable<string> GetAgentOrderLoansIds();
+
         OrderLoan GetOrderLoanById(string id);
     }
 }
