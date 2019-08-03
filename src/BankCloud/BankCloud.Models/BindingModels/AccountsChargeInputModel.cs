@@ -8,7 +8,7 @@ namespace BankCloud.Models.BindingModels
 {
     public class AccountsChargeInputModel
     {
-
+        //TODO: validation
         public string Id { get; set; }
 
         public decimal Amount { get; set; }

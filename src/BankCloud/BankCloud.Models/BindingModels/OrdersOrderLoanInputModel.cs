@@ -30,8 +30,6 @@ namespace BankCloud.Models.BindingModels
 
         public string CurrencyName { get; set; }
 
-        public string BuyerId { get; set; }
-
         public ICollection<string> UserCurrencyTypes { get; set; }
 
         [Required]

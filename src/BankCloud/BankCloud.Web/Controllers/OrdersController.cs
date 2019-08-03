@@ -81,13 +81,14 @@ namespace BankCloud.Web.Controllers
                 || model.Period > loanFromDb.Period
                 || model.InterestRate != loanFromDb.InterestRate)
             {
+                //TODO: refactor this!!!
                 model.Name = loanFromDb.Name;
                 model.CurrencyName = loanFromDb.Account.Currency.Name;
                 model.UserCurrencyTypes = this.accountsService.GetUserAccounts()
                 .Select(x => x.Currency.Name).ToList();
                 return this.View(model);
             }
-            //TODO: refactor if can!!!
+            //TODO: refactor this!!!
             order.Commission = BankCloudCalculator.CalculateCommission(loanFromDb);
             order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
             order.Status = OrderStatus.Pending;

@@ -5,6 +5,7 @@ namespace BankCloud.Models.BindingModels
 {
     public class CreditScoringsLoanInputModel
     {
+        //TODO: validation
         public string Id { get; set; }
 
         public string Status { get; set; }

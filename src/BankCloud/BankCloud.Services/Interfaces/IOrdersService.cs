@@ -11,6 +11,8 @@ namespace BankCloud.Services.Interfaces
 
         void RejectRequest(OrderLoan order);
 
+        void ApproveRequest(OrderLoan orderLoan);
+
         IEnumerable<OrderLoan> GetOrderedLoansByCurrentUser();
 
         IEnumerable<string> GetAgentOrderLoansIds();

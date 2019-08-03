@@ -2,6 +2,7 @@
 {
     public class AccountInputModel
     {
+        //TODO add validation
         public string IBAN { get; set; }
 
         //public decimal Charge { get; set; }

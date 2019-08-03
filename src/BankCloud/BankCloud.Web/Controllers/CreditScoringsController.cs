@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
-using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
-using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
-using FixerSharp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankCloud.Web.Controllers
 {
@@ -29,11 +22,13 @@ namespace BankCloud.Web.Controllers
             this.mapper = mapper;
         }
 
+        [Authorize(Roles = "Agent")]
         public IActionResult MySells()
         {
             return View();
         }
 
+        [Authorize(Roles = "Agent")]
         public IActionResult PendingRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
@@ -44,6 +39,7 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         public IActionResult ApprovedRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
@@ -54,6 +50,7 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         public IActionResult RejectedRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
@@ -64,6 +61,7 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpGet("/CreditScorings/DetailRequest/{id}")]
         public IActionResult LoanDetailRequest(string id)
         {
@@ -74,57 +72,30 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpGet("/CreditScorings/ApproveRequest/{id}")]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ApproveRequest(string id)
         {
+            OrderLoan orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
 
-            //Order orderedLoanFromDb = this.context.Orders
-            //    .Include(orderLoan => orderLoan.Account)
-            //    .ThenInclude(orderedLoanAccount => orderedLoanAccount.Currency)
-            //    .SingleOrDefault(ol => ol.Account.BankUser.IdentityNumber == User.FindFirst(ClaimTypes.NameIdentifier).Value
-            //            && ol.Id == id);
+            Account sellerAccount = orderedLoanFromDb.Loan.Account;
 
-            //Account buyerAccount = orderedLoanFromDb.Account;
-            //Account sellerAccount = orderedLoanFromDb.Loan.Account;
+            if (sellerAccount.Balance < orderedLoanFromDb.Amount)
+            {
+                this.TempData["error"] = GlobalConstants.ERROR_MESSAGE_FOR_INSUFFICIENT_FUNDS;
 
-            //if (sellerAccount.Balance < orderedLoanFromDb.Amount)
-            //{
-            //    this.TempData["error"] = GlobalConstants.ERROR_MESSAGE_FOR_INSUFFICIENT_FUNDS;
+                return this.Redirect("/Users/Accounts");
+            }
 
-            //    return this.Redirect("/Users/Accounts");
-            //}
-
-            //double orderCost = (double)orderedLoanFromDb.CostPrice;
-            //double orderAmount = (double)orderedLoanFromDb.Amount;
-            //double orderFee = (double)orderedLoanFromDb.MonthlyFee;
-
-            //if (buyerAccount.Currency.IsoCode != sellerAccount.Currency.IsoCode)
-            //{
-            //    ExchangeRate rateUsdGbp = Fixer
-            //        .Rate(sellerAccount.Currency.IsoCode, buyerAccount.Currency.IsoCode);
-
-            //    orderCost = rateUsdGbp.Convert(orderCost);
-            //    orderAmount = rateUsdGbp.Convert(orderAmount);
-            //    orderFee = rateUsdGbp.Convert(orderFee);
-            //}
-
-            //buyerAccount.Balance -= (decimal)orderCost;
-            //buyerAccount.Balance += (decimal)orderAmount;
-            //buyerAccount.MonthlyOutcome += (decimal)orderFee;
-
-            //sellerAccount.Balance += orderedLoanFromDb.CostPrice;
-            //sellerAccount.Balance -= orderedLoanFromDb.Amount;
-            //sellerAccount.MonthlyIncome += orderedLoanFromDb.MonthlyFee;
-            ////TODO: evry m trasfer
-            //orderedLoanFromDb.CompletedOn = DateTime.UtcNow;
-            //orderedLoanFromDb.Status = OrderStatus.Approved;
-
-            //this.context.SaveChanges();
+            this.ordersService.ApproveRequest(orderedLoanFromDb);
 
             return Redirect("/CreditScorings/PendingRequests");
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpGet("/CreditScorings/RejectRequest/{id}")]
+        [AutoValidateAntiforgeryToken]
         public IActionResult RejectRequest(string id)
         {
             OrderLoan orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);

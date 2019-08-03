@@ -66,6 +66,7 @@ namespace BankCloud.Web.Controllers
             return Redirect("/Products/Loans");
         }
 
+        //TODO: add description and pic for product
         //TODO: add other categories
     }
 }

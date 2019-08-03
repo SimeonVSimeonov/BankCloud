@@ -137,6 +137,7 @@ namespace BankCloud.Web.Controllers
             var detailOrderLoan = this.mapper
                 .Map<OrderedLoansDetailViewModel>(userOrderedLoanFromDB);
 
+            //TODO refactor this
             detailOrderLoan.Account = userOrderedLoanFromDB.Account.IBAN + " | " + userOrderedLoanFromDB.Account.Currency.Name;
             detailOrderLoan.DueAmount = userOrderedLoanFromDB.MonthlyFee * userOrderedLoanFromDB.Period;
 
