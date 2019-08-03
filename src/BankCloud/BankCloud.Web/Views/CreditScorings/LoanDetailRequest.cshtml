@@ -54,7 +54,7 @@
                 <div class="property-price d-flex justify-content-center foo">
                     <div class="card-header-c d-flex">
                         <div class="card-box-ico">
-                            <span class="ion-money">@Model.Currency</span>
+                            <span class="ion-money">@Model.CurrencyIso</span>
                         </div>
                         <div class="card-title-c align-self-center">
                             <h5 class="title-c">@Model.Amount</h5>
@@ -97,7 +97,7 @@
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Amount:</strong>
-                                <span>@Model.Amount @Model.Currency</span>
+                                <span>@Model.Amount @Model.CurrencyIso</span>
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Period:</strong>
@@ -105,11 +105,11 @@
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Charge Absorption:</strong>
-                                <span>@Model.Commission @Model.Currency</span>
+                                <span>@Model.Commission @Model.CurrencyIso</span>
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>MonthlyFee:</strong>
-                                <span>@Model.MonthlyFee @Model.Currency</span>
+                                <span>@Model.MonthlyFee @Model.CurrencyIso</span>
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>DueAmount:</strong>
@@ -181,7 +181,7 @@
                             <td>@account.MonthlyIncome</td>
                             <td>@account.MonthlyOutCome</td>
                             <td>@account.Balance</td>
-                            <td>@account.CurrencyIso</td>
+                            <td>@account.IsoCode</td>
                             <td>@account.CurrencyName</td>
                         </tr>
                     }

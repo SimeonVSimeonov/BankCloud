@@ -62,14 +62,14 @@ namespace BankCloud.Web.Controllers
         {
             var userAccountsFromDb = this.accountsService.GetUserAccounts();
 
-            var viewAccounts = this.mapper.Map<List<UsersAccountViewModel>>(userAccountsFromDb);
+            var view = this.mapper.Map<List<UsersAccountViewModel>>(userAccountsFromDb);
 
             if (!userAccountsFromDb.Any())
             {
                 return this.Redirect("Activate");
             }
 
-            return View(viewAccounts);
+            return View(view);
         }
 
         [Authorize]

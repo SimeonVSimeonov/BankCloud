@@ -87,7 +87,7 @@ namespace BankCloud.Web.Controllers
                 .Select(x => x.Currency.Name).ToList();
                 return this.View(model);
             }
-
+            //TODO: refactor if can!!!
             order.Commission = BankCloudCalculator.CalculateCommission(loanFromDb);
             order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
             order.Status = OrderStatus.Pending;

@@ -4,12 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Common;
+using BankCloud.Services.Interfaces;
 using FixerSharp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +20,13 @@ namespace BankCloud.Web.Controllers
 {
     public class CreditScoringsController : Controller
     {
-        private readonly BankCloudDbContext context;
+        private readonly IMapper mapper;
+        private readonly IOrdersService ordersService;
 
-        public CreditScoringsController(BankCloudDbContext context)
+        public CreditScoringsController(IOrdersService ordersService, IMapper mapper)
         {
-            this.context = context;
+            this.ordersService = ordersService;
+            this.mapper = mapper;
         }
 
         public IActionResult MySells()
@@ -32,128 +36,42 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult PendingRequests()
         {
-            //var orderedLoansFromDb = this.context.Orders
-            //    .Include(ol => ol.Loan)
-            //    .ThenInclude(oc => oc.Account.Currency)
-            //    .Include(ol => ol.Account.BankUser)
-            //    .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-            //            && ol.Status == OrderStatus.Pending)
-            //    .OrderByDescending(od => od.IssuedOn)
-            //    .ToList();
+            var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
+                .Where(orderLoan => orderLoan.Status == OrderStatus.Pending);
 
-            //var requestView = orderedLoansFromDb.Select(order => new CreditScoringsOrderedLoansViewModel
-            //{
-            //    Name = order.Name,
-            //    Amount = order.Amount,
-            //    Buyer = order.Account.BankUser.Name,
-            //    Period = order.Period,
-            //    MonthlyFee = order.MonthlyFee,
-            //    Commission = order.CostPrice,
-            //    Currency = order.Loan.Account.Currency.IsoCode,
-            //    Id = order.Id,
-            //});
+            var view = this.mapper.Map<List<CreditScoringsOrderedLoansViewModel>>(orderedLoansFromDb);
 
-           // return View(requestView);
-
-            return View();
+            return View(view);
         }
 
         public IActionResult ApprovedRequests()
         {
-            //var orderedLoansFromDb = this.context.Orders
-            //    .Include(ol => ol.Loan)
-            //    .ThenInclude(oc => oc.Account.Currency)
-            //    .Include(ol => ol.Account.BankUser)
-            //    .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-            //            && ol.Status == OrderStatus.Approved)
-            //    .OrderByDescending(od => od.IssuedOn)
-            //    .ToList();
+            var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
+                .Where(orderLoan => orderLoan.Status == OrderStatus.Approved);
 
-            //var requestView = orderedLoansFromDb.Select(order => new CreditScoringsOrderedLoansViewModel
-            //{
-            //    Name = order.Name,
-            //    Amount = order.Amount,
-            //    Buyer = order.Account.BankUser.Name,
-            //    Period = order.Period,
-            //    MonthlyFee = order.MonthlyFee,
-            //    Commission = order.CostPrice,
-            //    Currency = order.Loan.Account.Currency.IsoCode,
-            //    Id = order.Id,
-            //});
+            var view = this.mapper.Map<List<CreditScoringsOrderedLoansViewModel>>(orderedLoansFromDb);
 
-            //return View(requestView);
-            return View();
+            return View(view);
         }
 
         public IActionResult RejectedRequests()
         {
-            //var orderedLoansFromDb = this.context.Orders
-            //    .Include(ol => ol.Loan)
-            //    .ThenInclude(oc => oc.Account.Currency)
-            //    .Include(ol => ol.Account.BankUser)
-            //    .Where(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-            //            && ol.Status == OrderStatus.Rejected)
-            //    .OrderByDescending(od => od.IssuedOn)
-            //    .ToList();
+            var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
+                .Where(orderLoan => orderLoan.Status == OrderStatus.Rejected);
 
-            //var requestView = orderedLoansFromDb.Select(order => new CreditScoringsOrderedLoansViewModel
-            //{
-            //    Name = order.Name,
-            //    Amount = order.Amount,
-            //    Buyer = order.Account.BankUser.Name,
-            //    Period = order.Period,
-            //    MonthlyFee = order.MonthlyFee,
-            //    Commission = order.CostPrice,
-            //    Currency = order.Loan.Account.Currency.IsoCode,
-            //    Id = order.Id,
-            //});
+            var view = this.mapper.Map<List<CreditScoringsOrderedLoansViewModel>>(orderedLoansFromDb);
 
-            //return View(requestView);
-
-            return View();
+            return View(view);
         }
 
         [HttpGet("/CreditScorings/DetailRequest/{id}")]
         public IActionResult LoanDetailRequest(string id)
         {
-            //Order orderedLoanFromDb = this.context.Orders
-            //    .Include(orderedLoan => orderedLoan.Account.BankUser)
-            //    .ThenInclude(buyer => buyer.Accounts)
-            //    .ThenInclude(loan => loan.Currency)
-            //    .Include(orderedLoan => orderedLoan.Account.BankUser)
-            //    .SingleOrDefault(orderedLoan => orderedLoan.Id == id);
+            Order orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
 
-            //List<Account> buyerAccounts = orderedLoanFromDb.Account.BankUser.Accounts.ToList();
+            var view = this.mapper.Map<Order, CreditScoringsOrderedLoanDetailViewModel>(orderedLoanFromDb);
 
-            //var requestView = new CreditScoringsOrderedLoanDetailViewModel()
-            //{
-            //    Name = orderedLoanFromDb.Name,
-            //    Amount = orderedLoanFromDb.Amount,
-            //    Status = orderedLoanFromDb.Status.ToString(),
-            //    Buyer = orderedLoanFromDb.Account.BankUser.Name,
-            //    BuyerAcconts = buyerAccounts.Select(account => new UsersAccountViewModel()
-            //    {
-            //        Balance = account.Balance,
-            //        IBAN = account.IBAN,
-            //        MonthlyIncome = account.MonthlyIncome,
-            //        MonthlyOutCome = account.MonthlyOutcome,
-            //        CurrencyIso = account.Currency.IsoCode,
-            //        CurrencyName = account.Currency.Name
-            //    }),
-            //    Period = orderedLoanFromDb.Period,
-            //    IssuedOn = orderedLoanFromDb.IssuedOn.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
-            //    CompletedOn = orderedLoanFromDb.CompletedOn?.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture),
-            //    MonthlyFee = orderedLoanFromDb.MonthlyFee,
-            //    Commission = orderedLoanFromDb.CostPrice,
-            //    Currency = orderedLoanFromDb.Account.Currency.IsoCode,
-            //    CurrencyName = orderedLoanFromDb.Account.Currency.Name,
-            //    InterestRate = orderedLoanFromDb.InterestRate,
-            //    Id = orderedLoanFromDb.Id,
-            //    AccountForTransfer = orderedLoanFromDb.Account.IBAN + " | " + orderedLoanFromDb.Account.Currency.IsoCode,
-            //};
-
-            // return View(requestView);
-            return View();
+            return View(view);
         }
 
         [HttpGet("/CreditScorings/ApproveRequest/{id}")]
@@ -209,19 +127,9 @@ namespace BankCloud.Web.Controllers
         [HttpGet("/CreditScorings/RejectRequest/{id}")]
         public IActionResult RejectRequest(string id)
         {
-            //OrderLoan orderedLoanFromDb = this.context.Orders
-            //     .Include(orderLoan => orderLoan.Account)
-            //     .ThenInclude(orderedLoanAccount => orderedLoanAccount.Currency)
-            //     .Include(orderLoan => orderLoan.Loan)
-            //     .ThenInclude(loan => loan.Account)
-            //     .ThenInclude(loanAccount => loanAccount.Currency)
-            //     .SingleOrDefault(ol => ol.Loan.SellerID == User.FindFirst(ClaimTypes.NameIdentifier).Value
-            //             && ol.Id == id);
+            OrderLoan orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
 
-            //orderedLoanFromDb.CompletedOn = DateTime.UtcNow;
-            //orderedLoanFromDb.Status = OrderStatus.Rejected;
-
-            //this.context.SaveChanges();
+            this.ordersService.RejectRequest(orderedLoanFromDb);
 
             return Redirect("/CreditScorings/PendingRequests");
         }

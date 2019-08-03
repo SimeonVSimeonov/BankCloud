@@ -35,7 +35,7 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Loan.Account.Currency.IsoCode));
 
             CreateMap<Account, UsersAccountViewModel>()
-                .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Currency.IsoCode));
+                .ForMember(x => x.IsoCode, y => y.MapFrom(src => src.Currency.IsoCode));
 
             CreateMap<AccountInputModel, Account>()
                 .ForMember(x => x.CurrencyId, y => y.MapFrom(src => src.Currency))
@@ -56,7 +56,17 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.Currency, y => y.MapFrom(src => src.Account.Currency.IsoCode));
 
             CreateMap<Product, ProductsLoanDetailsViewModel>();
-            
+
+            CreateMap<OrderLoan, CreditScoringsOrderedLoansViewModel>()
+                .ForMember(x => x.Currency, y => y.MapFrom(src => src.Account.Currency.IsoCode));
+
+            CreateMap<OrderLoan, CreditScoringsOrderedLoanDetailViewModel>()
+                .ForMember(x => x.Buyer, y => y.MapFrom(src => src.Account.BankUser.UserName))
+                .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Account.Currency.IsoCode))
+                .ForMember(x => x.CurrencyName, y => y.MapFrom(src => src.Account.Currency.Name))
+                .ForMember(x => x.AccountForTransfer, y => y.MapFrom(src => src.Account.IBAN + " | " + src.Account.Currency.IsoCode))
+                .ForMember(x => x.BuyerAcconts, y => y.MapFrom(src => src.Account.BankUser.Accounts));
+
         }
     }
 }

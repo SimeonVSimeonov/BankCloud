@@ -9,10 +9,17 @@ namespace BankCloud.Services.Interfaces
     {
         void AddOrderLoan(OrderLoan order);
 
-        IEnumerable<OrderLoan> GetOrderedLoansByUser();
+        void RejectRequest(OrderLoan order);
+
+        IEnumerable<OrderLoan> GetOrderedLoansByCurrentUser();
 
         IEnumerable<string> GetAgentOrderLoansIds();
 
         OrderLoan GetOrderLoanById(string id);
+
+        IEnumerable<OrderLoan> GetSoldOrderLoans();
+
+        OrderLoan GetSoldOrderLoanById(string id);
+
     }
 }

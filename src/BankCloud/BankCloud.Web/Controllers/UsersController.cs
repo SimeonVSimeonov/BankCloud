@@ -120,7 +120,7 @@ namespace BankCloud.Web.Controllers
         [Authorize]
         public IActionResult OrderedLoans()
         {
-            IEnumerable<OrderLoan> userOrderedLoanFromDB = this.ordersService.GetOrderedLoansByUser();
+            IEnumerable<OrderLoan> userOrderedLoanFromDB = this.ordersService.GetOrderedLoansByCurrentUser();
 
            var viewAllOrderLoans = this.mapper
                 .Map<List<UsersOrderedLoansViewModel>>(userOrderedLoanFromDB);

@@ -12,7 +12,7 @@
 
         public decimal Balance { get; set; }
 
-        public string CurrencyIso { get; set; }
+        public string IsoCode { get; set; }
 
         public string CurrencyName { get; set; }
 

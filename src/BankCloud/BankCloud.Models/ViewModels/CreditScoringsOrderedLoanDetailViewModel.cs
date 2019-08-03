@@ -30,7 +30,7 @@ namespace BankCloud.Models.ViewModels
 
         public decimal MonthlyFee { get; set; }
 
-        public string Currency { get; set; }
+        public string CurrencyIso { get; set; }
 
         public string CurrencyName { get; set; }
 
