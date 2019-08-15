@@ -72,6 +72,11 @@ namespace BankCloud.Web.Controllers
             
             OrderLoan order = this.mapper.Map<OrderLoan>(model);
 
+            if (userFromDb.Id == loanFromDb.Account.BankUserId)
+            {
+                return this.Redirect("/");
+            }
+
             if (!userFromDb.Accounts.Any())
             {
                 return this.Redirect("/Accounts/Activate");

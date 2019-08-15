@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels
 {
@@ -7,6 +8,12 @@ namespace BankCloud.Models.BindingModels
         [StringLength(18, MinimumLength = 6)]
         [Display(Name = "Specify a name for your product")]
         public string Name { get; set; }
+
+        [Required]
+        public IFormFile AdUrl { get; set; }
+
+        [Required]
+        public string Description { get; set; }
 
         [Display(Name = "Specify a Interest Rate ( in % )")]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]

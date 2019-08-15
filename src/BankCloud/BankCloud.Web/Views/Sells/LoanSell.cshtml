@@ -14,13 +14,30 @@
         <hr />
         <div class="container">
             <div class="col-md-5 mx-auto">
-                <form asp-action="Loan" class="form-a fa-sign-in">
+                <form asp-action="Loan" class="form-a fa-sign-in" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label asp-for="Name" class="control-label"></label>
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control" cols="45" rows="8" 
+                                      data-rule="required" data-msg="Please write something for Description" 
+                                      placeholder="Description">
+                            </textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label asp-for="AdUrl" class="control-label"></label>
+                            <input asp-for="AdUrl" type="file" class="form-control" />
+                            <span asp-validation-for="AdUrl" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">

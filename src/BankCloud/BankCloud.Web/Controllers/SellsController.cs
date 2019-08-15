@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using BankCloud.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace BankCloud.Web.Controllers
 {
@@ -15,14 +16,16 @@ namespace BankCloud.Web.Controllers
         private readonly IMapper mapper;
         private readonly IAccountsService accountsService;
         private readonly IProductsService productsService;
+        private readonly ICloudinaryService cloudinaryService;
 
 
         public SellsController(IAccountsService accountsService, IMapper mapper, 
-            IProductsService productsService)
+            IProductsService productsService, ICloudinaryService cloudinaryService)
         {
             this.accountsService = accountsService;
             this.mapper = mapper;
             this.productsService = productsService;
+            this.cloudinaryService = cloudinaryService;
         }
 
         [Authorize(Roles = "Agent")]
@@ -43,7 +46,7 @@ namespace BankCloud.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Agent")]
         [AutoValidateAntiforgeryToken]
-        public IActionResult LoanSell(SellsLoanInputModel model)
+        public async Task<IActionResult> LoanSell(SellsLoanInputModel model)
         {
             this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
 
@@ -53,8 +56,12 @@ namespace BankCloud.Web.Controllers
             {
                 return this.Redirect("/Sells/LoanSell");
             }
-            
+
+            string adUrl = await this.cloudinaryService.UploadPictureAsync(model.AdUrl, model.Name);
+
             Loan loan = this.mapper.Map<Loan>(model);
+
+            loan.AdUrl = adUrl;
             
             if (!ModelState.IsValid)
             {

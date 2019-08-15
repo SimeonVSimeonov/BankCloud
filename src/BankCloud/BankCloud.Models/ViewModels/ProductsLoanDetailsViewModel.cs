@@ -6,6 +6,8 @@
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public decimal InterestRate { get; set; }
 
         public int Period { get; set; }

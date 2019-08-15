@@ -11,6 +11,8 @@ namespace BankCloud.Models.ViewModels
 
         public string Name { get; set; }
 
+        public string AdUrl { get; set; }
+
         public int Period { get; set; }
 
         public decimal Amount { get; set; }

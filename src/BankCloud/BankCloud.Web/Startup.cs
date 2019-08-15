@@ -14,6 +14,8 @@ using FixerSharp;
 using AutoMapper;
 using BankCloud.Services.Interfaces;
 using BankCloud.Services;
+using CloudinaryDotNet;
+using Account = CloudinaryDotNet.Account;
 
 namespace BankCloud.Web
 {
@@ -45,6 +47,15 @@ namespace BankCloud.Web
                 .AddEntityFrameworkStores<BankCloudDbContext>()
                 .AddDefaultTokenProviders();
 
+            Account cloudinaryCredentials = new Account(
+                this.Configuration["Cloudinary:CloudName"],
+                this.Configuration["Cloudinary:ApiKey"],
+                this.Configuration["Cloudinary:ApiSecret"]);
+
+            Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryCredentials);
+
+            services.AddSingleton(cloudinaryUtility);
+
             services.AddHttpContextAccessor();
 
             services.AddAutoMapper(typeof(Startup));
@@ -53,6 +64,7 @@ namespace BankCloud.Web
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             services.AddCors(options =>
             {
