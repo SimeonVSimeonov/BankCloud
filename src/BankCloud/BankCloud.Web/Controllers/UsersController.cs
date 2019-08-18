@@ -29,9 +29,13 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Products(string id)
+        public IActionResult Products()
         {
-            return View();
+            var types = this.productsService.GetAllProductTypes();
+
+            var view = this.mapper.Map<List<UsersProductsPanelViewModel>>(types);
+
+            return View(view);
         }
 
 

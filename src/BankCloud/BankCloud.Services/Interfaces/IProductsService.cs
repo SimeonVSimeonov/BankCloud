@@ -1,10 +1,13 @@
 ﻿using BankCloud.Data.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace BankCloud.Services.Interfaces
 {
     public interface IProductsService
     {
+        IEnumerable<Type> GetAllProductTypes();
+
         IEnumerable<Product> GetAllActiveProducts();
 
         IEnumerable<Product> GetAllActiveLoans();

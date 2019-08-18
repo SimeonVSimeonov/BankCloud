@@ -55,6 +55,9 @@ namespace BankCloud.Web.MappingConfiguration
 
             CreateMap<AddressInputModel, Address>();
 
+            CreateMap<Type, UsersProductsPanelViewModel>()
+                .ForMember(x => x.Type, y => y.MapFrom(src => src.Name));
+
             CreateMap<Product, IndexViewModel>()
                 .ForMember(x => x.Type, y => y.MapFrom(src => src.GetType().Name));
 

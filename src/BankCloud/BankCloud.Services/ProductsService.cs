@@ -6,6 +6,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Reflection;
+using System;
 
 namespace BankCloud.Services
 {
@@ -18,6 +20,13 @@ namespace BankCloud.Services
         {
             this.context = context;
             this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public IEnumerable<Type> GetAllProductTypes()
+        {
+            return Assembly.GetAssembly(typeof(Product))
+                .GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(Product)));
         }
 
         public IEnumerable<Product> GetAllActiveProducts()
