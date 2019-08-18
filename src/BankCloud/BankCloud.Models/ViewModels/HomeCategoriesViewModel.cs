@@ -1,4 +1,6 @@
-﻿namespace BankCloud.Models.ViewModels
+﻿using System;
+
+namespace BankCloud.Models.ViewModels
 {
     public class HomeCategoriesViewModel
     {

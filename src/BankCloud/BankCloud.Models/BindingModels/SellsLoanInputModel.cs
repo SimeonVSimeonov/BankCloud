@@ -10,20 +10,22 @@ namespace BankCloud.Models.BindingModels
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Specify a advertising picture for your product")]
         public IFormFile AdUrl { get; set; }
 
-        [Required]
+        [StringLength(1200, MinimumLength = 600)]
+        [Display(Name = "Specify a description and additional conditions")]
         public string Description { get; set; }
 
-        [Display(Name = "Specify a Interest Rate ( in % )")]
+        [Display(Name = "Specify a interest rate ( in % )")]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
         public decimal InterestRate { get; set; }
 
-        [Display(Name = "Specify a Maximum Period ( in months count )")]
+        [Display(Name = "Specify a maximum period ( in months count )")]
         [Range(1, int.MaxValue)]
         public int Period { get; set; }
 
-        [Display(Name = "Specify a Maximum Amount")]
+        [Display(Name = "Specify a maximum amount")]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
         public decimal Amount { get; set; }
 

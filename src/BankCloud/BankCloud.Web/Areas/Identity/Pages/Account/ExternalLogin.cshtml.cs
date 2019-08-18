@@ -45,6 +45,12 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            public string Name { get; set; }
+
+            public bool IsAgent { get; set; }
+
         }
 
         public IActionResult OnGetAsync()
@@ -115,8 +121,22 @@ namespace BankCloud.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new BankUser { UserName = Input.Email, Email = Input.Email };
+                var user = new BankUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Name = Input.Name,
+                    IsAgent = Input.IsAgent
+                };
+
                 var result = await _userManager.CreateAsync(user);
+
+                if (user.IsAgent)
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+                    await _userManager.AddToRoleAsync(user, "Agent");
+                }
+
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);

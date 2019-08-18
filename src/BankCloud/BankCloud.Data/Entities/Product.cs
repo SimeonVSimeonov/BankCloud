@@ -1,4 +1,5 @@
 ﻿using BankCloud.Data.Entities.Enums;
+using System;
 
 namespace BankCloud.Data.Entities
 {
@@ -8,7 +9,9 @@ namespace BankCloud.Data.Entities
 
         public string Name { get; set; }
 
-        public string AdUrl { get; set; }//TODO: add this
+        public string AdUrl { get; set; }
+
+        public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
 
         public string Description { get; set; }
 
@@ -21,9 +24,6 @@ namespace BankCloud.Data.Entities
         public decimal Commission { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public string SellerID { get; set; }
-        public BankUser Seller { get; set; }
 
         public string AccountId { get; set; }
         public Account Account { get; set; }

@@ -1,20 +1,20 @@
 ﻿@using BankCloud.Data.Entities;
-@model BankCloud.Models.BindingModels.SellsLoanInputModel
+@model BankCloud.Models.BindingModels.SellsSaveInputModel
 
 @{
-    ViewData["Title"] = "LoanSell";
+    ViewData["Title"] = "SaveSell";
 }
 
 <section class="section-agents section-t8">
     <div class="container-fluid text-center">
         <div class="title-single-box">
-            <h1 class="title-single"><span class="color-b">Create New Loan</span></h1>
+            <h1 class="title-single"><span class="color-b">Create New Deposit Offer</span></h1>
             <span class="color-text-a">Please insert your conditions</span>
         </div>
         <hr />
         <div class="container">
             <div class="col-md-5 mx-auto">
-                <form asp-action="Loan" class="form-a fa-sign-in" enctype="multipart/form-data">
+                <form asp-action="Save" class="form-a fa-sign-in" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
@@ -26,8 +26,8 @@
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label asp-for="Description" class="control-label"></label>
-                            <textarea asp-for="Description" class="form-control" cols="45" rows="8" 
-                                      data-rule="required" data-msg="Please write something for Description" 
+                            <textarea asp-for="Description" class="form-control" cols="45" rows="8"
+                                      data-rule="required" data-msg="Please write something for Description"
                                       placeholder="Description">
                             </textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
@@ -56,16 +56,9 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label asp-for="Amount" class="control-label"></label>
-                            <input asp-for="Amount" class="form-control" />
-                            <span asp-validation-for="Amount" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <div class="form-group">
-                            <label asp-for="Commission" class="control-label"></label>
-                            <input asp-for="Commission" class="form-control" />
-                            <span asp-validation-for="Commission" class="text-danger"></span>
+                            <label asp-for="PenaltyInterest" class="control-label"></label>
+                            <input asp-for="PenaltyInterest" class="form-control" />
+                            <span asp-validation-for="PenaltyInterest" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
@@ -95,3 +88,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

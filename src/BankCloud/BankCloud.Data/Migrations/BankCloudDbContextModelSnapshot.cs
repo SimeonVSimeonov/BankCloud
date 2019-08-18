@@ -256,6 +256,8 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<DateTime>("IssuedOn");
+
                     b.Property<string>("Name");
 
                     b.Property<int>("Period");
@@ -263,13 +265,9 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("ProductType")
                         .IsRequired();
 
-                    b.Property<string>("SellerID");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("SellerID");
 
                     b.ToTable("Products");
 
@@ -457,6 +455,8 @@ namespace BankCloud.Data.Migrations
                 {
                     b.HasBaseType("BankCloud.Data.Entities.Product");
 
+                    b.Property<decimal>("PenaltyInterest");
+
                     b.HasDiscriminator().HasValue("save");
                 });
 
@@ -502,10 +502,6 @@ namespace BankCloud.Data.Migrations
                     b.HasOne("BankCloud.Data.Entities.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId");
-
-                    b.HasOne("BankCloud.Data.Entities.BankUser", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerID");
                 });
 
             modelBuilder.Entity("BankCloud.Data.Entities.Transfer", b =>

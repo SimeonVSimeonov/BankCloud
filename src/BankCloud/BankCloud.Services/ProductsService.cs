@@ -63,7 +63,7 @@ namespace BankCloud.Services
         public IEnumerable<Product> GetAllActiveSaves()
         {
             return this.context.Products
-                .Where(product => product.GetType().Name == "Saves" && product.IsDeleted == false)
+                .Where(product => product.GetType().Name == "Save" && product.IsDeleted == false)
                 .Include(loan => loan.Account.Currency);
         }
 

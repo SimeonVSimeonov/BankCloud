@@ -2,6 +2,7 @@
 {
     public class Save : Product
     {
+        public decimal PenaltyInterest { get; set; }
 
     }
 }

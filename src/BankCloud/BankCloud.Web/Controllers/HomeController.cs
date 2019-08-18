@@ -5,6 +5,7 @@ using BankCloud.Web.Models;
 using BankCloud.Models.ViewModels;
 using BankCloud.Services.Interfaces;
 using AutoMapper;
+using System.Linq;
 
 namespace BankCloud.Web.Controllers
 {
@@ -21,9 +22,10 @@ namespace BankCloud.Web.Controllers
 
         public IActionResult Index()
         {
-            var productsFromDb = this.productsService.GetAllActiveProducts();
+            var productsFromDb = this.productsService.GetAllActiveProducts()
+                .OrderByDescending(x => x.IssuedOn).Take(9);
 
-            var view = this.mapper.Map<List<HomeCategoriesViewModel>>(productsFromDb);
+            var view = this.mapper.Map<List<IndexViewModel>>(productsFromDb);
 
             return View(view);
         }

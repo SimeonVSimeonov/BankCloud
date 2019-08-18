@@ -16,7 +16,6 @@ namespace BankCloud.Web.Controllers
             this.productsService = productsService;
             this.mapper = mapper;
         }
-
         
         public IActionResult Loans()
         {
@@ -35,6 +34,15 @@ namespace BankCloud.Web.Controllers
             var view = mapper.Map<ProductsLoanDetailsViewModel>(loanFromDb);
 
             return this.View(view);
+        }
+
+        public IActionResult Saves()
+        {
+            var savesFromDb = this.productsService.GetAllActiveSaves();
+
+            var view = mapper.Map<List<ProductsSavesViewModel>>(savesFromDb);
+
+            return View(view);
         }
 
         //TODO add other products!!!
