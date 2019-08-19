@@ -1,7 +1,7 @@
-﻿using BankCloud.Data.Entities;
+﻿using BankCloud.Models.BindingModels.Users;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankCloud.Models.BindingModels
+namespace BankCloud.Models.BindingModels.Accounts
 {
     public class AccountActivateInputModel
     {

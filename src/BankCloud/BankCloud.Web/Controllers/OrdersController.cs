@@ -1,16 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using AutoMapper;
-using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
-using BankCloud.Models.BindingModels;
+using BankCloud.Models.BindingModels.Orders;
 using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankCloud.Web.Controllers
 {

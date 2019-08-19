@@ -1,7 +1,7 @@
 ﻿using BankCloud.Models.ViewModels.Users;
 using System;
 
-namespace BankCloud.Models.BindingModels
+namespace BankCloud.Models.BindingModels.CreditScorings
 {
     public class CreditScoringsLoanInputModel
     {

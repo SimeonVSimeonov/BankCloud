@@ -3,7 +3,7 @@ using System.Linq;
 using AutoMapper;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
-using BankCloud.Models.BindingModels;
+using BankCloud.Models.BindingModels.Accounts;
 using BankCloud.Models.ViewModels.Users;
 using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;

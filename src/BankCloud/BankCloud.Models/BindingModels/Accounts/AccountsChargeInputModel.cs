@@ -1,10 +1,7 @@
-﻿using BankCloud.Data.Entities;
-using BankCloud.Data.Entities.Enums;
+﻿using BankCloud.Data.Entities.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BankCloud.Models.BindingModels
+namespace BankCloud.Models.BindingModels.Accounts
 {
     public class AccountsChargeInputModel
     {

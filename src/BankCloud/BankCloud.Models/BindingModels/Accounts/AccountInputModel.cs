@@ -1,4 +1,4 @@
-﻿namespace BankCloud.Models.BindingModels
+﻿namespace BankCloud.Models.BindingModels.Accounts
 {
     public class AccountInputModel
     {

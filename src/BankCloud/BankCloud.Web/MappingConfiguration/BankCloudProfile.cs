@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BankCloud.Data.Entities;
-using BankCloud.Models.BindingModels;
-using BankCloud.Models.ViewModels;
+using BankCloud.Models.BindingModels.Accounts;
+using BankCloud.Models.BindingModels.Orders;
+using BankCloud.Models.BindingModels.Products;
+using BankCloud.Models.BindingModels.Users;
 using BankCloud.Models.ViewModels.CreditScorings;
 using BankCloud.Models.ViewModels.Home;
 using BankCloud.Models.ViewModels.Orders;

@@ -8,6 +8,7 @@ using BankCloud.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using BankCloud.Models.BindingModels.Products;
 
 namespace BankCloud.Web.Controllers
 {
