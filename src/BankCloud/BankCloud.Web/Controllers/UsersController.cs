@@ -148,5 +148,87 @@ namespace BankCloud.Web.Controllers
             return View(detailOrderLoan);
 
         }
+
+        [Authorize(Roles = "Agent")]
+        public IActionResult ProductSaves()
+        {
+            var agentSavesFromDb = this.productsService.GetAllAgentActiveSaves();
+
+            var view = this.mapper.Map<List<ProductsSavesViewModel>>(agentSavesFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpGet("/Users/ProductSaveDetails/{id}")]
+        public IActionResult ProductSaveDetails(string id)
+        {
+            Product product = this.productsService.GetProductById(id);
+
+            var view = this.mapper.Map<ProductsSaveDetailsViewModel>(product);
+
+            return this.View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult SaveDelete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Product product = this.productsService.GetProductById(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var view = this.mapper.Map<ProductsSaveDetailsViewModel>(product);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpPost, ActionName("SaveDelete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveDeleteConfirmed(string id)
+        {
+
+            var pendingSaveIds = this.ordersService.GetAgentOrderSavesIds();
+
+            if (pendingSaveIds.Contains(id))
+            {
+                return this.Redirect("/CreditScorings/PendingRequests");
+            }
+
+            this.productsService.ArchiveProduct(id);
+
+            return Redirect("/Users/ProductSaves");
+
+        }
+
+        [Authorize(Roles = "Agent")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ArchivedProductSaves()
+        {
+            var saveFromDb = this.productsService.GetAllAgentArchivedSaves();
+
+            var view = this.mapper.Map<List<ProductsSavesViewModel>>(saveFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpGet("/Users/RestoreProductSave/{id}")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult RestoreProductSave(string id)
+        {
+            this.productsService.RestoreProduct(id);
+
+            return this.Redirect("/Users/ProductSaves");
+        }
     }
 }

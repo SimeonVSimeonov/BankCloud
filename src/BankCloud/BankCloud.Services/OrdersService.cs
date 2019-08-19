@@ -92,6 +92,17 @@ namespace BankCloud.Services
                 .Select(orderedLoan => orderedLoan.Id);
         }
 
+        public IEnumerable<string> GetAgentOrderSavesIds()
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.OrdersSaves
+                .Where(orderedSave => orderedSave.Status == OrderStatus.Pending &&
+                    orderedSave.Account.BankUserId == userId)
+                .Select(orderedSave => orderedSave.Id);
+        }
+
         public IEnumerable<OrderLoan> GetOrderedLoansByCurrentUser()
         {
             string userId = httpContextAccessor.HttpContext.User

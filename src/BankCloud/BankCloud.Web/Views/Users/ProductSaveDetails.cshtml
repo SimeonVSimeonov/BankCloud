@@ -1,0 +1,116 @@
+﻿@model BankCloud.Models.ViewModels.ProductsSaveDetailsViewModel
+
+@{
+    ViewData["Title"] = "ProductSaveDetails";
+}
+
+<section class="intro-single">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single">@Model.Name</h1>
+                    <span class="color-text-a">@Model.Seller</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/Users/ProductLoans">Loans</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.Name
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="property-single nav-arrow-b">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row justify-content-between">
+                    <div class="col-md-5 col-lg-4">
+                        <div class="property-price d-flex justify-content-center foo">
+                            <div class="card-header-c d-flex">
+                                <div class="card-box-ico">
+                                    <span class="ion-money">@Model.CurrencyIso</span>
+                                </div>
+                                <div class="card-title-c align-self-center">
+                                    <h5 class="title-c">@Model.InterestRate %</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="property-summary">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="title-box-d section-t4">
+                                        <h3 class="title-d">Quick Summary</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="summary-list">
+                                <ul class="list">
+                                    <li class="d-flex justify-content-between">
+                                        <strong>Product Name:</strong>
+                                        <span>@Model.Name</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <strong>Seller:</strong>
+                                        <span>@Model.Seller</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <strong>Interest Rate:</strong>
+                                        <span>@Model.InterestRate %</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <strong>Period up to:</strong>
+                                        <span>@Model.Period months</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <strong>Curency:</strong>
+                                        <span>@Model.CurrencyName</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-lg-7 section-md-t3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="title-box-d">
+                                    <h3 class="title-d">Description</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="property-description">
+                            <p class="description color-text-a">
+                                @Model.Description
+                            </p>
+                        </div>
+                        <div class="row section-t3">
+                            <div class="col-sm-12">
+                                <div class="title-box-d">
+                                    <h3 class="title-d">Manage Your Product</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="amenities-list color-text-a text-center">
+                            <div class="mx-auto">
+                                <a href="/Users/ProductSaves" class="btn btn-a">Back</a>
+                                <a href="/Users/SaveDelete/@Model.Id" class="btn btn-a">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -22,7 +22,7 @@ namespace BankCloud.Models.BindingModels
         public decimal InterestRate { get; set; }
 
         [Display(Name = "Specify a Maximum Period ( in months count )")]
-        [Range(1, int.MaxValue)]
+        [Range(0, int.MaxValue)]
         public int Period { get; set; }
 
         [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]

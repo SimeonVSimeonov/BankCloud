@@ -45,6 +45,16 @@ namespace BankCloud.Web.Controllers
             return View(view);
         }
 
+        [HttpGet("/Products/SaveDetails/{id}")]
+        public IActionResult SaveDetails(string id)
+        {
+            var saveFromDb = this.productsService.GetProductById(id);
+
+            var view = mapper.Map<ProductsSaveDetailsViewModel>(saveFromDb);
+
+            return this.View(view);
+        }
+
         //TODO add other products!!!
     }
 }

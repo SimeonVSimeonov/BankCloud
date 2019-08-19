@@ -76,6 +76,32 @@ namespace BankCloud.Services
                 .Include(loan => loan.Account.Currency);
         }
 
+        public IEnumerable<Product> GetAllAgentActiveSaves()
+        {
+            var currentAgentId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Products
+               .Include(product => product.Account)
+               .ThenInclude(account => account.Currency)
+               .Where(product => product.GetType().Name == "Save" &&
+               product.Account.BankUserId == currentAgentId &&
+               product.IsDeleted == false);
+        }
+
+        public IEnumerable<Product> GetAllAgentArchivedSaves()
+        {
+            var currentAgentId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Products
+               .Include(product => product.Account)
+               .ThenInclude(account => account.Currency)
+               .Where(product => product.GetType().Name == "Save" &&
+               product.Account.BankUserId == currentAgentId &&
+               product.IsDeleted == true);
+        }
+
         public IEnumerable<Product> GetAllActiveInsurance()
         {
             return this.context.Products

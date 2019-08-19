@@ -15,17 +15,24 @@ namespace BankCloud.Web.Controllers
     {
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
+        private readonly IProductsService productsService;
 
-        public CreditScoringsController(IOrdersService ordersService, IMapper mapper)
+        public CreditScoringsController(IOrdersService ordersService,
+            IMapper mapper, IProductsService productsService)
         {
             this.ordersService = ordersService;
             this.mapper = mapper;
+            this.productsService = productsService;
         }
 
         [Authorize(Roles = "Agent")]
         public IActionResult MySells()
         {
-            return View();
+            var types = this.productsService.GetAllProductTypes();
+
+            var view = this.mapper.Map<List<UsersProductsPanelViewModel>>(types);
+
+            return View(view);
         }
 
         [Authorize(Roles = "Agent")]

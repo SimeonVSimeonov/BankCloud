@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BankCloud.Models.ViewModels.ProductsSavesViewModel>
 
 @{
-    ViewData["Title"] = "Saves";
+    ViewData["Title"] = "ArchivedProductSaves";
 }
 
 <section class="section-agents section-t8">
@@ -9,18 +9,15 @@
         <div class="row">
             <div class="col-md-12 col-lg-8">
                 <div class="title-single-box">
-                    <h1 class="title-single">Our Amazing Deposits</h1>
-                    <span class="color-text-a">Grid Deposits</span>
+                    <h1 class="title-single">Archived Product Saves</h1>
+                    <span class="color-text-a">Grid Saves</span>
                 </div>
             </div>
             <div class="col-md-12 col-lg-4">
                 <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Deposits Grid
+                            <a href="/Users/Products">Back</a>
                         </li>
                     </ol>
                 </nav>
@@ -54,15 +51,15 @@
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="/Products/SaveDetails/@item.Id">
-                                            Loan
+                                        <a href="/Users/RestoreProductloan/@item.Id">
+                                            Archived
                                             <br /> @item.Name
                                         </a>
                                     </h2>
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <a href="/Products/SaveDetails/@item.Id"><span class="price-a">Save now</span></a>
+                                        <a href="/Users/RestoreProductSave/@item.Id"><span class="price-a">Restore</span></a>
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
@@ -102,4 +99,5 @@
         </div>
     </div>
 </section>
+
 

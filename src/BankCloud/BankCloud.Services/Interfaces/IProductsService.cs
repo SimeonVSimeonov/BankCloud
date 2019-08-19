@@ -15,6 +15,9 @@ namespace BankCloud.Services.Interfaces
         IEnumerable<Product> GetAllAgentArchivedLoans();
 
         IEnumerable<Product> GetAllActiveSaves();
+        IEnumerable<Product> GetAllAgentActiveSaves();
+        IEnumerable<Product> GetAllAgentArchivedSaves();
+
         IEnumerable<Product> GetAllActiveInsurance();
         IEnumerable<Product> GetAllActiveInvestment();
 

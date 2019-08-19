@@ -1,88 +1,48 @@
-﻿@{
+﻿@model List<BankCloud.Models.ViewModels.UsersProductsPanelViewModel>
+@{
     ViewData["Title"] = "MySells";
 }
 
 <section class="section-agents section-t8">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="title-single-box text-center">
-                    <h1 class="title-single color-b">Loans</h1>
-                    <span class="color-text-a">My loan products and orders</span>
+    @foreach (var item in Model)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="title-single-box text-center">
+                        <h1 class="title-single color-b">@item.Type.ToString()</h1>
+                        <span class="color-text-a">My @item.Type.ToString() sells</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/PendingRequests">Pending</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-3">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/ApprovedRequests">Approved</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-3">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/CreditScorings/RejectedRequests">Rejected</a>
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
-            <div class="col-md-3">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/CreditScorings/PendingRequests">Pending</a>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-md-3">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/CreditScorings/ApprovedRequests">Approved</a>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-md-3">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/CreditScorings/RejectedRequests">Rejected</a>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
         </div>
-    </div>
-    <hr />
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-lg-8">
-                <div class="title-single-box">
-                    <h1 class="title-single">Our Amazing Posts</h1>
-                    <span class="color-text-a">Grid News</span>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-4">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            News Grid
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-lg-8">
-                <div class="title-single-box">
-                    <h1 class="title-single">Our Amazing Posts</h1>
-                    <span class="color-text-a">Grid News</span>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-4">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            News Grid
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+        <hr />
+    }
 </section>
