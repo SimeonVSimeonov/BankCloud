@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BankCloud.Models.ViewModels
+namespace BankCloud.Models.ViewModels.Home
 {
     public class IndexViewModel
     {

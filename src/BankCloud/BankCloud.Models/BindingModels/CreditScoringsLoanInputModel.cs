@@ -1,4 +1,4 @@
-﻿using BankCloud.Models.ViewModels;
+﻿using BankCloud.Models.ViewModels.Users;
 using System;
 
 namespace BankCloud.Models.BindingModels

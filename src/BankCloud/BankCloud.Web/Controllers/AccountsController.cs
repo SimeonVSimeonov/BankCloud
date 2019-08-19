@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels;
-using BankCloud.Models.ViewModels;
-using BankCloud.Services.Common;
+using BankCloud.Models.ViewModels.Users;
 using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

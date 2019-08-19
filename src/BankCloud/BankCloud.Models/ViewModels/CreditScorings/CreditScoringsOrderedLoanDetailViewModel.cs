@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using BankCloud.Models.ViewModels.Users;
+using System.Collections.Generic;
 
-namespace BankCloud.Models.ViewModels
+namespace BankCloud.Models.ViewModels.CreditScorings
 {
     public class CreditScoringsOrderedLoanDetailViewModel
     {

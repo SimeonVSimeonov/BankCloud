@@ -2,6 +2,11 @@
 using BankCloud.Data.Entities;
 using BankCloud.Models.BindingModels;
 using BankCloud.Models.ViewModels;
+using BankCloud.Models.ViewModels.CreditScorings;
+using BankCloud.Models.ViewModels.Home;
+using BankCloud.Models.ViewModels.Orders;
+using BankCloud.Models.ViewModels.Products;
+using BankCloud.Models.ViewModels.Users;
 using System;
 
 namespace BankCloud.Web.MappingConfiguration

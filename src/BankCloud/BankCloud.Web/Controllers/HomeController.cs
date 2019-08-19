@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BankCloud.Web.Models;
-using BankCloud.Models.ViewModels;
+using BankCloud.Models.ViewModels.Home;
 using BankCloud.Services.Interfaces;
 using AutoMapper;
 using System.Linq;

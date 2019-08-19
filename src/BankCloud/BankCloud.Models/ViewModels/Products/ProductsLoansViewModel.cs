@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankCloud.Models.ViewModels
+﻿namespace BankCloud.Models.ViewModels.Products
 {
-    public class ProductsSavesViewModel
+    public class ProductsLoansViewModel
     {
         public string Id { get; set; }
 
@@ -15,6 +11,8 @@ namespace BankCloud.Models.ViewModels
         public decimal InterestRate { get; set; }
 
         public int Period { get; set; }
+
+        public decimal Amount { get; set; }
 
         public string Currency { get; set; }
     }

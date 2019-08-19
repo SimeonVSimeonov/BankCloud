@@ -1,4 +1,4 @@
-﻿@model BankCloud.Models.ViewModels.ProductsSaveDetailsViewModel
+﻿@model BankCloud.Models.ViewModels.Products.ProductsSaveDetailsViewModel
 @{
     ViewData["Title"] = "SaveDetails";
 }
@@ -72,7 +72,16 @@
                                     </li>
                                     <li class="d-flex justify-content-between">
                                         <strong>Period up to:</strong>
-                                        <span>@Model.Period months</span>
+                                        @if (Model.Period == 0)
+                                        {
+                                            <span>Open</span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                @Model.Period months
+                                            </span>
+                                        }
                                     </li>
                                     <li class="d-flex justify-content-between">
                                         <strong>Penalty Interest:</strong>

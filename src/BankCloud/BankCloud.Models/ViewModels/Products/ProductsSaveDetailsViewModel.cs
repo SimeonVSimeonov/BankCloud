@@ -1,6 +1,6 @@
-﻿namespace BankCloud.Models.ViewModels
+﻿namespace BankCloud.Models.ViewModels.Products
 {
-    public class ProductsLoanDetailsViewModel
+    public class ProductsSaveDetailsViewModel
     {
         public string Id { get; set; }
 
@@ -12,8 +12,6 @@
 
         public int Period { get; set; }
 
-        public decimal Amount { get; set; }
-
         public string Seller { get; set; }
 
         public string SellerEmail { get; set; }
@@ -22,6 +20,6 @@
 
         public string CurrencyName { get; set; }
 
-        public decimal Commission { get; set; }
+        public decimal PenaltyInterest { get; set; }
     }
 }

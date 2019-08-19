@@ -1,4 +1,4 @@
-﻿namespace BankCloud.Models.ViewModels
+﻿namespace BankCloud.Models.ViewModels.CreditScorings
 {
     public class CreditScoringsOrderedLoansViewModel
     {

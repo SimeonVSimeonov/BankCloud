@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using BankCloud.Models.ViewModels;
+using BankCloud.Models.ViewModels.Products;
 using BankCloud.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
