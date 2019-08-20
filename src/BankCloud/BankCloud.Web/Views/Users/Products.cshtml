@@ -6,63 +6,236 @@
 <section class="section-agents section-t8">
     @foreach (var item in Model)
     {
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="title-single-box text-center">
-                        <h1 class="title-single color-b">@item.Type.ToString()s</h1>
-                        <span class="color-text-a">My @item.Type products and orders</span>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h1 class="title-single color-b">@item.Type.ToString()</h1>
+                    <span class="color-text-a">My @item.Type products and orders</span>
                 </div>
-                @if (User.IsInRole("Agent"))
-                {
-                    <div class="col-md-3">
-                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/Users/Product@{@item.Type.ToString();}s">My Product @item.Type.ToString()s</a>
-                                </li>
-
-                            </ol>
-
-                        </nav>
-
-                    </div>
-
-                    <div class="col-md-3">
-                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/Users/ArchivedProduct@{@item.Type.ToString();}s">Archived @item.Type.ToString()s</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-
-                    <div class="col-md-3">
-                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/Users/Ordered@{@item.Type.ToString();}s">My Ordered @item.Type.ToString()s</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-9">
-                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-center">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/Users/Ordered@{@item.Type.ToString();}s">My Ordered @item.Type.ToString()s</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                }
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            My @item.Type
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
+        <hr />
+        @if (User.IsInRole("Agent"))
+        {
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            @if (item.Type == "Save")
+                            {
+                                <img src="~/img/deposit.png" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Loan")
+                            {
+                                <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Investment")
+                            {
+                                <img src="~/img/investments.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Insurance")
+                            {
+                                <img src="~/img/insurance.jpg" alt="" class="img-a img-fluid">
+                            }
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="#">
+                                            <br /><span class="h4">@item.Type.ToString()</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex justify-content-center">
+                                        <a href="/Users/Product@{@item.Type.ToString();}s"><span class="price-a">Products</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Type
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            @if (item.Type == "Save")
+                            {
+                                <img src="~/img/deposit.png" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Loan")
+                            {
+                                <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Investment")
+                            {
+                                <img src="~/img/investments.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Insurance")
+                            {
+                                <img src="~/img/insurance.jpg" alt="" class="img-a img-fluid">
+                            }
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="#">
+                                            <br /><span class="h4">@item.Type.ToString()</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex justify-content-center">
+                                        <a href="/Users/ArchivedProduct@{@item.Type.ToString();}s"><span class="price-a">Archived</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Type
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            @if (item.Type == "Save")
+                            {
+                                <img src="~/img/deposit.png" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Loan")
+                            {
+                                <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Investment")
+                            {
+                                <img src="~/img/investments.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Insurance")
+                            {
+                                <img src="~/img/insurance.jpg" alt="" class="img-a img-fluid">
+                            }
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="#">
+                                            <br /><span class="h4">@item.Type.ToString()</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex justify-content-center">
+                                        <a href="/Users/Ordered@{@item.Type.ToString();}s"><span class="price-a">Ordered</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Type
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-5"></div>
+                <div class="col-md-2">
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            @if (item.Type == "Save")
+                            {
+                                <img src="~/img/deposit.png" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Loan")
+                            {
+                                <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Investment")
+                            {
+                                <img src="~/img/investments.jpg" alt="" class="img-a img-fluid">
+                            }
+                            @if (item.Type == "Insurance")
+                            {
+                                <img src="~/img/insurance.jpg" alt="" class="img-a img-fluid">
+                            }
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a href="#">
+                                            <br /><span class="h4">@item.Type.ToString()</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex justify-content-center">
+                                        <a href="/Users/Ordered@{@item.Type.ToString();}s"><span class="price-a">Ordered</span></a>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Amount</h4>
+                                            <span>
+                                                @item.Type
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+        <hr />
         <hr />
     }
 </section>
