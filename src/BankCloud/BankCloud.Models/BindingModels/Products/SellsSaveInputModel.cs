@@ -21,7 +21,7 @@ namespace BankCloud.Models.BindingModels.Products
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
         public decimal InterestRate { get; set; }
 
-        [Display(Name = "Specify a Maximum Period ( in months count )")]
+        [Display(Name = "Specify a Deposit Period (if Open specify 0 )")]
         [Range(0, int.MaxValue)]
         public int Period { get; set; }
 

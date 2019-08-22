@@ -1,13 +1,13 @@
-﻿namespace BankCloud.Models.ViewModels.Users
+﻿namespace BankCloud.Models.ViewModels.Orders
 {
-    public class UsersProductsViewModel
+    public class AllOrdersViewModel
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public string Type { get; set; }
+
+        public string Status { get; set; }
     }
 }

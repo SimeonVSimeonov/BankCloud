@@ -29,6 +29,15 @@ namespace BankCloud.Services
                 .Where(t => t.IsSubclassOf(typeof(Product)));
         }
 
+        public IEnumerable<Product> GetAllAgentProducts()
+        {
+            var currentAgentId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Products
+                .Where(product => product.Account.BankUserId == currentAgentId);
+        }
+
         public IEnumerable<Product> GetAllActiveProducts()
         {
             return this.context.Products

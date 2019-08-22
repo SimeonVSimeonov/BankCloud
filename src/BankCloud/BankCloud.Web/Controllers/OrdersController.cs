@@ -89,15 +89,34 @@ namespace BankCloud.Web.Controllers
                 .Select(x => x.Currency.Name).ToList();
                 return this.View(model);
             }
-            //TODO: refactor this!!!
-            order.Commission = BankCloudCalculator.CalculateCommission(loanFromDb);
-            order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loanFromDb);
-            order.Status = OrderStatus.Pending;
-            order.Name = loanFromDb.Name;
 
-            this.ordersService.AddOrderLoan(order);
+            this.ordersService.AddOrderLoan(order, loanFromDb);
 
             return this.Redirect("/Users/OrderedLoans");
+        }
+
+        [Authorize]
+        [HttpGet("/Orders/OrderSave/{id}")]
+        public IActionResult OrderSave(string id)
+        {
+            Product saveFromDb = this.productsService.GetProductById(id);
+
+            BankUser userFromDb = this.usersService.GetCurrentUser();
+
+            if (!userFromDb.Accounts.Any())
+            {
+                return this.Redirect("/Accounts/Activate");
+            }
+
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
+
+            var view = this.mapper.Map<OrdersOrderSaveInputModel>(saveFromDb);
+
+            view.UserCurrencyTypes = this.accountsService.GetUserAccounts()
+                .Select(x => x.Currency.Name).ToList();
+
+            ;
+            return this.View(view);
         }
     }
 }

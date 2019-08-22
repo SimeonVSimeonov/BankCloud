@@ -14,5 +14,7 @@ namespace BankCloud.Models.ViewModels.Home
 
         public string AdUrl { get; set; }
 
+        public int Popularity { get; set; }
+
     }
 }

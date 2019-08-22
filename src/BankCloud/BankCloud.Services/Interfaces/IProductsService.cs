@@ -7,6 +7,7 @@ namespace BankCloud.Services.Interfaces
     public interface IProductsService
     {
         IEnumerable<Type> GetAllProductTypes();
+        IEnumerable<Product> GetAllAgentProducts();
 
         IEnumerable<Product> GetAllActiveProducts();
 

@@ -1,9 +1,6 @@
-﻿
-//.on("change paste keyup", function)
-
-$(this).keyup(function () {
-            calc();
-       });
+﻿$(this).on("change paste keyup", function () {
+    calc();
+});
 
 function calc() {
     var period = parseFloat(document.getElementById('period').value);

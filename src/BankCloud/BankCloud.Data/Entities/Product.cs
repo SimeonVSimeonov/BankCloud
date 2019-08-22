@@ -1,5 +1,4 @@
-﻿using BankCloud.Data.Entities.Enums;
-using System;
+﻿using System;
 
 namespace BankCloud.Data.Entities
 {
@@ -22,6 +21,8 @@ namespace BankCloud.Data.Entities
         public decimal Amount { get; set; }
 
         public decimal Commission { get; set; }
+
+        public int Popularity { get; set; }
 
         public bool IsDeleted { get; set; }
 

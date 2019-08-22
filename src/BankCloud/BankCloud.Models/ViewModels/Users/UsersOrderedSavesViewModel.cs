@@ -1,12 +1,14 @@
-﻿namespace BankCloud.Models.ViewModels.Orders
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BankCloud.Models.ViewModels.Users
 {
-    public class OrderedLoansDetailViewModel
+    public class UsersOrderedSavesViewModel
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
 
         public string Seller { get; set; }
 

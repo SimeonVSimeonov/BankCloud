@@ -4,6 +4,7 @@ using AutoMapper;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.ViewModels.CreditScorings;
+using BankCloud.Models.ViewModels.Orders;
 using BankCloud.Models.ViewModels.Users;
 using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
@@ -29,10 +30,21 @@ namespace BankCloud.Web.Controllers
         [Authorize(Roles = "Agent")]
         public IActionResult MySells()
         {
-            var types = this.productsService.GetAllProductTypes();
+            var types = this.productsService.GetAllProductTypes()
+                .Select(x => x.Name.ToString());
+            var soldLoansFromDb = this.ordersService.GetSoldOrderLoans();
+            var soldSavesFromDb = this.ordersService.GetSoldOrderSaves();
 
-            var view = this.mapper.Map<List<UsersProductsPanelViewModel>>(types);
+            var soldLoans = this.mapper.Map<List<UsersOrderedLoansViewModel>>(soldLoansFromDb);
+            var soldSaves = this.mapper.Map<List<UsersOrderedSavesViewModel>>(soldSavesFromDb);
 
+            var view = new OrdersProductsPanelViewModel()
+            {
+                Type = types,
+                OrderedLoans = soldLoans,
+                OrderedSaves = soldSaves
+            };
+            
             return View(view);
         }
 

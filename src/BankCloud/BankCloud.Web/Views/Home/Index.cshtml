@@ -4,11 +4,9 @@
     ViewData["Title"] = "Home Page";
 }
 
-@{/* TODO: add and arrange by popularity */}
-
 <div class="intro intro-carousel">
     <div id="carousel" class="owl-carousel owl-theme">
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderByDescending(x => x.Popularity).Take(5))
         {
             <div class="carousel-item-a intro-item bg-image" style="background-image: url(@item.AdUrl)">
                 <div class="overlay overlay-a"></div>
@@ -59,7 +57,7 @@
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="#">
+                                        <a href="/Products/@item.Type.ToString()Details/@item.Id">
                                             @item.Type
                                             <br /> @item.Name
                                         </a>
@@ -80,7 +78,7 @@
                                         </li>
                                         <li>
                                             <h4 class="card-info-title">Popularity</h4>
-                                            <span>2</span>
+                                            <span>@item.Popularity</span>
                                         </li>
                                     </ul>
                                 </div>

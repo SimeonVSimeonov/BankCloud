@@ -34,9 +34,22 @@ namespace BankCloud.Web.Controllers
         [Authorize]
         public IActionResult Products()
         {
-            var types = this.productsService.GetAllProductTypes();
+            var types = this.productsService.GetAllProductTypes()
+                .Select(x => x.Name.ToString());
+            var myProductFromDb = this.productsService.GetAllAgentProducts();
 
-            var view = this.mapper.Map<List<UsersProductsPanelViewModel>>(types);
+            var myProducts = mapper.Map<IEnumerable<UsersProductsViewModel>>(myProductFromDb);
+
+            var allOrderedFormDb = this.ordersService.GetAllOrderedByCurrentUser();
+
+            var allOrdered = mapper.Map<IEnumerable<AllOrdersViewModel>>(allOrderedFormDb);
+
+            var view = new UsersProductsPanelViewModel
+            {
+                Type = types,
+                Products = myProducts,
+                Orders = allOrdered
+            };
 
             return View(view);
         }
@@ -143,10 +156,6 @@ namespace BankCloud.Web.Controllers
 
             var detailOrderLoan = this.mapper
                 .Map<OrderedLoansDetailViewModel>(userOrderedLoanFromDB);
-
-            //TODO refactor this
-            detailOrderLoan.Account = userOrderedLoanFromDB.Account.IBAN + " | " + userOrderedLoanFromDB.Account.Currency.Name;
-            detailOrderLoan.DueAmount = userOrderedLoanFromDB.MonthlyFee * userOrderedLoanFromDB.Period;
 
             return View(detailOrderLoan);
 

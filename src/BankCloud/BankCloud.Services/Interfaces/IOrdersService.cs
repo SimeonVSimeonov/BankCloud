@@ -7,11 +7,13 @@ namespace BankCloud.Services.Interfaces
 {
     public interface IOrdersService
     {
-        void AddOrderLoan(OrderLoan order);
+        void AddOrderLoan(OrderLoan order, Product loan);
 
         void RejectRequest(OrderLoan order);
 
         void ApproveRequest(OrderLoan orderLoan);
+
+        IEnumerable<Order> GetAllOrderedByCurrentUser();
 
         IEnumerable<OrderLoan> GetOrderedLoansByCurrentUser();
 
@@ -22,6 +24,7 @@ namespace BankCloud.Services.Interfaces
         OrderLoan GetOrderLoanById(string id);
 
         IEnumerable<OrderLoan> GetSoldOrderLoans();
+        IEnumerable<OrderSave> GetSoldOrderSaves();
 
         OrderLoan GetSoldOrderLoanById(string id);
 

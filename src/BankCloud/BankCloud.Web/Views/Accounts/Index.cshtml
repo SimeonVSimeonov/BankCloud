@@ -76,19 +76,19 @@
                                         <li>
                                             <h4 class="card-info-title">Amount</h4>
                                             <span>
-                                                @item.Balance
+                                                @item.Balance.ToString("F0")
                                             </span>
                                         </li>
                                         <li>
                                             <h4 class="card-info-title">Income</h4>
                                             <span>
-                                                @item.MonthlyIncome
+                                                @item.MonthlyIncome.ToString("F0")
                                             </span>
                                         </li>
                                         <li>
                                             <h4 class="card-info-title">OutCome</h4>
                                             <span>
-                                                @item.MonthlyOutCome
+                                                @item.MonthlyOutCome.ToString("F0")
                                             </span>
                                         </li>
                                     </ul>
@@ -99,6 +99,5 @@
                 </div>
             }
         </div>
-    </div>
     </div>
 </section>

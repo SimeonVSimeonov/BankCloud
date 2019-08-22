@@ -1,6 +1,7 @@
 ﻿using BankCloud.Data.Context;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
+using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
 using FixerSharp;
 using Microsoft.AspNetCore.Http;
@@ -24,14 +25,20 @@ namespace BankCloud.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public void AddOrderLoan(OrderLoan orderLoan)
+        public void AddOrderLoan(OrderLoan order, Product loan)
         {
-            if (orderLoan == null)
+            if (order == null || loan == null)
             {
                 return;
             }
 
-            context.OrdersLoans.Add(orderLoan);
+            order.Commission = BankCloudCalculator.CalculateCommission(loan);
+            order.MonthlyFee = BankCloudCalculator.CalculateMounthlyFee(loan);
+            order.Status = OrderStatus.Pending;
+            order.Name = loan.Name;
+            loan.Popularity++;
+
+            context.OrdersLoans.Add(order);
             context.SaveChanges();
         }
 
@@ -103,6 +110,22 @@ namespace BankCloud.Services
                 .Select(orderedSave => orderedSave.Id);
         }
 
+        public IEnumerable<Order> GetAllOrderedByCurrentUser()
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            IEnumerable<Order> orderedSaves = this.context.OrdersSaves
+                .Where(x => x.Account.BankUserId == userId);
+
+            IEnumerable<Order> orderedLoans = this.context.OrdersLoans
+                .Where(x => x.Account.BankUserId == userId);
+
+            var result = orderedSaves.Concat(orderedLoans);
+            //TODO add insurance and Invetsment
+            return result;
+        }
+
         public IEnumerable<OrderLoan> GetOrderedLoansByCurrentUser()
         {
             string userId = httpContextAccessor.HttpContext.User
@@ -151,8 +174,22 @@ namespace BankCloud.Services
             return this.context.OrdersLoans
                 .Include(orderLoan => orderLoan.Loan)
                 .ThenInclude(loan => loan.Account.Currency)
-                .Where(order => order.Account.BankUserId != userId)
+                .Where(order => order.Account.BankUserId != userId
+                && order.Loan.Account.BankUserId == userId)
                 .Include(orderLoan => orderLoan.Account.Currency);
+        }
+
+        public IEnumerable<OrderSave> GetSoldOrderSaves()
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                 .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.OrdersSaves
+                .Include(orderSave => orderSave.Save)
+                .ThenInclude(save => save.Account.Currency)
+                .Where(order => order.Account.BankUserId != userId
+                    && order.Save.Account.BankUserId == userId)
+                .Include(orderSave => orderSave.Account.Currency);
         }
     }
 }

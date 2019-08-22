@@ -23,5 +23,10 @@ namespace BankCloud.Services.Common
         {
             return product.Commission * product.Amount / 100;
         }
+
+        public static decimal CalculateDepositMonthlyIncome(Product saveFromDb)
+        {
+            return (saveFromDb.Amount / 100) * saveFromDb.InterestRate;
+        }
     }
 }
