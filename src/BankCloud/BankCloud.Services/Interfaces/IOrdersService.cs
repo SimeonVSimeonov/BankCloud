@@ -23,6 +23,7 @@ namespace BankCloud.Services.Interfaces
         IEnumerable<string> GetAgentOrderSavesIds();
 
         OrderLoan GetOrderLoanById(string id);
+        OrderSave GetOrderSaveById(string id);
 
         IEnumerable<OrderLoan> GetSoldOrderLoans();
         IEnumerable<OrderSave> GetSoldOrderSaves();

@@ -1,0 +1,149 @@
+﻿@model BankCloud.Models.ViewModels.Orders.OrderedSavesDetailViewModel
+
+@{
+    ViewData["Title"] = "OrderedSaveDetails";
+}
+
+<section class="section-agents section-t8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="title-single-box">
+                    <h1 class="title-single">@Model.Name</h1>
+                    <span class="color-text-a">Seller: @Model.Seller</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/Users/OrderedSaves">Ordered</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.Name
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<hr />
+<section class="property-single nav-arrow-b">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="property-price d-flex justify-content-center foo">
+                    <div class="card-header-c d-flex">
+                        <div class="card-box-ico">
+                            <span class="ion-money">@Model.InterestRate</span>
+                        </div>
+                        <div class="card-title-c align-self-center">
+                            <h5 class="title-c">%</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-summary">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="title-box-d section-t4">
+                                <h3 class="title-d">Quick Summary</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-list">
+                        <ul class="list">
+                            <li class="d-flex justify-content-between">
+                                <strong>Product Name:</strong>
+                                <span>@Model.Name</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Seller:</strong>
+                                <span>@Model.Seller</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Issued On:</strong>
+                                <span>@Model.IssuedOn</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Completed On:</strong>
+                                <span>@Model.CompletedOn</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Status:</strong>
+                                <span>@Model.Status</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Interest Rate:</strong>
+                                <span>@Model.InterestRate%</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Amount Deposited:</strong>
+                                <span>@Model.Amount @Model.CurrencyIso</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Period:</strong>
+                                @if (Model.Period == 0)
+                                {
+                                    <span>Open</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.Period months</span>
+                                }
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Monthly Income:</strong>
+                                <span>@Model.MonthlyFee</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Expected Revenue:</strong>
+                                @if (Model.Period == 0)
+                                {
+                                    <span>Depends on the duration</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.DueAmount</span>
+                                }
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>Curency:</strong>
+                                <span>@Model.CurrencyIso</span>
+                            </li>
+                            <li class="d-flex justify-content-between">
+                                <strong>My Account For Transfer:</strong>
+                                <span>@Model.Account</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="row justify-content-between">
+                    <div class="col-md-7 col-lg-7 section-md-t3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="title-box-d">
+                                    <h3 class="title-d">Description</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="property-description">
+                            <p class="description color-text-a">
+                                @Model.Description
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="/Users/OrderedSaves">Back to List</a>
+        </div>
+    </div>
+</section>>
+

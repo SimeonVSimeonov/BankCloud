@@ -253,5 +253,17 @@ namespace BankCloud.Web.Controllers
 
             return View(viewAllOrderSaves);
         }
+
+        [Authorize]
+        [HttpGet("/Users/OrderedSaveDetails/{id}")]
+        public IActionResult OrderedSaveDetails(string id)
+        {
+            OrderSave userOrderedSaveFromDB = this.ordersService.GetOrderSaveById(id);
+
+            var detailOrderSave = this.mapper
+                .Map<OrderedSavesDetailViewModel>(userOrderedSaveFromDB);
+
+            return View(detailOrderSave);
+        }
     }
 }

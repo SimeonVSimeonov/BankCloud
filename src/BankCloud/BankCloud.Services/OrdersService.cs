@@ -176,6 +176,17 @@ namespace BankCloud.Services
                 .Include(orderLoan => orderLoan.Loan.Account.BankUser)
                 .SingleOrDefault(orderLoan => orderLoan.Id == id);
         }
+        public OrderSave GetOrderSaveById(string id)
+        {
+            return this.context.OrdersSaves
+                .Include(orderSave => orderSave.Account)
+                .ThenInclude(account => account.Currency)
+                .Include(orderSave => orderSave.Save)
+                .ThenInclude(save => save.Account)
+                .ThenInclude(account => account.Currency)
+                .Include(orderSave => orderSave.Save.Account.BankUser)
+                .SingleOrDefault(orderSave => orderSave.Id == id);
+        }
 
         public OrderLoan GetSoldOrderLoanById(string id)
         {
@@ -218,5 +229,6 @@ namespace BankCloud.Services
                     && order.Save.Account.BankUserId == userId)
                 .Include(orderSave => orderSave.Account.Currency);
         }
+
     }
 }
