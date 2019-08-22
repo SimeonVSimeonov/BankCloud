@@ -115,8 +115,40 @@ namespace BankCloud.Web.Controllers
             view.UserCurrencyTypes = this.accountsService.GetUserAccounts()
                 .Select(x => x.Currency.Name).ToList();
 
-            ;
             return this.View(view);
+        }
+
+        [Authorize]
+        [AutoValidateAntiforgeryToken]
+        [HttpPost]
+        public IActionResult OrderSave(OrdersOrderSaveInputModel model)
+        {
+            Product saveFromDb = this.productsService.GetProductById(model.Id);
+
+            BankUser userFromDb = this.usersService.GetCurrentUser();
+
+            if (userFromDb.Id == saveFromDb.Account.BankUserId)
+            {
+                return this.Redirect("/");
+            }
+
+            if (!userFromDb.Accounts.Any())
+            {
+                return this.Redirect("/Accounts/Activate");
+            }
+
+            this.ViewData["Accounts"] = this.accountsService.GetUserAccounts();
+
+            OrderSave order = this.mapper.Map<OrderSave>(model);
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            this.ordersService.AddOrderSave(order, saveFromDb);
+
+            return this.Redirect("/Users/OrderedSaves");
         }
     }
 }

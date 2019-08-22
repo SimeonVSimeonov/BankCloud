@@ -242,5 +242,16 @@ namespace BankCloud.Web.Controllers
 
             return this.Redirect("/Users/ProductSaves");
         }
+
+        [Authorize]
+        public IActionResult OrderedSaves()
+        {
+            IEnumerable<OrderSave> userOrderedSavesFromDB = this.ordersService.GetOrderedSavesByCurrentUser();
+
+            var viewAllOrderSaves = this.mapper
+                 .Map<List<UsersOrderedSavesViewModel>>(userOrderedSavesFromDB);
+
+            return View(viewAllOrderSaves);
+        }
     }
 }

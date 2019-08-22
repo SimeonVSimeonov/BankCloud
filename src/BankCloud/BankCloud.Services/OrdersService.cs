@@ -42,6 +42,22 @@ namespace BankCloud.Services
             context.SaveChanges();
         }
 
+        public void AddOrderSave(OrderSave order, Product save)
+        {
+            if (order == null || save == null)
+            {
+                return;
+            }
+
+            order.MonthlyFee = BankCloudCalculator.CalculateDepositMonthlyIncome(order, save);
+            order.Status = OrderStatus.Pending;
+            order.Name = save.Name;
+            save.Popularity++;
+
+            context.OrdersSaves.Add(order);
+            context.SaveChanges();
+        }
+
         public void RejectRequest(OrderLoan orderLoan)
         {
             if (orderLoan == null)
@@ -136,6 +152,17 @@ namespace BankCloud.Services
                 .ThenInclude(loan => loan.Account.Currency)
                 .Where(order => order.Account.BankUserId == userId)
                 .Include(orderLoan => orderLoan.Account.Currency);
+        }
+        public IEnumerable<OrderSave> GetOrderedSavesByCurrentUser()
+        {
+            string userId = httpContextAccessor.HttpContext.User
+               .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.OrdersSaves
+                .Include(orderSave => orderSave.Save)
+                .ThenInclude(save => save.Account.Currency)
+                .Where(order => order.Account.BankUserId == userId)
+                .Include(orderSave => orderSave.Account.Currency);
         }
 
         public OrderLoan GetOrderLoanById(string id)

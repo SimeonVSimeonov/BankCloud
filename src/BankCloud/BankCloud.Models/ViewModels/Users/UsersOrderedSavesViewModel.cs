@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankCloud.Models.ViewModels.Users
+﻿namespace BankCloud.Models.ViewModels.Users
 {
     public class UsersOrderedSavesViewModel
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
+
+        public string AdUrl { get; set; }
 
         public string Seller { get; set; }
 

@@ -54,9 +54,18 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.LoanId, y => y.MapFrom(src => src.Id));
 
+            CreateMap<OrdersOrderSaveInputModel, OrderSave>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.SaveId, y => y.MapFrom(src => src.Id));
+
             CreateMap<OrderLoan, UsersOrderedLoansViewModel>()
                 .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Loan.Account.Currency.IsoCode))
                 .ForMember(x => x.AdUrl, y => y.MapFrom(src => src.Loan.AdUrl));
+
+            CreateMap<OrderSave, UsersOrderedSavesViewModel>()
+                .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Save.Account.Currency.IsoCode))
+                .ForMember(x => x.Seller, y => y.MapFrom(src => src.Save.Account.BankUser))
+                .ForMember(x => x.AdUrl, y => y.MapFrom(src => src.Save.AdUrl));
 
             CreateMap<OrderLoan, OrderedLoansDetailViewModel>()
                 .ForMember(x => x.Seller, y => y.MapFrom(src => src.Loan.Account.BankUser))
@@ -65,9 +74,9 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.Account, y => y.MapFrom(src => src.Account.IBAN + " | " + src.Account.Currency.Name))
                 .ForMember(x => x.DueAmount, y => y.MapFrom(src => src.MonthlyFee * src.Period));
 
-            CreateMap<OrderSave, UsersOrderedSavesViewModel>()
-                .ForMember(x => x.Seller, y => y.MapFrom(src => src.Save.Account.BankUser))
-                .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Save.Account.Currency.IsoCode));
+            //CreateMap<OrderSave, UsersOrderedSavesViewModel>()
+            //    .ForMember(x => x.Seller, y => y.MapFrom(src => src.Save.Account.BankUser))
+            //    .ForMember(x => x.CurrencyIso, y => y.MapFrom(src => src.Save.Account.Currency.IsoCode));
 
             CreateMap<Account, UsersAccountViewModel>()
                 .ForMember(x => x.IsoCode, y => y.MapFrom(src => src.Currency.IsoCode));

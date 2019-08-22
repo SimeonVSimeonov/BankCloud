@@ -9,9 +9,9 @@
     <div class="container-fluid text-center">
         <div class="title-single-box">
             <h1 class="title-single"><span class="color-b">Ask for Loan</span></h1>
-            <span class="color-text-a">@Model.Name</span>
-            <span class="color-text-a">@Model.InterestRate %</span>
-            <span class="color-text-a">in @Model.CurrencyName</span>
+            <span class="color-b">@Model.Name</span>
+            <span class="color-b">@Model.InterestRate %</span>
+            <span class="color-b">in @Model.CurrencyName</span>
             <br />
             <span class="color-text-a">Please insert your desired conditions</span>
         </div>
@@ -50,7 +50,9 @@
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label>BankCloud Advice!!!</label>
+                            <hr />
                             <label>If you specify an account in another currency, you will be charged for conversion!</label>
+                            <hr />
                             @if (!Model.UserCurrencyTypes.Contains(Model.CurrencyName))
                             {
                                 <a href="/Users/AccountCreate"><strong>Activate your free @Model.CurrencyName Account from here now!</strong></a>
