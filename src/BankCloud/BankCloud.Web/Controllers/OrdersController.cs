@@ -141,7 +141,9 @@ namespace BankCloud.Web.Controllers
 
             OrderSave order = this.mapper.Map<OrderSave>(model);
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid 
+                || saveFromDb.InterestRate != model.InterestRate 
+                || saveFromDb.Period != model.Period)
             {
                 return this.View(model);
             }

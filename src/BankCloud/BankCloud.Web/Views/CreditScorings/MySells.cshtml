@@ -65,7 +65,22 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex justify-content-center">
-                                        <a href="/CreditScorings/PendingRequests"><span class="price-a">Pending</span></a>
+                                        @if (item == GlobalConstants.SAVE)
+                                        {
+                                            <a href="/CreditScorings/SavePendingRequests"><span class="price-a">Pending</span></a>
+                                        }
+                                        @if (item == GlobalConstants.LOAN)
+                                        {
+                                            <a href="/CreditScorings/LoanPendingRequests"><span class="price-a">Pending</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INVESTMENT)
+                                        {
+                                            <a href="/CreditScorings/InvestmentPendingRequests"><span class="price-a">Pending</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INSURANCE)
+                                        {
+                                            <a href="/CreditScorings/InsurancePendingRequests"><span class="price-a">Pending</span></a>
+                                        }
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
@@ -75,7 +90,7 @@
                                             @if (item == GlobalConstants.SAVE)
                                             {
                                                 <span>
-                                                    @Model.OrderedLoans.Where(x => x.Status == "Pending").Count() Pending
+                                                    @Model.OrderedSaves.Where(x => x.Status == "Pending").Count() Pending
                                                 </span>
                                             }
                                             @if (item == GlobalConstants.LOAN)
@@ -135,7 +150,22 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex justify-content-center">
-                                        <a href="/CreditScorings/ApprovedRequests"><span class="price-a">Approved</span></a>
+                                        @if (item == GlobalConstants.SAVE)
+                                        {
+                                            <a href="/CreditScorings/SaveApprovedRequests"><span class="price-a">Approved</span></a>
+                                        }
+                                        @if (item == GlobalConstants.LOAN)
+                                        {
+                                            <a href="/CreditScorings/LoanApprovedRequests"><span class="price-a">Approved</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INVESTMENT)
+                                        {
+                                            <a href="/CreditScorings/InvestmentApprovedRequests"><span class="price-a">Approved</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INSURANCE)
+                                        {
+                                            <a href="/CreditScorings/InsuranceApprovedRequests"><span class="price-a">Approved</span></a>
+                                        }
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
@@ -205,7 +235,22 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex justify-content-center">
-                                        <a href="/CreditScorings/RejectedRequests"><span class="price-a">Rejected</span></a>
+                                        @if (item == GlobalConstants.SAVE)
+                                        {
+                                            <a href="/CreditScorings/SaveRejectedRequests"><span class="price-a">Rejected</span></a>
+                                        }
+                                        @if (item == GlobalConstants.LOAN)
+                                        {
+                                            <a href="/CreditScorings/LoanRejectedRequests"><span class="price-a">Rejected</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INVESTMENT)
+                                        {
+                                            <a href="/CreditScorings/InvestmentRejectedRequests"><span class="price-a">Rejected</span></a>
+                                        }
+                                        @if (item == GlobalConstants.INSURANCE)
+                                        {
+                                            <a href="/CreditScorings/InsuranceRejectedRequests"><span class="price-a">Rejected</span></a>
+                                        }
                                     </div>
                                 </div>
                                 <div class="card-footer-a">

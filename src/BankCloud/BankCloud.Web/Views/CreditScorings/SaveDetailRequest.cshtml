@@ -1,7 +1,6 @@
-﻿@model BankCloud.Models.ViewModels.CreditScorings.CreditScoringsOrderedLoanDetailViewModel
-
+﻿@model BankCloud.Models.ViewModels.CreditScorings.CreditScoringsOrderedSaveDetailViewModel
 @{
-    ViewData["Title"] = "LoanDetailRequest";
+    ViewData["Title"] = "SaveDetailRequest";
 }
 
 <section class="section-agents section-t8">
@@ -22,19 +21,19 @@
                         @if (Model.Status == "Pending")
                         {
                             <li class="breadcrumb-item">
-                                <a href="/CreditScorings/LoanPendingRequests">Pending</a>
+                                <a href="/CreditScorings/SavePendingRequests">Pending</a>
                             </li>
                         }
                         @if (Model.Status == "Approved")
                         {
                             <li class="breadcrumb-item">
-                                <a href="/CreditScorings/LoanApprovedRequests">Approved</a>
+                                <a href="/CreditScorings/SaveApprovedRequests">Approved</a>
                             </li>
                         }
                         @if (Model.Status == "Rejected")
                         {
                             <li class="breadcrumb-item">
-                                <a href="/CreditScorings/LoanRejectedRequests">Rejected</a>
+                                <a href="/CreditScorings/SaveRejectedRequests">Rejected</a>
                             </li>
                         }
                         <li class="breadcrumb-item active" aria-current="page">
@@ -101,7 +100,14 @@
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Period:</strong>
-                                <span>@Model.Period months</span>
+                                @if (Model.Period == 0)
+                                {
+                                    <span>Open</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.Period months</span>
+                                }
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Charge Absorption:</strong>
@@ -110,10 +116,6 @@
                             <li class="d-flex justify-content-between">
                                 <strong>MonthlyFee:</strong>
                                 <span>@Model.MonthlyFee @Model.CurrencyIso</span>
-                            </li>
-                            <li class="d-flex justify-content-between">
-                                <strong>DueAmount:</strong>
-                                <span>@Model.Amount</span>
                             </li>
                             <li class="d-flex justify-content-between">
                                 <strong>Curency:</strong>
@@ -190,19 +192,18 @@
                         <a class="btn btn-a" href="/CreditScorings/ApproveRequest/@Model.Id">Approve</a>
                         <a class="btn btn-a" href="/CreditScorings/RejectRequest/@Model.Id">Reject</a>
                     </div>
-                    <a href="/CreditScorings/LoanPendingRequests">Back to Pending</a>
+                    <a href="/CreditScorings/SavePendingRequests">Back to Pending</a>
                 }
                 @if (Model.Status == "Approved")
                 {
-                    <a href="/CreditScorings/LoanApprovedRequests">Back to Approved</a>
+                    <a href="/CreditScorings/SaveApprovedRequests">Back to Approved</a>
                 }
                 @if (Model.Status == "Rejected")
                 {
-                    <a href="/CreditScorings/LoanRejectedRequests">Back to Rejected</a>
+                    <a href="/CreditScorings/SaveRejectedRequests">Back to Rejected</a>
                 }
             </div>
         </div>
     </div>
 </section>
-
 

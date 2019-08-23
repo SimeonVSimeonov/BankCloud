@@ -58,15 +58,15 @@ namespace BankCloud.Services
             context.SaveChanges();
         }
 
-        public void RejectRequest(OrderLoan orderLoan)
+        public void RejectRequest(Order ordered)
         {
-            if (orderLoan == null)
+            if (ordered == null)
             {
                 return;
             }
 
-            orderLoan.CompletedOn = DateTime.UtcNow;
-            orderLoan.Status = OrderStatus.Rejected;
+            ordered.CompletedOn = DateTime.UtcNow;
+            ordered.Status = OrderStatus.Rejected;
 
             this.context.SaveChanges();
         }
@@ -124,6 +124,11 @@ namespace BankCloud.Services
                 .Where(orderedSave => orderedSave.Status == OrderStatus.Pending &&
                     orderedSave.Account.BankUserId == userId)
                 .Select(orderedSave => orderedSave.Id);
+        }
+
+        public Order GetOrderById(string id)
+        {
+           return this.context.Find<Order>(id);
         }
 
         public IEnumerable<Order> GetAllOrderedByCurrentUser()
@@ -202,6 +207,21 @@ namespace BankCloud.Services
                 .ThenInclude(loan => loan.BankUser)
                 .SingleOrDefault(orderedLoan => orderedLoan.Id == id && 
                 orderedLoan.Account.BankUserId != userId);
+        }
+        public OrderSave GetSoldOrderSaveById(string id)
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.OrdersSaves
+                .Include(orderedSave => orderedSave.Account.BankUser)
+                .ThenInclude(buyer => buyer.Accounts)
+                .ThenInclude(save => save.Currency)
+                .Include(orderedSave => orderedSave.Save)
+                .ThenInclude(save => save.Account)
+                .ThenInclude(save => save.BankUser)
+                .SingleOrDefault(orderedSave => orderedSave.Id == id &&
+                orderedSave.Account.BankUserId != userId);
         }
 
         public IEnumerable<OrderLoan> GetSoldOrderLoans()

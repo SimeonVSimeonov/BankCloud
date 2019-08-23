@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BankCloud.Models.ViewModels.Users.UsersAccountViewModel>
+﻿@model IEnumerable<BankCloud.Models.ViewModels.CreditScorings.CreditScoringsOrderedLoansViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "LoanRejectedRequests";
 }
 
 <section class="section-agents section-t8">
@@ -9,20 +9,15 @@
         <div class="row">
             <div class="col-md-12 col-lg-8">
                 <div class="title-single-box">
-                    <h1 class="title-single">Accounts</h1>
-                    <span class="color-text-a">Grid Accounts</span>
+                    <h1 class="title-single">Your Rejected Sells</h1>
+                    <span class="color-text-a">Grid Loans</span>
                 </div>
             </div>
             <div class="col-md-12 col-lg-4">
-                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-between">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/Accounts/Create">Create New</a>
-                        </li>
-                    </ol>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/">Home</a>
+                            <a href="/CreditScorings/MySells">Back</a>
                         </li>
                     </ol>
                 </nav>
@@ -45,31 +40,26 @@
                         </form>*@
                 </div>
             </div>
-        </div>
-        <div class="row">
             @foreach (var item in Model)
             {
                 <div class="col-md-4">
                     <div class="card-box-a card-shadow">
                         <div class="img-box-a">
-                            <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            <img src="@item.AdUrl" alt="" class="img-a img-fluid">
                         </div>
                         <div class="card-overlay">
                             <div class="card-overlay-a-content">
                                 <div class="card-header-a">
                                     <h2 class="card-title-a">
-                                        <a href="#">
-                                            @item.CurrencyName
-                                            <br /> @item.IsoCode
-                                            <br /><span class="h4">@item.IBAN</span>
+                                        <a href="/CreditScorings/LoanDetailRequest/@item.Id">
+                                            Loan
+                                            <br /> @item.Name
                                         </a>
                                     </h2>
                                 </div>
                                 <div class="card-body-a">
-                                    <div class="price-box d-flex justify-content-between">
-                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">Charge</span></a>
-                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">transfer</span></a>
-                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">Detail</span></a>
+                                    <div class="price-box d-flex">
+                                        <a href="/CreditScorings/LoanDetailRequest/@item.Id"><span class="price-a">Details</span></a>
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
@@ -77,19 +67,25 @@
                                         <li>
                                             <h4 class="card-info-title">Amount</h4>
                                             <span>
-                                                @item.Balance.ToString("F0")
+                                                @item.Amount.ToString("F0")
                                             </span>
                                         </li>
                                         <li>
-                                            <h4 class="card-info-title">Income</h4>
+                                            <h4 class="card-info-title">Monthly Fee</h4>
                                             <span>
-                                                @item.MonthlyIncome.ToString("F0")
+                                                @item.MonthlyFee.ToString("F0")
                                             </span>
                                         </li>
                                         <li>
-                                            <h4 class="card-info-title">OutCome</h4>
+                                            <h4 class="card-info-title">Curency</h4>
                                             <span>
-                                                @item.MonthlyOutCome.ToString("F0")
+                                                @item.Currency
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Period</h4>
+                                            <span>
+                                                @item.Period months
                                             </span>
                                         </li>
                                     </ul>
@@ -102,3 +98,4 @@
         </div>
     </div>
 </section>
+

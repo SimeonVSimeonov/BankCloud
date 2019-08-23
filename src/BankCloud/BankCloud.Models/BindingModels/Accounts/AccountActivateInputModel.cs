@@ -21,10 +21,10 @@ namespace BankCloud.Models.BindingModels.Accounts
         [Display(Name = "Specifyr your Identity Number")]
         public string IdentityNumber { get; set; }
 
-        //[Required] TODO:
+        [Required]
         public AddressInputModel Address { get; set; }
 
-        //[Required] TODO:
+        [Required]
         public AccountInputModel Account { get; set; }
     }
 }

@@ -1,6 +1,10 @@
-﻿namespace BankCloud.Models.ViewModels.CreditScorings
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BankCloud.Models.ViewModels.CreditScorings
 {
-    public class CreditScoringsOrderedLoansViewModel
+    public class CreditScoringsOrderedSavesViewModel
     {
         public string Id { get; set; }
 
@@ -11,6 +15,8 @@
         public string Buyer { get; set; }
 
         public int Period { get; set; }
+
+        public decimal InterestRate { get; set; }
 
         public decimal Amount { get; set; }
 

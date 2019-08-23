@@ -49,7 +49,7 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        public IActionResult PendingRequests()
+        public IActionResult LoanPendingRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
                 .Where(orderLoan => orderLoan.Status == OrderStatus.Pending);
@@ -60,7 +60,18 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        public IActionResult ApprovedRequests()
+        public IActionResult SavePendingRequests()
+        {
+            var orderedSavesFromDb = this.ordersService.GetSoldOrderSaves()
+                .Where(orderSave => orderSave.Status == OrderStatus.Pending);
+
+            var view = this.mapper.Map<List<CreditScoringsOrderedSavesViewModel>>(orderedSavesFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        public IActionResult LoanApprovedRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
                 .Where(orderLoan => orderLoan.Status == OrderStatus.Approved);
@@ -71,7 +82,7 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        public IActionResult RejectedRequests()
+        public IActionResult LoanRejectedRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
                 .Where(orderLoan => orderLoan.Status == OrderStatus.Rejected);
@@ -82,12 +93,34 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        [HttpGet("/CreditScorings/DetailRequest/{id}")]
+        public IActionResult SaveRejectedRequests()
+        {
+            var orderedSaveFromDb = this.ordersService.GetSoldOrderSaves()
+               .Where(orderSave => orderSave.Status == OrderStatus.Rejected);
+
+            var view = this.mapper.Map<List<CreditScoringsOrderedSavesViewModel>>(orderedSaveFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpGet("/CreditScorings/LoanDetailRequest/{id}")]
         public IActionResult LoanDetailRequest(string id)
         {
             Order orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
 
             var view = this.mapper.Map<Order, CreditScoringsOrderedLoanDetailViewModel>(orderedLoanFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpGet("/CreditScorings/SaveDetailRequest/{id}")]
+        public IActionResult SaveDetailRequest(string id)
+        {
+            Order orderedSaveFromDb = this.ordersService.GetSoldOrderSaveById(id);
+
+            var view = this.mapper.Map<Order, CreditScoringsOrderedSaveDetailViewModel>(orderedSaveFromDb);
 
             return View(view);
         }
@@ -110,7 +143,7 @@ namespace BankCloud.Web.Controllers
 
             this.ordersService.ApproveRequest(orderedLoanFromDb);
 
-            return Redirect("/CreditScorings/PendingRequests");
+            return Redirect("/CreditScorings/MySells");
         }
 
         [Authorize(Roles = "Agent")]
@@ -118,11 +151,11 @@ namespace BankCloud.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult RejectRequest(string id)
         {
-            OrderLoan orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
+            Order orderedFromDb = this.ordersService.GetOrderById(id);
 
-            this.ordersService.RejectRequest(orderedLoanFromDb);
+            this.ordersService.RejectRequest(orderedFromDb);
 
-            return Redirect("/CreditScorings/PendingRequests");
+            return Redirect("/CreditScorings/MySells");
         }
     }
 }

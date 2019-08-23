@@ -1,9 +1,11 @@
 ﻿using BankCloud.Models.ViewModels.Users;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BankCloud.Models.ViewModels.CreditScorings
 {
-    public class CreditScoringsOrderedLoanDetailViewModel
+    public class CreditScoringsOrderedSaveDetailViewModel
     {
         public string Id { get; set; }
 
@@ -36,6 +38,5 @@ namespace BankCloud.Models.ViewModels.CreditScorings
         public string CurrencyIso { get; set; }
 
         public string CurrencyName { get; set; }
-
     }
 }
