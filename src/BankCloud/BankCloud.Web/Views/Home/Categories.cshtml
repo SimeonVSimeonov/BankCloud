@@ -1,4 +1,5 @@
 ﻿@model List<BankCloud.Models.ViewModels.Home.HomeCategoriesViewModel>;
+@using BankCloud.Services.Common
 
 @{
     ViewData["Title"] = "Categories";
@@ -45,7 +46,7 @@
                                 <h2 class="card-title-a">
                                     <a href="/Products/Loans">
                                         Loans
-                                        <br /> for all your needs
+                                        <br /> For all your needs
                                     </a>
                                 </h2>
                             </div>
@@ -59,19 +60,19 @@
                                     <li>
                                         <h4 class="card-info-title">Over</h4>
                                         <span>
-                                            @(Model.Where(x => x.Type == "Loan").Count() - 1) loans
+                                            @(Model.Where(x => x.Type == GlobalConstants.LOAN).Count() - 1) loans
                                         </span>
                                     </li>
                                     <li>
                                         <h4 class="card-info-title">Interest Rates To</h4>
                                         <span>
-                                            @(Model.Where(x => x.Type == "Loan").Select(x => x.InterestRate).Min()) %
+                                            @(Model.Where(x => x.Type == GlobalConstants.LOAN).Select(x => x.InterestRate).Min()) %
                                         </span>
                                     </li>
                                     <li>
                                         <h4 class="card-info-title">Relaxed Conditions To</h4>
                                         <span>
-                                            @(Model.Where(x => x.Type == "Loan").Select(x => x.Period).Max()) months
+                                            @(Model.Where(x => x.Type == GlobalConstants.LOAN).Select(x => x.Period).Max()) months
                                         </span>
                                     </li>
                                 </ul>
@@ -89,37 +90,36 @@
                         <div class="card-overlay-a-content">
                             <div class="card-header-a">
                                 <h2 class="card-title-a">
-                                    <a href="#">
+                                    <a href="/Products/Saves">
                                         Saves
-                                        <br /> For Your Future
+                                        <br /> For your future
                                     </a>
                                 </h2>
                             </div>
                             <div class="card-body-a">
                                 <div class="price-box d-flex">
-                                    <a href="/Products/LoanAll"><span class="price-a">Ask now</span></a>
+                                    <a href="/Products/Saves"><span class="price-a">Ask now</span></a>
                                 </div>
                             </div>
                             <div class="card-footer-a">
                                 <ul class="card-info d-flex justify-content-around">
                                     <li>
-                                        <h4 class="card-info-title">Area</h4>
+                                        <h4 class="card-info-title">Over</h4>
                                         <span>
-                                            340m
-                                            <sup>2</sup>
+                                            @(Model.Where(x => x.Type == GlobalConstants.SAVE).Count() - 1) saves
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Beds</h4>
-                                        <span>2</span>
+                                        <h4 class="card-info-title">Interest Rates To</h4>
+                                        <span>
+                                            @(Model.Where(x => x.Type == GlobalConstants.SAVE).Select(x => x.InterestRate).Max()) %
+                                        </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Baths</h4>
-                                        <span>4</span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Garages</h4>
-                                        <span>1</span>
+                                        <h4 class="card-info-title">Relaxed Conditions</h4>
+                                        <span>
+                                            from @(Model.Where(x => x.Type == GlobalConstants.SAVE).Select(x => x.Period).Max()) months to Open
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
@@ -136,38 +136,37 @@
                         <div class="card-overlay-a-content">
                             <div class="card-header-a">
                                 <h2 class="card-title-a">
-                                    <a href="#">
+                                    <a href="/Products/Insurances">
                                         Insurances
-                                        <br /> for your calmness
+                                        <br /> For your calmness
                                     </a>
                                 </h2>
                             </div>
                             <div class="card-body-a">
                                 <div class="price-box d-flex">
-                                    <a href="#"><span class="price-a">Ask now</span></a>
-                                </div>  
+                                    <a href="/Products/Insurances"><span class="price-a">Ask now</span></a>
+                                </div>
                             </div>
                             <div class="card-footer-a">
                                 <ul class="card-info d-flex justify-content-around">
-                                    <li>
-                                        <h4 class="card-info-title">Area</h4>
+                                    @*<li>
+                                        <h4 class="card-info-title">Over</h4>
                                         <span>
-                                            340m
-                                            <sup>2</sup>
+                                            @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Count() - 1) saves
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Beds</h4>
-                                        <span>2</span>
+                                        <h4 class="card-info-title">Interest Rates To</h4>
+                                        <span>
+                                            @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.InterestRate).Max()) %
+                                        </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Baths</h4>
-                                        <span>4</span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Garages</h4>
-                                        <span>1</span>
-                                    </li>
+                                        <h4 class="card-info-title">Relaxed Conditions</h4>
+                                        <span>
+                                            from @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.Period).Max()) months to Open
+                                        </span>
+                                    </li>*@
                                 </ul>
                             </div>
                         </div>
@@ -183,39 +182,38 @@
                         <div class="card-overlay-a-content">
                             <div class="card-header-a">
                                 <h2 class="card-title-a">
-                                    <a href="#">
+                                    <a href="/Products/Investments">
                                         Investments
-                                        <br /> Olive Road Two
+                                        <br /> Wall street in your pocket
                                     </a>
                                 </h2>
                             </div>
                             <div class="card-body-a">
                                 <div class="price-box d-flex">
-                                    <a href="#"><span class="price-a">Ask now</span></a>
+                                    <a href="/Products/Investments"><span class="price-a">Ask now</span></a>
                                 </div>
                             </div>
                             <div class="card-footer-a">
-                                <ul class="card-info d-flex justify-content-around">
+                                @*<ul class="card-info d-flex justify-content-around">
                                     <li>
-                                        <h4 class="card-info-title">Area</h4>
+                                        <h4 class="card-info-title">Over</h4>
                                         <span>
-                                            340m
-                                            <sup>2</sup>
+                                            @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Count() - 1) saves
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Beds</h4>
-                                        <span>2</span>
+                                        <h4 class="card-info-title">Interest Rates To</h4>
+                                        <span>
+                                            @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.InterestRate).Max()) %
+                                        </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Baths</h4>
-                                        <span>4</span>
+                                        <h4 class="card-info-title">Relaxed Conditions</h4>
+                                        <span>
+                                            from @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.Period).Max()) months to Open
+                                        </span>
                                     </li>
-                                    <li>
-                                        <h4 class="card-info-title">Garages</h4>
-                                        <span>1</span>
-                                    </li>
-                                </ul>
+                                </ul>*@
                             </div>
                         </div>
                     </div>
@@ -230,15 +228,15 @@
                         <div class="card-overlay-a-content">
                             <div class="card-header-a">
                                 <h2 class="card-title-a">
-                                    <a href="#">
+                                    <a href="/Products/Payments">
                                         Payments
-                                        <br /> Olive Road Two
+                                        <br /> No more waste time
                                     </a>
                                 </h2>
                             </div>
                             <div class="card-body-a">
                                 <div class="price-box d-flex">
-                                    <a href="#"><span class="price-a">Ask now</span></a>
+                                    <a href="/Products/Payments"><span class="price-a">Ask now</span></a>
                                 </div>
                             </div>
                             <div class="card-footer-a">

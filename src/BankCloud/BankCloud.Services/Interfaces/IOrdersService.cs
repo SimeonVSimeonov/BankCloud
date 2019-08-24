@@ -1,4 +1,5 @@
 ﻿using BankCloud.Data.Entities;
+using FixerSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,8 @@ namespace BankCloud.Services.Interfaces
 
         void RejectRequest(Order order);
 
-        void ApproveRequest(OrderLoan orderLoan);
+        void ApproveLoanRequest(OrderLoan orderLoan);
+        void ApproveSaveRequest(OrderSave orderedSave);
 
         IEnumerable<Order> GetAllOrderedByCurrentUser();
 

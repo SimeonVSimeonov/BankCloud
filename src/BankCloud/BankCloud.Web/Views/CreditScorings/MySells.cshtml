@@ -175,7 +175,7 @@
                                             @if (item == GlobalConstants.SAVE)
                                             {
                                                 <span>
-                                                    @Model.OrderedLoans.Where(x => x.Status == "Approved").Count() Approved
+                                                    @Model.OrderedSaves.Where(x => x.Status == "Approved").Count() Approved
                                                 </span>
                                             }
                                             @if (item == GlobalConstants.LOAN)
@@ -260,7 +260,7 @@
                                             @if (item == GlobalConstants.SAVE)
                                             {
                                                 <span>
-                                                    @Model.OrderedLoans.Where(x => x.Status == "Rejected").Count() Rejected
+                                                    @Model.OrderedSaves.Where(x => x.Status == "Rejected").Count() Rejected
                                                 </span>
                                             }
                                             @if (item == GlobalConstants.LOAN)

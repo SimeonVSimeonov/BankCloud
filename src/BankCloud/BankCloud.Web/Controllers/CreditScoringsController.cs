@@ -82,6 +82,17 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
+        public IActionResult SaveApprovedRequests()
+        {
+            var orderedSavesFromDb = this.ordersService.GetSoldOrderSaves()
+                .Where(orderSave => orderSave.Status == OrderStatus.Approved);
+
+            var view = this.mapper.Map<List<CreditScoringsOrderedSavesViewModel>>(orderedSavesFromDb);
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Agent")]
         public IActionResult LoanRejectedRequests()
         {
             var orderedLoansFromDb = this.ordersService.GetSoldOrderLoans()
@@ -126,22 +137,45 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        [HttpGet("/CreditScorings/ApproveRequest/{id}")]
+        [HttpGet("/CreditScorings/ApproveLoan/{id}")]
         [AutoValidateAntiforgeryToken]
-        public IActionResult ApproveRequest(string id)
+        public IActionResult ApproveLoan(string id)
         {
             OrderLoan orderedLoanFromDb = this.ordersService.GetSoldOrderLoanById(id);
 
             Account sellerAccount = orderedLoanFromDb.Loan.Account;
-
+            
             if (sellerAccount.Balance < orderedLoanFromDb.Amount)
             {
                 this.TempData["error"] = GlobalConstants.ERROR_MESSAGE_FOR_INSUFFICIENT_FUNDS;
 
-                return this.Redirect("/Users/Accounts");
+                return this.Redirect("/Accounts/Index");
             }
 
-            this.ordersService.ApproveRequest(orderedLoanFromDb);
+            this.ordersService.ApproveLoanRequest(orderedLoanFromDb);
+
+            return Redirect("/CreditScorings/MySells");
+        }
+
+        [Authorize(Roles = "Agent")]
+        [HttpGet("/CreditScorings/ApproveSave/{id}")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ApproveSave(string id)
+        {
+            OrderSave orderedSaveFromDb = this.ordersService.GetSoldOrderSaveById(id);
+
+            var depositorAccount = orderedSaveFromDb.Account;
+
+            Account sellerAccount = orderedSaveFromDb.Save.Account;
+
+            if (depositorAccount.Balance < orderedSaveFromDb.Amount)
+            {
+                this.TempData["error"] = GlobalConstants.ERROR_MESSAGE_FOR_DEPOSITOR_DOES_NOT_HAVE_MONEY;
+                var view = this.mapper.Map<Order, CreditScoringsOrderedSaveDetailViewModel>(orderedSaveFromDb);
+                return this.View("SaveDetailRequest", view);
+            }
+
+            this.ordersService.ApproveSaveRequest(orderedSaveFromDb);
 
             return Redirect("/CreditScorings/MySells");
         }

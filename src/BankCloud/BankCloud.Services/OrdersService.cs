@@ -71,7 +71,7 @@ namespace BankCloud.Services
             this.context.SaveChanges();
         }
 
-        public void ApproveRequest(OrderLoan orderLoan)
+        public void ApproveLoanRequest(OrderLoan orderLoan)
         {
             Account buyerAccount = orderLoan.Account;
             Account sellerAccount = orderLoan.Loan.Account;
@@ -82,12 +82,12 @@ namespace BankCloud.Services
 
             if (buyerAccount.Currency.IsoCode != sellerAccount.Currency.IsoCode)
             {
-                ExchangeRate rateUsdGbp = Fixer
+                ExchangeRate rateFromTo = Fixer
                     .Rate(sellerAccount.Currency.IsoCode, buyerAccount.Currency.IsoCode);
 
-                orderCost = rateUsdGbp.Convert(orderCost);
-                orderAmount = rateUsdGbp.Convert(orderAmount);
-                orderFee = rateUsdGbp.Convert(orderFee);
+                orderCost = rateFromTo.Convert(orderCost);
+                orderAmount = rateFromTo.Convert(orderAmount);
+                orderFee = rateFromTo.Convert(orderFee);
             }
 
             buyerAccount.Balance -= (decimal)orderCost;
@@ -97,9 +97,39 @@ namespace BankCloud.Services
             sellerAccount.Balance += orderLoan.Commission;
             sellerAccount.Balance -= orderLoan.Amount;
             sellerAccount.MonthlyIncome += orderLoan.MonthlyFee;
-            //TODO: evry mounts task trasfer
+            //TODO: every mounts task transfer
             orderLoan.CompletedOn = DateTime.UtcNow;
             orderLoan.Status = OrderStatus.Approved;
+
+            this.context.SaveChanges();
+        }
+
+        public void ApproveSaveRequest(OrderSave orderedSave)
+        {
+            Account depositorAccount = orderedSave.Account;
+            Account sellerAccount = orderedSave.Save.Account;
+
+            double depositAmount = (double)orderedSave.Amount;
+            double monthlyIncome = (double)orderedSave.MonthlyFee;
+
+            if (depositorAccount.Currency.IsoCode != sellerAccount.Currency.IsoCode)
+            {
+                ExchangeRate rateFromTo = Fixer
+                    .Rate(sellerAccount.Currency.IsoCode, depositorAccount.Currency.IsoCode);
+
+                depositAmount = rateFromTo.Convert(depositAmount);
+                monthlyIncome = rateFromTo.Convert(monthlyIncome);
+
+            }
+
+            depositorAccount.Balance -= (decimal)depositAmount;
+            depositorAccount.MonthlyIncome += (decimal)monthlyIncome;
+            //TODO every mounts task transfer
+            sellerAccount.Balance += orderedSave.Amount;
+            sellerAccount.MonthlyOutcome += orderedSave.MonthlyFee;
+
+            orderedSave.CompletedOn = DateTime.UtcNow;
+            orderedSave.Status = OrderStatus.Approved;
 
             this.context.SaveChanges();
         }
@@ -249,6 +279,5 @@ namespace BankCloud.Services
                     && order.Save.Account.BankUserId == userId)
                 .Include(orderSave => orderSave.Account.Currency);
         }
-
     }
 }

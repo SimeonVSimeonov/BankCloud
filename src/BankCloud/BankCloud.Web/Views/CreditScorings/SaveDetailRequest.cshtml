@@ -114,7 +114,7 @@
                                 <span>@Model.Commission @Model.CurrencyIso</span>
                             </li>
                             <li class="d-flex justify-content-between">
-                                <strong>MonthlyFee:</strong>
+                                <strong>Monthly Fee:</strong>
                                 <span>@Model.MonthlyFee @Model.CurrencyIso</span>
                             </li>
                             <li class="d-flex justify-content-between">
@@ -189,7 +189,7 @@
                 @if (Model.Status == "Pending")
                 {
                     <div class="form-group">
-                        <a class="btn btn-a" href="/CreditScorings/ApproveRequest/@Model.Id">Approve</a>
+                        <a class="btn btn-a" href="/CreditScorings/ApproveSave/@Model.Id">Approve</a>
                         <a class="btn btn-a" href="/CreditScorings/RejectRequest/@Model.Id">Reject</a>
                     </div>
                     <a href="/CreditScorings/SavePendingRequests">Back to Pending</a>

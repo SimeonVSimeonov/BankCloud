@@ -18,12 +18,19 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @*TODO: Add payment method*@
                     @*<div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label asp-for="Charge" class="control-label"></label>
+                                <input asp-for="Charge" class="form-control" />
+                                <span asp-validation-for="Charge" class="text-danger"></span>
+                            </div>
+                        </div>*@
+                    <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label asp-for="Charge" class="control-label"></label>
-                            <input asp-for="Charge" class="form-control" />
-                            <span asp-validation-for="Charge" class="text-danger"></span>
+                            <label asp-for="AdUrl" class="control-label"></label>
+                            <input asp-for="AdUrl" type="file" class="form-control-file" />
+                            <span asp-validation-for="AdUrl" class="text-danger"></span>
                         </div>
-                    </div>*@
+                    </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label asp-for="MonthlyIncome" class="control-label"></label>
@@ -38,7 +45,7 @@
                                 <option selected>Curency</option>
                                 @foreach (var currency in (List<Currency>)ViewData["Curencies"])
                                 {
-                                <option value="@currency.Id">@currency.IsoCode</option>
+                                    <option value="@currency.Id">@currency.IsoCode</option>
                                 };
                             </select>
                         </div>
