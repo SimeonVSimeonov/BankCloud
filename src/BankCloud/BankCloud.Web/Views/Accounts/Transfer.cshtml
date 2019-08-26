@@ -1,0 +1,49 @@
+﻿@model BankCloud.Models.BindingModels.Accounts.TransferBankCloudInputModel
+@using BankCloud.Data.Entities.Enums;
+
+@{
+    ViewData["Title"] = "Transfer";
+}
+
+<section class="section-agents section-t8">
+    <div class="container-fluid text-center">
+        <div class="title-single-box">
+            <h1 class="title-single"><span class="color-b">Charge Your Account</span></h1>
+            <span class="color-text-a">Please insert your conditions</span>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="col-md-5 mx-auto">
+                <form asp-action="Transfer" class="form-a fa-sign-in">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IBAN" class="control-label"></label>
+                        <input asp-for="IBAN" class="form-control" />
+                        <span asp-validation-for="IBAN" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Apply" class="btn btn-a" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
