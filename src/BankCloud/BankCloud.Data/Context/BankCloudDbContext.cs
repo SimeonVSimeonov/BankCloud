@@ -7,6 +7,8 @@ namespace BankCloud.Data.Context
     public class BankCloudDbContext : IdentityDbContext<BankUser, BankUserRole, string>
     {
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Transfer> Transfers { get; set; } 
+        public DbSet<Payment> Payments { get; set; } 
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CreditScoring> CreditScorings { get; set; }
         public DbSet<Currency> Currencies { get; set; }
@@ -38,6 +40,12 @@ namespace BankCloud.Data.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Account>()
+                .HasMany(x => x.Transfers)
+                .WithOne(x => x.Account)
+                .HasForeignKey(x => x.AccountId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             builder.Entity<Product>().ToTable("Products");
 

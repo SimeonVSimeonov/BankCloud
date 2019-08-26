@@ -2,14 +2,11 @@
 using BankCloud.Data.Entities;
 using BankCloud.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using BankCloud.Services.Common;
-using BankCloud.Models.BindingModels;
 
 namespace BankCloud.Services
 {
@@ -25,6 +22,13 @@ namespace BankCloud.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
+        public object GetAccountById(string id)
+        {
+            return this.context.Accounts
+                .Include(account => account.Currency)
+                .SingleOrDefault(x => x.Id == id);
+        }
+
         public IEnumerable<Currency> GetCurrencies()
         {
             return this.context.Currencies;
@@ -37,6 +41,8 @@ namespace BankCloud.Services
 
             return this.context.Accounts
                 .Where(account => account.BankUserId == userId)
+                .Include(account => account.Transfers)
+                .Include(account => account.Payments)
                 .Include(account => account.Currency)
                 .ToList();
         }
@@ -62,6 +68,11 @@ namespace BankCloud.Services
             userFromDb.Accounts.Add(account);
 
             this.context.SaveChanges();
+        }
+
+        public Account GetAccountByIban(string iban)
+        {
+            return this.context.Accounts.SingleOrDefault(x => x.IBAN == iban);
         }
     }
 }

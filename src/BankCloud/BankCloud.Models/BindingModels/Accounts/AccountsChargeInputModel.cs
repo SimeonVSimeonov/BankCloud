@@ -6,22 +6,23 @@ namespace BankCloud.Models.BindingModels.Accounts
 {
     public class AccountsChargeInputModel
     {
-        //TODO: validation
         public string Id { get; set; }
 
-        [Display(Name = "Specify a maximum amount")]
+        [Required]
+        [Display(Name = "Specify amount")]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
         public decimal Amount { get; set; }
 
+        [Required]
+        [Display(Name = "Specify description for transfer")]
+        [StringLength(100, MinimumLength = 10)]
         public string Description { get; set; }
 
+        [Required]
         public TransferType Type { get; set; }
 
         public DateTime Date { get; set; } = DateTime.UtcNow;
 
-        public DateTime Completed { get; set; }
-
-        public string Account { get; set; }
-
+        public DateTime? Completed { get; set; }
     }
 }

@@ -13,5 +13,7 @@ namespace BankCloud.Services.Interfaces
         IEnumerable<Currency> GetCurrencies();
 
         void AddAccountToUser(Account account);
+        Account GetAccountByIban(string iban);
+        object GetAccountById(string id);
     }
 }

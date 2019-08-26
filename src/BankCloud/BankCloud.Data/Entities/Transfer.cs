@@ -11,11 +11,20 @@ namespace BankCloud.Data.Entities
 
         public decimal Amount { get; set; }
 
+        public BalanceType BalanceType { get; set; }
+
+        public TransferStatus Status { get; set; }
+
         public DateTime Date { get; set; }
+
+        public DateTime? Completed { get; set; }
 
         public TransferType Type { get; set; }
 
         public string AccountId { get; set; }
         public Account Account { get; set; }
+
+        public string ForeignAccountId { get; set; }
+        public Account ForeignAccount { get; set; }
     }
 }

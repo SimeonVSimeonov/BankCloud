@@ -52,7 +52,7 @@
                 <div class="col-md-4">
                     <div class="card-box-a card-shadow">
                         <div class="img-box-a">
-                            <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
+                            <img src="@item.AdUrl" alt="" class="img-a img-fluid">
                         </div>
                         <div class="card-overlay">
                             <div class="card-overlay-a-content">
@@ -60,7 +60,8 @@
                                     <h2 class="card-title-a">
                                         <a href="#">
                                             @item.CurrencyName
-                                            <br /> @item.IsoCode
+                                            <br /><span class="h4">
+                                                Blance @item.Balance.ToString("F0") @item.IsoCode</span>
                                             <br /><span class="h4">@item.IBAN</span>
                                         </a>
                                     </h2>
@@ -68,28 +69,22 @@
                                 <div class="card-body-a">
                                     <div class="price-box d-flex justify-content-between">
                                         <a href="/Accounts/Charge/@item.Id"><span class="price-a">Charge</span></a>
-                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">transfer</span></a>
-                                        <a href="/Accounts/Charge/@item.Id"><span class="price-a">Detail</span></a>
+                                        <a href="/Accounts/Transfer/@item.Id"><span class="price-a">transfer</span></a>
+                                        <a href="/Accounts/Detail/@item.Id"><span class="price-a">Detail</span></a>
                                     </div>
                                 </div>
                                 <div class="card-footer-a">
                                     <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <h4 class="card-info-title">Amount</h4>
+                                        <li class="text-center">
+                                            <h4 class="card-info-title">Pending Recharges</h4>
                                             <span>
-                                                @item.Balance.ToString("F0")
+                                                @item.PendingRecharges
                                             </span>
                                         </li>
-                                        <li>
-                                            <h4 class="card-info-title">Income</h4>
+                                        <li class="text-center">
+                                            <h4 class="card-info-title">Pending Payments</h4>
                                             <span>
-                                                @item.MonthlyIncome.ToString("F0")
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <h4 class="card-info-title">OutCome</h4>
-                                            <span>
-                                                @item.MonthlyOutCome.ToString("F0")
+                                                @item.PendingPayments
                                             </span>
                                         </li>
                                     </ul>

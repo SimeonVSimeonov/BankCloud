@@ -24,6 +24,8 @@ namespace BankCloud.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AdUrl");
+
                     b.Property<decimal>("Balance");
 
                     b.Property<string>("BankUserId");
@@ -237,6 +239,24 @@ namespace BankCloud.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Order");
                 });
 
+            modelBuilder.Entity("BankCloud.Data.Entities.Payment", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AccountId");
+
+                    b.Property<string>("TransferId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("TransferId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("BankCloud.Data.Entities.Product", b =>
                 {
                     b.Property<string>("Id")
@@ -285,9 +305,17 @@ namespace BankCloud.Data.Migrations
 
                     b.Property<decimal>("Amount");
 
+                    b.Property<int>("BalanceType");
+
+                    b.Property<DateTime?>("Completed");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Description");
+
+                    b.Property<string>("ForeignAccountId");
+
+                    b.Property<int>("Status");
 
                     b.Property<int>("Type");
 
@@ -295,7 +323,9 @@ namespace BankCloud.Data.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Transfer");
+                    b.HasIndex("ForeignAccountId");
+
+                    b.ToTable("Transfers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -499,6 +529,17 @@ namespace BankCloud.Data.Migrations
                         .HasForeignKey("BankUserId");
                 });
 
+            modelBuilder.Entity("BankCloud.Data.Entities.Payment", b =>
+                {
+                    b.HasOne("BankCloud.Data.Entities.Account", "Account")
+                        .WithMany("Payments")
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("BankCloud.Data.Entities.Transfer", "Transfer")
+                        .WithMany()
+                        .HasForeignKey("TransferId");
+                });
+
             modelBuilder.Entity("BankCloud.Data.Entities.Product", b =>
                 {
                     b.HasOne("BankCloud.Data.Entities.Account", "Account")
@@ -510,7 +551,12 @@ namespace BankCloud.Data.Migrations
                 {
                     b.HasOne("BankCloud.Data.Entities.Account", "Account")
                         .WithMany("Transfers")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BankCloud.Data.Entities.Account", "ForeignAccount")
+                        .WithMany()
+                        .HasForeignKey("ForeignAccountId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

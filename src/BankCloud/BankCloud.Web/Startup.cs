@@ -64,6 +64,7 @@ namespace BankCloud.Web
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ITransferService, TransferService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             services.AddCors(options =>

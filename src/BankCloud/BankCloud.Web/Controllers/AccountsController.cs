@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels.Accounts;
 using BankCloud.Models.ViewModels.Users;
+using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
+using BankCloud.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,43 +18,18 @@ namespace BankCloud.Web.Controllers
     {
         private readonly IMapper mapper;
         private readonly IAccountsService accountsService;
+        private readonly ITransferService transferService;
         private readonly IUsersService usersService;
+        private readonly ICloudinaryService cloudinaryService;
 
         public AccountsController(IMapper mapper, IAccountsService accountsService,
-            IUsersService usersService)
+            IUsersService usersService, ICloudinaryService cloudinaryService, ITransferService transferService)
         {
             this.mapper = mapper;
             this.accountsService = accountsService;
             this.usersService = usersService;
-        }
-
-        public IActionResult Charge()
-        {
-            return View();
-        }
-
-        [Authorize]
-        [HttpPost]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult Charge(AccountsChargeInputModel model)
-        {
-            if (model.Type == TransferType.BankCloud)
-            {
-                var accuser = this.accountsService.GetUserAccounts();
-
-                if (accuser.Any(x => x.IBAN == model.Account.ToString()))
-                {
-                    ;
-                }
-
-            }
-
-            if (model.Type == TransferType.Card)
-            {
-                ;
-            }
-
-            return Redirect("Accounts");
+            this.cloudinaryService = cloudinaryService;
+            this.transferService = transferService;
         }
 
         [Authorize]
@@ -119,13 +97,109 @@ namespace BankCloud.Web.Controllers
         [HttpPost]
         [Authorize]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Create(AccountInputModel model)
+        public async Task<IActionResult> Create(AccountInputModel model)
         {
+            string adUrl = await this.cloudinaryService.UploadPictureAsync(model.AdUrl, model.Currency);
+
             Account account = this.mapper.Map<Account>(model);
+
+            account.AdUrl = adUrl;
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
 
             this.accountsService.AddAccountToUser(account);
 
             return Redirect("Index");
+        }
+
+        [Authorize]
+        public IActionResult Charge()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Charge(AccountsChargeInputModel model)
+        {
+            if (model.Type == TransferType.BankCloud)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return this.View(model);
+                }
+
+                return this.RedirectToAction("ChargeBankCloud", "Accounts", model);
+            }
+
+            //TODO: For additional pay services
+            if (model.Type == TransferType.Card)
+            {
+
+            }
+
+            return Redirect("Accounts");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ChargeBankCloud(AccountsChargeInputModel model)
+        {
+            TempData.Put("charge", model);
+
+            return this.View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ChargeBankCloud(string iban)
+        {
+            var chargeData = TempData.Get<AccountsChargeInputModel>("charge");
+
+            var bankCloudCharge = this.mapper.Map<ChargeBankCloudInputModel>(chargeData);
+
+            var grantAccount = this.accountsService.GetAccountByIban(iban);
+
+            if (grantAccount == null)
+            {
+                this.TempData["error"] = GlobalConstants.MISSING_BANKCLOUD_ACCOUNT;
+                return this.RedirectToAction("Charge", chargeData);
+            }
+            Transfer transfer = this.mapper.Map<Transfer>(bankCloudCharge);
+            transfer.ForeignAccountId = grantAccount.Id;
+            transfer.BalanceType = BalanceType.Positive;
+
+            this.transferService.AddBankCloudTransfer(transfer);
+
+            return this.Redirect("/Accounts/Index");
+        }
+
+        [Authorize]
+        public IActionResult Transfer()
+        {
+            return this.View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Transfer(TransferBankCloudInputModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var grantAccount = this.accountsService.GetAccountById(model.Id);
+
+
+
+            return this.View();
         }
     }
 }
