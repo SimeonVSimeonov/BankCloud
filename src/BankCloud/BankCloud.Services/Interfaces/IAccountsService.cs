@@ -14,6 +14,6 @@ namespace BankCloud.Services.Interfaces
 
         void AddAccountToUser(Account account);
         Account GetAccountByIban(string iban);
-        object GetAccountById(string id);
+        Account GetAccountById(string id);
     }
 }

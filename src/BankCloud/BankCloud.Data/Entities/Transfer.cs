@@ -11,6 +11,8 @@ namespace BankCloud.Data.Entities
 
         public decimal Amount { get; set; }
 
+        public decimal? ConvertedAmount { get; set; }
+
         public BalanceType BalanceType { get; set; }
 
         public TransferStatus Status { get; set; }

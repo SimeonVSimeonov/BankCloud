@@ -25,5 +25,9 @@
         public const string INVALID_BANKCLOUD_IBAN_NUMBER = "Please enter a valid BankCloud IBAN number!!!";
 
         public const string MISSING_BANKCLOUD_ACCOUNT = "An BankCloud account with that IBAN does not exist!!!";
+
+        public const string MISSING_IBAN_ACCOUNT = "An account with that IBAN does not exist!!!";
+        
+        public const string INSUFFICIENT_FUNDS = "Insufficient Funds!!!";
     }
 }

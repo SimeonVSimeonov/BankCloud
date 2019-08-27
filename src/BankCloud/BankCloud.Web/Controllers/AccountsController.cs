@@ -165,7 +165,7 @@ namespace BankCloud.Web.Controllers
 
             var grantAccount = this.accountsService.GetAccountByIban(iban);
 
-            if (grantAccount == null)
+            if (grantAccount == null || bankCloudCharge.Id == grantAccount.Id)
             {
                 this.TempData["error"] = GlobalConstants.MISSING_BANKCLOUD_ACCOUNT;
                 return this.RedirectToAction("Charge", chargeData);
@@ -196,9 +196,28 @@ namespace BankCloud.Web.Controllers
             }
 
             var grantAccount = this.accountsService.GetAccountById(model.Id);
+            if (grantAccount.Balance < model.Amount)
+            {
+                this.TempData["error"] = GlobalConstants.INSUFFICIENT_FUNDS;
+                return this.View(model);
+            }
 
+            var receiverAccount = this.accountsService.GetAccountByIban(model.IBAN);
+            if (receiverAccount == null || grantAccount.Id == receiverAccount.Id)
+            {
+                this.TempData["error"] = GlobalConstants.MISSING_IBAN_ACCOUNT;
+                return this.View(model);
+            }
 
+            this.transferService.DoTransfer(model, grantAccount, receiverAccount);
 
+            return this.Redirect("/Accounts/Index");
+        }
+
+        [Authorize]
+        [HttpGet("/Accounts/Detail/{id}")]
+        public IActionResult Detail(string id)
+        {
             return this.View();
         }
     }

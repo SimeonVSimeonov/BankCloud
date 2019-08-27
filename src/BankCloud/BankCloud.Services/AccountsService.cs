@@ -22,7 +22,7 @@ namespace BankCloud.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public object GetAccountById(string id)
+        public Account GetAccountById(string id)
         {
             return this.context.Accounts
                 .Include(account => account.Currency)
@@ -72,7 +72,9 @@ namespace BankCloud.Services
 
         public Account GetAccountByIban(string iban)
         {
-            return this.context.Accounts.SingleOrDefault(x => x.IBAN == iban);
+            return this.context.Accounts
+                .Include(account => account.Currency)
+                .SingleOrDefault(x => x.IBAN == iban);
         }
     }
 }
