@@ -65,13 +65,21 @@ namespace BankCloud.Web.Controllers
         [HttpPost]
         [Authorize]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Activate(AccountActivateInputModel model)
+        public async Task<IActionResult> Activate(AccountActivateInputModel model)
         {
-            var userFromDb = this.usersService.GetCurrentUser();
+            ModelState.Remove("Account.AdUrl");
+            if (!ModelState.IsValid)
+            {
+                this.ViewData["Curencies"] = this.accountsService.GetCurrencies().ToList();
+                return this.View(model);
+            }
 
+            var userFromDb = this.usersService.GetCurrentUser();
             this.mapper.Map(model, userFromDb);
 
             Account account = this.mapper.Map<Account>(model.Account);
+            string adUrl = await this.cloudinaryService.UploadPictureAsync(model.AdUrl, model.Surname);
+            account.AdUrl = adUrl;
 
             this.accountsService.AddAccountToUser(account);
 
@@ -99,16 +107,14 @@ namespace BankCloud.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Create(AccountInputModel model)
         {
-            string adUrl = await this.cloudinaryService.UploadPictureAsync(model.AdUrl, model.Currency);
-
-            Account account = this.mapper.Map<Account>(model);
-
-            account.AdUrl = adUrl;
-
             if (!ModelState.IsValid)
             {
                 return this.View(model);
             }
+
+            Account account = this.mapper.Map<Account>(model);
+            string adUrl = await this.cloudinaryService.UploadPictureAsync(model.AdUrl, model.Currency);
+            account.AdUrl = adUrl;
 
             this.accountsService.AddAccountToUser(account);
 

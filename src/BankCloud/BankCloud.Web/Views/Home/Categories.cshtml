@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-sm-12">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card-box-a card-shadow">
                     <div class="img-box-a">
                         <img src="~/img/loan-2.jpg" alt="" class="img-a img-fluid">
@@ -64,13 +64,13 @@
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Interest Rates To</h4>
+                                        <h4 class="card-info-title">Rates To</h4>
                                         <span>
                                             @(Model.Where(x => x.Type == GlobalConstants.LOAN).Select(x => x.InterestRate).Min()) %
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Relaxed Conditions To</h4>
+                                        <h4 class="card-info-title">Period To</h4>
                                         <span>
                                             @(Model.Where(x => x.Type == GlobalConstants.LOAN).Select(x => x.Period).Max()) months
                                         </span>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card-box-a card-shadow">
                     <div class="img-box-a">
                         <img src="~/img/deposit.png" alt="" class="img-a img-fluid">
@@ -110,15 +110,9 @@
                                         </span>
                                     </li>
                                     <li>
-                                        <h4 class="card-info-title">Interest Rates To</h4>
+                                        <h4 class="card-info-title">Rates To</h4>
                                         <span>
                                             @(Model.Where(x => x.Type == GlobalConstants.SAVE).Select(x => x.InterestRate).Max()) %
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Relaxed Conditions</h4>
-                                        <span>
-                                            from @(Model.Where(x => x.Type == GlobalConstants.SAVE).Select(x => x.Period).Max()) months to Open
                                         </span>
                                     </li>
                                 </ul>
@@ -148,31 +142,32 @@
                                 </div>
                             </div>
                             <div class="card-footer-a">
-                                <ul class="card-info d-flex justify-content-around">
-                                    @*<li>
-                                        <h4 class="card-info-title">Over</h4>
-                                        <span>
-                                            @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Count() - 1) saves
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Interest Rates To</h4>
-                                        <span>
-                                            @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.InterestRate).Max()) %
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Relaxed Conditions</h4>
-                                        <span>
-                                            from @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.Period).Max()) months to Open
-                                        </span>
-                                    </li>*@
-                                </ul>
+                                @*<ul class="card-info d-flex justify-content-around">
+                                <li>
+                                    <h4 class="card-info-title">Over</h4>
+                                    <span>
+                                        @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Count() - 1) saves
+                                    </span>
+                                </li>
+                                <li>
+                                    <h4 class="card-info-title">Interest Rates To</h4>
+                                    <span>
+                                        @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.InterestRate).Max()) %
+                                    </span>
+                                </li>
+                                <li>
+                                    <h4 class="card-info-title">Relaxed Conditions</h4>
+                                    <span>
+                                        from @(Model.Where(x => x.Type == GlobalConstants.INSURANCE).Select(x => x.Period).Max()) months to Open
+                                    </span>
+                                </li>
+                            </ul>*@
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-2"></div>
             <div class="col-md-4">
                 <div class="card-box-a card-shadow">
                     <div class="img-box-a">
@@ -195,25 +190,25 @@
                             </div>
                             <div class="card-footer-a">
                                 @*<ul class="card-info d-flex justify-content-around">
-                                    <li>
-                                        <h4 class="card-info-title">Over</h4>
-                                        <span>
-                                            @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Count() - 1) saves
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Interest Rates To</h4>
-                                        <span>
-                                            @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.InterestRate).Max()) %
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <h4 class="card-info-title">Relaxed Conditions</h4>
-                                        <span>
-                                            from @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.Period).Max()) months to Open
-                                        </span>
-                                    </li>
-                                </ul>*@
+                                <li>
+                                    <h4 class="card-info-title">Over</h4>
+                                    <span>
+                                        @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Count() - 1) saves
+                                    </span>
+                                </li>
+                                <li>
+                                    <h4 class="card-info-title">Interest Rates To</h4>
+                                    <span>
+                                        @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.InterestRate).Max()) %
+                                    </span>
+                                </li>
+                                <li>
+                                    <h4 class="card-info-title">Relaxed Conditions</h4>
+                                    <span>
+                                        from @(Model.Where(x => x.Type == GlobalConstants.INVESTMENT).Select(x => x.Period).Max()) months to Open
+                                    </span>
+                                </li>
+                            </ul>*@
                             </div>
                         </div>
                     </div>
@@ -240,11 +235,11 @@
                                 </div>
                             </div>
                             <div class="card-footer-a">
-                                <ul class="card-info d-flex justify-content-around">
-                                    <li>
-                                        
-                                    </li>
-                                </ul>
+                                @*<ul class="card-info d-flex justify-content-around">
+                                <li>
+
+                                </li>
+                            </ul>*@
                             </div>
                         </div>
                     </div>

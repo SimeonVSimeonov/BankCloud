@@ -15,7 +15,7 @@
         <hr />
         <div class="container">
             <div class="col-md-5 mx-auto">
-                <form asp-action="AccountActivate" class="form-a fa-sign-in">
+                <form asp-action="AccountActivate" class="form-a fa-sign-in" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
@@ -73,13 +73,13 @@
                             <span asp-validation-for="Account.MonthlyIncome" class="text-danger"></span>
                         </div>
                     </div>
-                    @*<div class="col-md-12 mb-3">
+                    <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label asp-for="Account.Charge" class="control-label"></label>
-                            <input asp-for="Account.Charge" class="form-control" />
-                            <span asp-validation-for="Account.Charge" class="text-danger"></span>
+                            <label asp-for="AdUrl" class="control-label"></label>
+                            <input asp-for="AdUrl" type="file" class="form-control-file" />
+                            <span asp-validation-for="AdUrl" class="text-danger"></span>
                         </div>
-                    </div>*@
+                    </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label asp-for="Account.Currency" class="control-label"></label>
@@ -103,6 +103,7 @@
         </div>
     </div>
 </section>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

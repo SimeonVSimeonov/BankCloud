@@ -26,7 +26,7 @@ namespace BankCloud.Models.BindingModels.Products
         public int Period { get; set; }
 
         [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]
-        [Display(Name = "Specify a penalty interest ( fee in % )")]
+        [Display(Name = "Specify a penalty ( fee in % if Open specify 0 )")]
         public decimal PenaltyInterest { get; set; }
 
         [Required]

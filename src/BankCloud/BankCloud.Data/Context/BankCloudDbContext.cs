@@ -33,7 +33,7 @@ namespace BankCloud.Data.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer("Server=DESKTOP-KDM5RU8\\SQLEXPRESS;Database=BankCloud;Trusted_Connection=True;MultipleActiveResultSets=true");
+                .UseSqlServer("Data Source=tcp:bankcloud.database.windows.net,1433;Initial Catalog=BankCloudSqlServer;User Id=bankcloudadmin@bankcloud.database.windows.net;Password=Ger100100@;");
 
             base.OnConfiguring(optionsBuilder);
         }
