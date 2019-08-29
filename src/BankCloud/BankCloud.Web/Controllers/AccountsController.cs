@@ -5,10 +5,12 @@ using AutoMapper;
 using BankCloud.Data.Entities;
 using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels.Accounts;
+using BankCloud.Models.ViewModels.Accounts;
 using BankCloud.Models.ViewModels.Users;
 using BankCloud.Services.Common;
 using BankCloud.Services.Interfaces;
 using BankCloud.Web.Extensions;
+using FixerSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -132,6 +134,9 @@ namespace BankCloud.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Charge(AccountsChargeInputModel model)
         {
+            var account = this.accountsService.GetAccountById(model.Id);
+            model.IsoCode = account.Currency.IsoCode;
+
             if (model.Type == TransferType.BankCloud)
             {
                 if (!ModelState.IsValid)
@@ -176,7 +181,20 @@ namespace BankCloud.Web.Controllers
                 this.TempData["error"] = GlobalConstants.MISSING_BANKCLOUD_ACCOUNT;
                 return this.RedirectToAction("Charge", chargeData);
             }
+
             Transfer transfer = this.mapper.Map<Transfer>(bankCloudCharge);
+            if (grantAccount.Currency.IsoCode != bankCloudCharge.IsoCode)
+            {
+                ExchangeRate rateFromTo = Fixer
+                    .Rate(bankCloudCharge.IsoCode, grantAccount.Currency.IsoCode);
+
+                var convertedAmount = rateFromTo.Convert((double)bankCloudCharge.Amount);
+                transfer.ConvertedAmount = (decimal)convertedAmount;
+            }
+            else
+            {
+                transfer.ConvertedAmount = bankCloudCharge.Amount;
+            }
             transfer.ForeignAccountId = grantAccount.Id;
             transfer.BalanceType = BalanceType.Positive;
 
@@ -221,10 +239,49 @@ namespace BankCloud.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("/Accounts/ApproveTransfer/{id}")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ApproveTransfer(string id)
+        {
+            var transfer = this.transferService.GetTransferById(id);
+            var grantAccount = transfer.ForeignAccount;
+            var receiverAccount = transfer.Account;
+
+            if (transfer.Status == TransferStatus.Approved)
+            {
+                return this.Redirect("/Accounts/Detail/" + grantAccount.Id);
+            }
+
+            if (grantAccount.Balance < transfer.ConvertedAmount)
+            {
+                this.TempData["error"] = GlobalConstants.INSUFFICIENT_FUNDS;
+                return this.Redirect("/Accounts/Charge/" + grantAccount.Id);
+            }
+
+            this.transferService.ApproveTransfer(transfer, grantAccount, receiverAccount);
+
+            return this.Redirect("/Accounts/Detail/" + grantAccount.Id);
+        }
+
+        public IActionResult RejectTransfer()
+        {
+            return this.RedirectToAction();
+        }
+
+        [Authorize]
         [HttpGet("/Accounts/Detail/{id}")]
         public IActionResult Detail(string id)
         {
-            return this.View();
+            var account = this.accountsService.GetAccountById(id);
+
+            var transfers = this.transferService.GetTransfers(id)
+                .ToList();
+
+            var transfersView = this.mapper.Map<IEnumerable<TransfersDetailViewModel>>(transfers);
+            var view = this.mapper.Map<AccountsDetailViewModel>(account);
+            view.Transfers = transfersView;
+
+            return this.View(view);
         }
     }
 }

@@ -5,23 +5,38 @@ using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels.Accounts;
 using BankCloud.Services.Interfaces;
 using FixerSharp;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BankCloud.Services
 {
     public class TransferService : ITransferService
     {
         private readonly IMapper mapper;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly BankCloudDbContext context;
         private readonly IAccountsService accountsService;
 
 
-        public TransferService(BankCloudDbContext context,
+        public TransferService(BankCloudDbContext context, IHttpContextAccessor httpContextAccessor,
             IAccountsService accountsService, IMapper mapper)
         {
             this.context = context;
+            this.httpContextAccessor = httpContextAccessor;
             this.accountsService = accountsService;
             this.mapper = mapper;
+        }
+
+        public Transfer GetTransferById(string id)
+        {
+           return this.context.Transfers
+                .Include(transfer => transfer.Account)
+                .Include(transfer => transfer.ForeignAccount)
+                .SingleOrDefault(x => x.Id == id);
         }
 
         public void AddBankCloudTransfer(Transfer transfer)
@@ -66,6 +81,39 @@ namespace BankCloud.Services
 
             this.context.Transfers.Add(transfer);
             this.context.SaveChanges();
+        }
+
+        public IEnumerable<Payment> GetPaymentsByAccountId(string id)
+        {
+            return this.context.Payments
+                .Where(payment => payment.AccountId == id)
+                .Include(payment => payment.Transfer)
+                .ThenInclude(transfer => transfer.Account)
+                .ThenInclude(account => account.BankUser);
+        }
+
+        public void ApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount)
+        {
+            grantAccount.Balance -= transfer.ConvertedAmount;
+            receiverAccount.Balance += transfer.ConvertedAmount;
+            transfer.Status = TransferStatus.Approved;
+            transfer.Completed = DateTime.UtcNow;
+
+            var payments = this.context.Payments.SingleOrDefault(x => x.TransferId == transfer.Id);
+            this.context.Payments.Remove(payments);
+
+            this.context.SaveChanges();
+        }
+
+        public IEnumerable<Transfer> GetTransfers(string id)
+        {
+            string userId = httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return this.context.Transfers
+                .Include(transfer => transfer.Account)
+                .ThenInclude(account => account.BankUser)
+                .Where(x => x.ForeignAccountId == id);
         }
     }
 }

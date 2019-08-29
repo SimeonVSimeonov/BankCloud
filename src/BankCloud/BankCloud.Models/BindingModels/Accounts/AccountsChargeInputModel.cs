@@ -8,6 +8,8 @@ namespace BankCloud.Models.BindingModels.Accounts
     {
         public string Id { get; set; }
 
+        public string IsoCode { get; set; }
+
         [Required]
         [Display(Name = "Specify amount")]
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
@@ -15,7 +17,7 @@ namespace BankCloud.Models.BindingModels.Accounts
 
         [Required]
         [Display(Name = "Specify description for transfer")]
-        [StringLength(100, MinimumLength = 10)]
+        [StringLength(20, MinimumLength = 6)]
         public string Description { get; set; }
 
         [Required]

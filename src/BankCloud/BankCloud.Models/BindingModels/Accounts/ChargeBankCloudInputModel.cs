@@ -11,6 +11,8 @@ namespace BankCloud.Models.BindingModels.Accounts
     {
         public string Id { get; set; }
 
+        public string IsoCode { get; set; }
+
         [Required]
         [StringLength(23, MinimumLength = 23)]
         [Display(Name = "Specify a BankCloud IBAN")]

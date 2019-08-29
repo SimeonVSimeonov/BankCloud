@@ -4,6 +4,7 @@ using BankCloud.Models.BindingModels.Accounts;
 using BankCloud.Models.BindingModels.Orders;
 using BankCloud.Models.BindingModels.Products;
 using BankCloud.Models.BindingModels.Users;
+using BankCloud.Models.ViewModels.Accounts;
 using BankCloud.Models.ViewModels.CreditScorings;
 using BankCloud.Models.ViewModels.Home;
 using BankCloud.Models.ViewModels.Orders;
@@ -152,6 +153,17 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.Id, y => y.Ignore())
                 .ForMember(x => x.AccountId, y => y.MapFrom(src => src.Id))
                 .ForMember(x => x.ForeignAccountId, y => y.MapFrom(src => src.Id));
+
+
+            CreateMap<Transfer, TransfersDetailViewModel>()
+                .ForMember(x => x.Recipient, y => y.MapFrom(src => src.Account.BankUser.UserName))
+                .ForMember(x => x.RecipientIban, y => y.MapFrom(src => src.Account.IBAN));
+
+            CreateMap<Account, AccountsDetailViewModel>()
+                .ForMember(x => x.IsoCode, y => y.MapFrom(src => src.Currency.IsoCode))
+                .ForMember(x => x.CurrencyName, y => y.MapFrom(src => src.Currency.Name));
+
+
         }
     }
 }

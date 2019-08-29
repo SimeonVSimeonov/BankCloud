@@ -1,13 +1,19 @@
 ﻿using BankCloud.Data.Entities.Enums;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace BankCloud.Data.Entities
+namespace BankCloud.Models.ViewModels.Accounts
 {
-    public class Transfer
+    public class TransfersDetailViewModel
     {
         public string Id { get; set; }
 
         public string Description { get; set; }
+
+        public string Recipient { get; set; }
+
+        public string RecipientIban { get; set; }
 
         public decimal Amount { get; set; }
 
@@ -26,9 +32,8 @@ namespace BankCloud.Data.Entities
         public TransferType Type { get; set; }
 
         public string AccountId { get; set; }
-        public Account Account { get; set; }
 
         public string ForeignAccountId { get; set; }
-        public Account ForeignAccount { get; set; }
+
     }
 }

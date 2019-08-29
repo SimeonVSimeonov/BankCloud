@@ -1,8 +1,77 @@
-﻿
+﻿@model BankCloud.Models.ViewModels.Accounts.AccountsDetailViewModel
+@using BankCloud.Data.Entities.Enums
 @{
     ViewData["Title"] = "Detail";
 }
 
 <section class="section-agents section-t8">
-    <h1>Detail</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8">
+                <div class="title-single-box">
+                    <h3 class="title-single color-b">@Model.CurrencyName</h3>
+                    <span class="color-text-a">IBAN: @Model.IBAN</span><br />
+                    <span class="color-text-a">Balance: @Model.Balance</span><br />
+                    <span class="color-text-a">Monthly Income: @Model.MonthlyIncome</span><br />
+                    <span class="color-text-a">Monthly Outcome: @Model.MonthlyOutcome</span><br />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/Accounts/Index">Accounts</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.IBAN
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<hr />
+<section class="container-fluid">
+
+    <table class="table-responsive table-hover" cellspacing="25" cellpadding="10">
+        <thead>
+            <tr>
+                <th class="text-sm-center">Date</th>
+                <th class="text-sm-center">Status</th>
+                <th class="text-sm-center">Type</th>
+                <th class="text-sm-center">Recipient</th>
+                <th class="text-sm-center">IBAN</th>
+                <th class="text-sm-center">Amount</th>
+                <th class="text-sm-center">Converted Amount</th>
+                <th class="text-sm-center">Description</th>
+            </tr>
+        </thead>
+        @foreach (var transfer in Model.Transfers)
+        {
+            <tr>
+                <td class="text-sm-center">
+                    @transfer.Date.ToLocalTime().ToString("yyyy/MM/dd")
+                    <br />@transfer.Date.ToLocalTime().ToString("hh:mm:ss")
+                </td>
+                <td class="text-sm-center">@transfer.Status</td>
+                <td class="text-sm-center">@transfer.Type</td>
+                <td class="text-sm-center">@transfer.Recipient</td>
+                <td class="text-sm-center">@transfer.RecipientIban</td>
+                <td class="text-sm-center">@transfer.Amount @transfer.IsoCode</td>
+                <td class="text-sm-center">@transfer.ConvertedAmount</td>
+                <td class="text-sm-center">@transfer.Description</td>
+                @if (transfer.Status == TransferStatus.Approved || transfer.Status == TransferStatus.Rejected)
+                {
+                    <td class="text-sm-center">@transfer.Completed?.ToLocalTime().ToString("yyyy/MM/dd")</td>
+                    <td class="text-sm-center">@transfer.Completed?.ToLocalTime().ToString("hh:mm:ss")</td>
+                }
+                else
+                {
+                    <td class="text-sm-center"><a class="btn" href="/Accounts/ApproveTransfer/@transfer.Id">Transfer</a></td>
+                    <td class="text-sm-center"><a class="btn" href="/Accounts/RejectTransfer/@transfer.Id">Reject</a></td>
+                }
+            </tr>
+        }
+    </table>
 </section>
