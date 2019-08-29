@@ -148,6 +148,22 @@ namespace BankCloud.Web
                             Type = Data.Entities.Enums.CurrencyType.National,
                             ТrustLevel = 9
                         });
+
+                        context.Currencies.Add(new Currency
+                        {
+                            IsoCode = "GBP",
+                            Name = "Great Britain Pound",
+                            Type = Data.Entities.Enums.CurrencyType.International,
+                            ТrustLevel = 8
+                        });
+
+                        context.Currencies.Add(new Currency
+                        {
+                            IsoCode = "JPY",
+                            Name = "Japanese Yen",
+                            Type = Data.Entities.Enums.CurrencyType.International,
+                            ТrustLevel = 9
+                        });
                     }
 
                     context.SaveChanges();

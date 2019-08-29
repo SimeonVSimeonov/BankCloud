@@ -6,7 +6,7 @@
 }
 
 <section class="section-agents section-t8">
-    @foreach (var item in Model.Type)
+    @foreach (var item in Model.Type.Where(x => x == "Save" || x == "Loan"))
     {
         <div class="container">
             <div class="container">
