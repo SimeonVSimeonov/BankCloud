@@ -49,7 +49,7 @@
                 <th class="text-sm-center">Description</th>
             </tr>
         </thead>
-        @foreach (var transfer in Model.Transfers)
+        @foreach (var transfer in Model.Transfers.OrderBy(x => x.Status).ThenByDescending(x => x.Date))
         {
             <tr>
                 <td class="text-sm-center">
@@ -95,7 +95,7 @@
                 <th class="text-sm-center">Description</th>
             </tr>
         </thead>
-        @foreach (var transfer in Model.Charges)
+        @foreach (var transfer in Model.Charges.OrderBy(x => x.Status).ThenByDescending(x => x.Date))
         {
             <tr>
                 <td class="text-sm-center">
