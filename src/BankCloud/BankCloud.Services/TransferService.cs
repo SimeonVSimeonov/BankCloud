@@ -47,7 +47,8 @@ namespace BankCloud.Services
             Payment payment = new Payment
             {
                 AccountId = transfer.ForeignAccountId,
-                TransferId = transfer.Id
+                TransferId = transfer.Id,
+                Status = PaymentStatus.Pending
             };
 
             this.context.Payments.Add(payment);
@@ -72,12 +73,16 @@ namespace BankCloud.Services
             else
             {
                 receiverAccount.Balance += model.Amount;
+                model.ConvertedAmount = model.Amount;
             }
 
             Transfer transfer = this.mapper.Map<Transfer>(model);
+            transfer.ForeignAccountId = receiverAccount.Id;
             transfer.Date = DateTime.UtcNow;
             transfer.Completed = DateTime.UtcNow;
+            transfer.Type = TransferType.BankCloud;
             transfer.Status = TransferStatus.Approved;
+            transfer.BalanceType = BalanceType.Negative;
 
             this.context.Transfers.Add(transfer);
             this.context.SaveChanges();
@@ -99,21 +104,33 @@ namespace BankCloud.Services
             transfer.Status = TransferStatus.Approved;
             transfer.Completed = DateTime.UtcNow;
 
-            var payments = this.context.Payments.SingleOrDefault(x => x.TransferId == transfer.Id);
-            this.context.Payments.Remove(payments);
+            var payment = this.context.Payments.SingleOrDefault(x => x.TransferId == transfer.Id);
+            payment.Status = PaymentStatus.Approved;
 
             this.context.SaveChanges();
         }
 
         public IEnumerable<Transfer> GetTransfers(string id)
         {
+            return this.context.Payments
+                 .Select(x => x.Transfer)
+                 .Include(transfer => transfer.Account)
+                 .ThenInclude(account => account.BankUser)
+                 .Where(x => x.ForeignAccountId == id);
+        }
+
+        public IEnumerable<Transfer> GetCharges(string id)
+        {
             string userId = httpContextAccessor.HttpContext.User
-                .FindFirst(ClaimTypes.NameIdentifier).Value;
+               .FindFirst(ClaimTypes.NameIdentifier).Value;
 
             return this.context.Transfers
-                .Include(transfer => transfer.Account)
-                .ThenInclude(account => account.BankUser)
-                .Where(x => x.ForeignAccountId == id);
+               .Include(transfer => transfer.Account)
+               .ThenInclude(account => account.BankUser)
+               .Include(transfer => transfer.ForeignAccount)
+               .ThenInclude(account => account.BankUser)
+               .Include(x => x.ForeignAccount.Currency)
+               .Where(x => x.AccountId == id || x.Account.BankUserId == userId);
         }
     }
 }

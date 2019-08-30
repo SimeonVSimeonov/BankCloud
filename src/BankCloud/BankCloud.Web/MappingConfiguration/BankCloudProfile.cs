@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BankCloud.Data.Entities;
+using BankCloud.Data.Entities.Enums;
 using BankCloud.Models.BindingModels.Accounts;
 using BankCloud.Models.BindingModels.Orders;
 using BankCloud.Models.BindingModels.Products;
@@ -85,8 +86,10 @@ namespace BankCloud.Web.MappingConfiguration
 
             CreateMap<Account, UsersAccountViewModel>()
                 .ForMember(x => x.IsoCode, y => y.MapFrom(src => src.Currency.IsoCode))
-                .ForMember(x => x.PendingRecharges, y => y.MapFrom(src => src.Transfers.Count()))
-                .ForMember(x => x.PendingPayments, y => y.MapFrom(src => src.Payments.Count()));
+                .ForMember(x => x.PendingRecharges, 
+                    y => y.MapFrom(src => src.Transfers.Where(x => x.Status == TransferStatus.Pending).Count()))
+                .ForMember(x => x.PendingPayments, 
+                    y => y.MapFrom(src => src.Payments.Where(x => x.Status == PaymentStatus.Pending).Count()));
 
             CreateMap<AccountInputModel, Account>()
                 .ForMember(x => x.CurrencyId, y => y.MapFrom(src => src.Currency))
@@ -151,9 +154,13 @@ namespace BankCloud.Web.MappingConfiguration
             //CreateMap<Transfer, TransferBankCloudInputModel>();
             CreateMap<TransferBankCloudInputModel, Transfer>()
                 .ForMember(x => x.Id, y => y.Ignore())
-                .ForMember(x => x.AccountId, y => y.MapFrom(src => src.Id))
-                .ForMember(x => x.ForeignAccountId, y => y.MapFrom(src => src.Id));
+                .ForMember(x => x.AccountId, y => y.MapFrom(src => src.Id));
 
+            CreateMap<Transfer, ChargesDetailViewModel>()
+                .ForMember(x => x.Recipient, y => y.MapFrom(src => src.ForeignAccount.BankUser.UserName))
+                .ForMember(x => x.RecipientIban, y => y.MapFrom(src => src.ForeignAccount.IBAN))
+                .ForMember(x => x.ConvertedIsoCode, y => y.MapFrom(src => src.ForeignAccount.Currency.IsoCode));
+                //.ForMember(x => x.ConvertedIsoCode, y => y.MapFrom(src => src.));
 
             CreateMap<Transfer, TransfersDetailViewModel>()
                 .ForMember(x => x.Recipient, y => y.MapFrom(src => src.Account.BankUser.UserName))

@@ -7,8 +7,8 @@ namespace BankCloud.Data.Entities.Enums
         [DisplayText("BankCloud Account")]
         BankCloud = 1,
 
-        [DisplayText("With a Card From Another Bank ")]
-        Card = 2,
+        //[DisplayText("With a Card From Another Bank ")]
+        //Card = 2,
     }
 
 }

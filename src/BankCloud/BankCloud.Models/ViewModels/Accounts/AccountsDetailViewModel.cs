@@ -20,5 +20,7 @@ namespace BankCloud.Models.ViewModels.Accounts
         public decimal Balance { get; set; }
 
         public IEnumerable<TransfersDetailViewModel> Transfers { get; set; }
+
+        public IEnumerable<ChargesDetailViewModel> Charges { get; set; }
     }
 }

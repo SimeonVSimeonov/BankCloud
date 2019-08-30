@@ -148,10 +148,10 @@ namespace BankCloud.Web.Controllers
             }
 
             //TODO: For additional pay services
-            if (model.Type == TransferType.Card)
-            {
+            //if (model.Type == TransferType.Card)
+            //{
 
-            }
+            //}
 
             return Redirect("Accounts");
         }
@@ -277,9 +277,14 @@ namespace BankCloud.Web.Controllers
             var transfers = this.transferService.GetTransfers(id)
                 .ToList();
 
+            var charges = this.transferService.GetCharges(id)
+                .ToList();
+            ;
             var transfersView = this.mapper.Map<IEnumerable<TransfersDetailViewModel>>(transfers);
+            var chargesView = this.mapper.Map<IEnumerable<ChargesDetailViewModel>>(charges);
             var view = this.mapper.Map<AccountsDetailViewModel>(account);
             view.Transfers = transfersView;
+            view.Charges = chargesView;
 
             return this.View(view);
         }

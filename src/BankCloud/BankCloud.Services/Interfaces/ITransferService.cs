@@ -12,5 +12,6 @@ namespace BankCloud.Services.Interfaces
         Transfer GetTransferById(string id);
         void ApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount);
         IEnumerable<Transfer> GetTransfers(string id);
+        IEnumerable<Transfer> GetCharges(string id);
     }
 }

@@ -32,8 +32,10 @@
     </div>
 </section>
 <hr />
+<hr />
 <section class="container-fluid">
-
+    <h3>Received Transfer Requests</h3>
+    <hr />
     <table class="table-responsive table-hover" cellspacing="25" cellpadding="10">
         <thead>
             <tr>
@@ -43,7 +45,7 @@
                 <th class="text-sm-center">Recipient</th>
                 <th class="text-sm-center">IBAN</th>
                 <th class="text-sm-center">Amount</th>
-                <th class="text-sm-center">Converted Amount</th>
+                <th class="text-sm-center">Transfer Amount</th>
                 <th class="text-sm-center">Description</th>
             </tr>
         </thead>
@@ -59,7 +61,7 @@
                 <td class="text-sm-center">@transfer.Recipient</td>
                 <td class="text-sm-center">@transfer.RecipientIban</td>
                 <td class="text-sm-center">@transfer.Amount @transfer.IsoCode</td>
-                <td class="text-sm-center">@transfer.ConvertedAmount</td>
+                <td class="text-sm-center"><span> - </span>@transfer.ConvertedAmount @Model.IsoCode</td>
                 <td class="text-sm-center">@transfer.Description</td>
                 @if (transfer.Status == TransferStatus.Approved || transfer.Status == TransferStatus.Rejected)
                 {
@@ -71,6 +73,47 @@
                     <td class="text-sm-center"><a class="btn" href="/Accounts/ApproveTransfer/@transfer.Id">Transfer</a></td>
                     <td class="text-sm-center"><a class="btn" href="/Accounts/RejectTransfer/@transfer.Id">Reject</a></td>
                 }
+            </tr>
+        }
+    </table>
+</section>
+<hr />
+<hr />
+<section class="container-fluid">
+    <h3>Direct Transfers With Bank<span class="color-b">Cloud</span></h3>
+    <hr />
+    <table class="table-responsive table-hover" cellspacing="25" cellpadding="10">
+        <thead>
+            <tr>
+                <th class="text-sm-center">Date</th>
+                <th class="text-sm-center">Status</th>
+                <th class="text-sm-center">Type</th>
+                <th class="text-sm-center">Recipient</th>
+                <th class="text-sm-center">IBAN</th>
+                <th class="text-sm-center">Amount</th>
+                <th class="text-sm-center">Transfer Amount</th>
+                <th class="text-sm-center">Description</th>
+            </tr>
+        </thead>
+        @foreach (var transfer in Model.Charges)
+        {
+            <tr>
+                <td class="text-sm-center">
+                    @transfer.Date.ToLocalTime().ToString("yyyy/MM/dd")
+                    <br />@transfer.Date.ToLocalTime().ToString("hh:mm:ss")
+                </td>
+                <td class="text-sm-center">@transfer.Status</td>
+                <td class="text-sm-center">@transfer.Type</td>
+                <td class="text-sm-center">@transfer.Recipient</td>
+                <td class="text-sm-center">@transfer.RecipientIban</td>
+                <td class="text-sm-center">@transfer.Amount @Model.IsoCode</td>
+                <td class="text-sm-center"> @if (transfer.BalanceType == BalanceType.Negative)
+                {
+                    <span> - </span>
+                } @transfer.ConvertedAmount @transfer.ConvertedIsoCode</td>
+                <td class="text-sm-center">@transfer.Description</td>
+                <td class="text-sm-center">@transfer.Completed?.ToLocalTime().ToString("yyyy/MM/dd")</td>
+                <td class="text-sm-center">@transfer.Completed?.ToLocalTime().ToString("hh:mm:ss")</td>
             </tr>
         }
     </table>

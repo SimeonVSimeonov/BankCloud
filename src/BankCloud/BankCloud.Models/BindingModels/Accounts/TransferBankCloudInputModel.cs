@@ -12,7 +12,7 @@ namespace BankCloud.Models.BindingModels.Accounts
         [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
         public decimal Amount { get; set; }
 
-        public decimal? ConvertedAmount { get; set; }
+        public decimal ConvertedAmount { get; set; }
 
         [Required]
         [Display(Name = "Specify description for transfer")]
@@ -24,6 +24,8 @@ namespace BankCloud.Models.BindingModels.Accounts
         [Display(Name = "Specify a IBAN")]
         [RegularExpression("CLD [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}", ErrorMessage = "Please enter a valid IBAN number!!!")]
         public string IBAN { get; set; }
+
+        public string IsoCode { get; set; }
 
         public DateTime Date { get; set; } = DateTime.UtcNow;
 
