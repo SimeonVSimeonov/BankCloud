@@ -1,6 +1,7 @@
 # BankCloud
 BankCloudApp Virtual bank system for individual and business clients
-
+BankCloudApp is published on  http://bankcloud.azurewebsites.net/
+If you want, you can sign up for free :)
 # Project - BankCloud
 
 ## Type - Virtual Bank System
