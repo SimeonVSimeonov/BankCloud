@@ -258,7 +258,26 @@ namespace BankCloud.Web.Controllers
                 return this.Redirect("/Accounts/Charge/" + grantAccount.Id);
             }
 
-            this.transferService.ApproveTransfer(transfer, grantAccount, receiverAccount);
+            this.transferService.DoApproveTransfer(transfer, grantAccount, receiverAccount);
+
+            return this.Redirect("/Accounts/Detail/" + grantAccount.Id);
+        }
+
+        [Authorize]
+        [HttpGet("/Accounts/RejectTransfer/{id}")]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult RejectTransfer(string id)
+        {
+            var transfer = this.transferService.GetTransferById(id);
+            var grantAccount = transfer.ForeignAccount;
+            var receiverAccount = transfer.Account;
+
+            if (transfer.Status == TransferStatus.Rejected)
+            {
+                return this.Redirect("/Accounts/Detail/" + grantAccount.Id);
+            }
+
+            this.transferService.DoRejectTransfer(transfer, grantAccount, receiverAccount);
 
             return this.Redirect("/Accounts/Detail/" + grantAccount.Id);
         }

@@ -10,8 +10,10 @@ namespace BankCloud.Services.Interfaces
         void DoTransfer(TransferBankCloudInputModel model, Account grantAccount, Account receiverAccount);
         IEnumerable<Payment> GetPaymentsByAccountId(string id);
         Transfer GetTransferById(string id);
-        void ApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount);
+        void DoApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount);
+        void DoRejectTransfer(Transfer transfer, Account grantAccount, Account receiverAccount);
         IEnumerable<Transfer> GetTransfers(string id);
         IEnumerable<Transfer> GetCharges(string id);
+        
     }
 }

@@ -97,15 +97,36 @@ namespace BankCloud.Services
                 .ThenInclude(account => account.BankUser);
         }
 
-        public void ApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount)
+        public void DoApproveTransfer(Transfer transfer, Account grantAccount, Account receiverAccount)
         {
-            grantAccount.Balance -= transfer.ConvertedAmount;
-            receiverAccount.Balance += transfer.ConvertedAmount;
+
+            if (receiverAccount.CurrencyId != grantAccount.CurrencyId)
+            {
+                receiverAccount.Balance += transfer.Amount;
+                grantAccount.Balance -= transfer.ConvertedAmount;
+            }
+            else
+            {
+                receiverAccount.Balance += transfer.Amount;
+                grantAccount.Balance -= transfer.Amount;
+            }
+
             transfer.Status = TransferStatus.Approved;
             transfer.Completed = DateTime.UtcNow;
 
             var payment = this.context.Payments.SingleOrDefault(x => x.TransferId == transfer.Id);
             payment.Status = PaymentStatus.Approved;
+
+            this.context.SaveChanges();
+        }
+
+        public void DoRejectTransfer(Transfer transfer, Account grantAccount, Account receiverAccount)
+        {
+            transfer.Completed = DateTime.UtcNow;
+            transfer.Status = TransferStatus.Rejected;
+
+            var payment = this.context.Payments.SingleOrDefault(x => x.TransferId == transfer.Id);
+            payment.Status = PaymentStatus.Rejected;
 
             this.context.SaveChanges();
         }
