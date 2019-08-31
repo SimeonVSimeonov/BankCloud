@@ -30,13 +30,16 @@ namespace BankCloud.Data.Context
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseSqlServer("Data Source=tcp:bankcloud.database.windows.net,1433;Initial Catalog=BankCloudSqlServer;User Id=bankcloudadmin@bankcloud.database.windows.net;Password=Ger100100@;");
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder
+        //            .UseSqlServer("Data Source=tcp:bankcloud.database.windows.net,1433;Initial Catalog=BankCloudSqlServer;User Id=bankcloudadmin@bankcloud.database.windows.net;Password=Ger100100@;");
+        //    }
 
-            base.OnConfiguring(optionsBuilder);
-        }
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

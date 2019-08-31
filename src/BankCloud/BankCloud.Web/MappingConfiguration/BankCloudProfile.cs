@@ -149,9 +149,7 @@ namespace BankCloud.Web.MappingConfiguration
             CreateMap<ChargeBankCloudInputModel, Transfer>()
                 .ForMember(x => x.Id, y => y.Ignore())
                 .ForMember(x => x.AccountId, y => y.MapFrom(src => src.Id));
-            //.ForMember(x => x.ForeignAccountId, y => y.MapFrom(src => src.Id));
 
-            //CreateMap<Transfer, TransferBankCloudInputModel>();
             CreateMap<TransferBankCloudInputModel, Transfer>()
                 .ForMember(x => x.Id, y => y.Ignore())
                 .ForMember(x => x.AccountId, y => y.MapFrom(src => src.Id));
@@ -160,7 +158,6 @@ namespace BankCloud.Web.MappingConfiguration
                 .ForMember(x => x.Recipient, y => y.MapFrom(src => src.ForeignAccount.BankUser.UserName))
                 .ForMember(x => x.RecipientIban, y => y.MapFrom(src => src.ForeignAccount.IBAN))
                 .ForMember(x => x.ConvertedIsoCode, y => y.MapFrom(src => src.ForeignAccount.Currency.IsoCode));
-                //.ForMember(x => x.ConvertedIsoCode, y => y.MapFrom(src => src.));
 
             CreateMap<Transfer, TransfersDetailViewModel>()
                 .ForMember(x => x.Recipient, y => y.MapFrom(src => src.Account.BankUser.UserName))
@@ -169,8 +166,6 @@ namespace BankCloud.Web.MappingConfiguration
             CreateMap<Account, AccountsDetailViewModel>()
                 .ForMember(x => x.IsoCode, y => y.MapFrom(src => src.Currency.IsoCode))
                 .ForMember(x => x.CurrencyName, y => y.MapFrom(src => src.Currency.Name));
-
-
         }
     }
 }
