@@ -298,7 +298,7 @@ namespace BankCloud.Web.Controllers
 
             var charges = this.transferService.GetCharges(id)
                 .ToList();
-            ;
+
             var transfersView = this.mapper.Map<IEnumerable<TransfersDetailViewModel>>(transfers);
             var chargesView = this.mapper.Map<IEnumerable<ChargesDetailViewModel>>(charges);
             var view = this.mapper.Map<AccountsDetailViewModel>(account);

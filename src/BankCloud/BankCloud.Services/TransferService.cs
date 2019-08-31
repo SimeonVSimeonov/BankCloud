@@ -151,7 +151,7 @@ namespace BankCloud.Services
                .Include(transfer => transfer.ForeignAccount)
                .ThenInclude(account => account.BankUser)
                .Include(x => x.ForeignAccount.Currency)
-               .Where(x => x.AccountId == id || x.Account.BankUserId == userId);
+               .Where(x => x.AccountId == id && x.Account.BankUserId == userId);
         }
     }
 }
