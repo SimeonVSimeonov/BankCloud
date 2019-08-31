@@ -7,11 +7,8 @@ namespace BankCloud.Services.Interfaces
     public interface IAccountsService
     {
         IEnumerable<Account> GetUserAccounts();
-
         IEnumerable<string> GetUserAccountsIds();
-
         IEnumerable<Currency> GetCurrencies();
-
         void AddAccountToUser(Account account);
         Account GetAccountByIban(string iban);
         Account GetAccountById(string id);
