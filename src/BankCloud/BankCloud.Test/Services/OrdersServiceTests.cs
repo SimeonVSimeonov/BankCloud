@@ -229,6 +229,46 @@ namespace BankCloud.Test.Services
             Assert.Equal(order, returnedOrder);
         }
 
+        [Fact]
+        public void GetOrderLoanByIdShouldReturnCorrectOrderLoan()
+        {
+            var options = new DbContextOptionsBuilder<BankCloudDbContext>()
+               .UseInMemoryDatabase(databaseName: "GetOrderLoanById_Database")
+               .Options;
 
+            var dbContext = new BankCloudDbContext(options);
+
+            var ordersService = new OrdersService(dbContext, null);
+
+            var orderId = "123abc";
+            var order = new OrderLoan { Id = orderId };
+            dbContext.OrdersLoans.Add(order);
+            dbContext.SaveChanges();
+
+            var returnedOrder = ordersService.GetOrderLoanById(orderId);
+
+            Assert.Equal(order, returnedOrder);
+        }
+
+        [Fact]
+        public void GetOrderSaveByIdShouldReturnCorrectOrderSave()
+        {
+            var options = new DbContextOptionsBuilder<BankCloudDbContext>()
+               .UseInMemoryDatabase(databaseName: "GetOrderLoanById_Database")
+               .Options;
+
+            var dbContext = new BankCloudDbContext(options);
+
+            var ordersService = new OrdersService(dbContext, null);
+
+            var orderId = "123abc";
+            var order = new OrderSave { Id = orderId };
+            dbContext.OrdersSaves.Add(order);
+            dbContext.SaveChanges();
+
+            var returnedOrder = ordersService.GetOrderSaveById(orderId);
+
+            Assert.Equal(order, returnedOrder);
+        }
     }
 }
