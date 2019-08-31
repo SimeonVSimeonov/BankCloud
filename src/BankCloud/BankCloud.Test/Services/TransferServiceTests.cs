@@ -41,14 +41,14 @@ namespace BankCloud.Test.Services
         public void AddBankCloudTransferShouldAddBankCloudTran()
         {
             var options = new DbContextOptionsBuilder<BankCloudDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetTransferById_Database")
+                .UseInMemoryDatabase(databaseName: "AddBankCloudTransfer_Database")
                 .Options;
 
             var dbContext = new BankCloudDbContext(options);
 
             var transferService = new TransferService(dbContext, null, null, null);
 
-            var transferId = "123abc";
+            var transferId = "123dsdabc";
             var transfer = new Transfer { Id = transferId };
             transferService.AddBankCloudTransfer(transfer);
 
