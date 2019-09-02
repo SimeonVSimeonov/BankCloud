@@ -6,8 +6,6 @@
 # Custom
 .zip
 .DS_Store
-appsettings.Development.json
-appsettings.json
 
 # User-specific files
 *.suo
@@ -55,6 +53,8 @@ dlldata.c
 BenchmarkDotNet.Artifacts/
 
 # .NET Core
+appsettings.Development.json
+appsettings.json
 project.lock.json
 project.fragment.lock.json
 artifacts/
