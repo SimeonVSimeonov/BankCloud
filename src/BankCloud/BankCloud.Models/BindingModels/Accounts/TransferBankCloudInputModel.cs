@@ -1,28 +1,40 @@
-﻿using System;
+﻿using BankCloud.Models.BindingModels.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels.Accounts
 {
     public class TransferBankCloudInputModel
     {
+        private const string IBANRegExValidation = "CLD [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}";
+
+        private const string AmountMinValue = "0.01";
+        private const string AmountMaxValue = "1000000000";
+
+        private const int TransferDescriptionMinLength = 6;
+        private const int TransferDescriptionMaxLength = 20;
+
+        private const int IBANMinLength = 23;
+        private const int IBANMaxLength = 23;
+
         public string Id { get; set; }
 
         [Required]
-        [Display(Name = "Specify amount")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Display(Name = BindingModelsConstants.SpecifyAmount)]
+        [Range(typeof(decimal), AmountMinValue, AmountMaxValue)]
         public decimal Amount { get; set; }
 
         public decimal ConvertedAmount { get; set; }
 
         [Required]
-        [Display(Name = "Specify description for transfer")]
-        [StringLength(100, MinimumLength = 10)]
+        [Display(Name = BindingModelsConstants.TransferDescription)]
+        [StringLength(TransferDescriptionMaxLength, MinimumLength = TransferDescriptionMinLength)]
         public string Description { get; set; }
 
         [Required]
-        [StringLength(23, MinimumLength = 23)]
-        [Display(Name = "Specify a IBAN")]
-        [RegularExpression("CLD [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}", ErrorMessage = "Please enter a valid IBAN number!!!")]
+        [StringLength(IBANMaxLength, MinimumLength = IBANMinLength)]
+        [Display(Name = BindingModelsConstants.SpecifyIban)]
+        [RegularExpression(IBANRegExValidation, ErrorMessage = BindingModelsConstants.ValidIbanNumber)]
         public string IBAN { get; set; }
 
         public string IsoCode { get; set; }

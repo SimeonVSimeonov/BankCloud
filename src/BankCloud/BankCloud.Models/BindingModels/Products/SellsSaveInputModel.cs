@@ -1,36 +1,46 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BankCloud.Models.BindingModels.Common;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels.Products
 {
     public class SellsSaveInputModel
     {
-        [StringLength(18, MinimumLength = 6)]
-        [Display(Name = "Specify a name for your product")]
+        public const string SavePeriod = "Specify a Deposit Period (if Open specify 0 )";
+        public const string SavePenalty = "Specify a penalty ( fee in % if Open specify 0 )";
+
+        public const int SaveNameMinLength = 6;
+        public const int SaveNameMaxLength = 18;
+
+        public const int SaveDescriptionMinLength = 600;
+        public const int SaveDescriptionMaxLength = 1200;
+
+        [StringLength(SaveNameMaxLength, MinimumLength = SaveNameMinLength)]
+        [Display(Name = BindingModelsConstants.ProductName)]
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Specify a advertising picture for your product")]
+        [Display(Name = BindingModelsConstants.ProductAdPicture)]
         public IFormFile AdUrl { get; set; }
 
-        [StringLength(1200, MinimumLength = 600)]
-        [Display(Name = "Specify a description and additional conditions")]
+        [StringLength(SaveDescriptionMaxLength, MinimumLength = SaveDescriptionMinLength)]
+        [Display(Name = BindingModelsConstants.ProductDescription)]
         public string Description { get; set; }
 
-        [Display(Name = "Specify a Interest Rate ( in % )")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Display(Name = BindingModelsConstants.InterestRate)]
+        [Range(typeof(decimal), SaveConstants.SaveRateMinValue, SaveConstants.SaveRateMaxValue)]
         public decimal InterestRate { get; set; }
 
-        [Display(Name = "Specify a Deposit Period (if Open specify 0 )")]
-        [Range(0, int.MaxValue)]
+        [Display(Name = SavePeriod)]
+        [Range(SaveConstants.SavePeriodMinValue, SaveConstants.SavePeriodMaxValue)]
         public int Period { get; set; }
 
-        [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]
-        [Display(Name = "Specify a penalty ( fee in % if Open specify 0 )")]
+        [Range(typeof(decimal), SaveConstants.SavePenaltyRateMinValue, SaveConstants.SavePenaltyRateMaxValue)]
+        [Display(Name = SavePenalty)]
         public decimal PenaltyInterest { get; set; }
 
         [Required]
-        [Display(Name = "Specify a money transfer account")]
+        [Display(Name = BindingModelsConstants.TransferAccount)]
         public string AccountId { get; set; }
     }
 }

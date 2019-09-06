@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using BankCloud.Web.Models;
+using BankCloud.Models.ViewModels.Error;
 using BankCloud.Models.ViewModels.Home;
 using BankCloud.Services.Interfaces;
 using AutoMapper;

@@ -1,40 +1,53 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BankCloud.Models.BindingModels.Common;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels.Products
 {
     public class SellsLoanInputModel
     {
-        [StringLength(18, MinimumLength = 6)]
-        [Display(Name = "Specify a name for your product")]
+        public const string LoanPeriod = "Specify a maximum period ( in months count )";
+        public const string LoanAmount = "Specify a maximum amount";
+        public const string LoanCommission = "Specify a commission ( service fee in % )";
+
+        public const int LoanNameMinLength = 6;
+        public const int LoanNameMaxLength = 18;
+
+        public const int LoanDescriptionMinLength = 600;
+        public const int LoanDescriptionMaxLength = 1200;
+
+        [Required]
+        [StringLength(LoanNameMaxLength, MinimumLength = LoanNameMinLength)]
+        [Display(Name = BindingModelsConstants.ProductName)]
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Specify a advertising picture for your product")]
+        [Display(Name = BindingModelsConstants.ProductAdPicture)]
         public IFormFile AdUrl { get; set; }
 
-        [StringLength(1200, MinimumLength = 600)]
-        [Display(Name = "Specify a description and additional conditions")]
+        [Required]
+        [StringLength(LoanDescriptionMaxLength, MinimumLength = LoanDescriptionMinLength)]
+        [Display(Name = BindingModelsConstants.ProductDescription)]
         public string Description { get; set; }
 
-        [Display(Name = "Specify a interest rate ( in % )")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Display(Name = BindingModelsConstants.InterestRate)]
+        [Range(typeof(decimal), LoanConstants.LoanRateMinValue, LoanConstants.LoanRateMaxValue)]
         public decimal InterestRate { get; set; }
 
-        [Display(Name = "Specify a maximum period ( in months count )")]
-        [Range(1, int.MaxValue)]
+        [Display(Name = LoanPeriod)]
+        [Range(LoanConstants.LoanPeriodMinValue, LoanConstants.LoanPeriodMaxValue)]
         public int Period { get; set; }
 
-        [Display(Name = "Specify a maximum amount")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Display(Name = LoanAmount)]
+        [Range(typeof(decimal), LoanConstants.LoanAmountMinValue, LoanConstants.LoanAmountMaxValue)]
         public decimal Amount { get; set; }
 
-        [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]
-        [Display(Name = "Specify a commission ( service fee in % )")]
+        [Range(typeof(decimal), LoanConstants.LoanCommissionMinValue, LoanConstants.LoanCommissionMaxValue)]
+        [Display(Name = LoanCommission)]
         public decimal Commission { get; set; }
 
         [Required]
-        [Display(Name = "Specify a money transfer account")]
+        [Display(Name = BindingModelsConstants.TransferAccount)]
         public string AccountId { get; set; }
     }
 }

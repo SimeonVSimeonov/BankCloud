@@ -1,43 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using BankCloud.Models.BindingModels.Common;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankCloud.Models.BindingModels.Orders
 {
     public class OrdersOrderLoanInputModel
     {
+        private const string EnterPeriod = "Enter a Period ( in months count ) not more than";
+        private const string EnterAmount = "Enter a Amount not more than";
+        private const string AutoMonthlyFee = "Monthly Fee (it's auto calculate)";
+        private const string SpecifyAccount = "Specify a money transfer account";
+
+        private const string MonthlyFeeMinValue = "0.01";
+        private const string MonthlyFeeMaxValue = "1000000000";
+
         [Required]
         public string Id { get; set; }
 
         public string Name { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
-        [Display(Name = "Enter a Period ( in months count ) not more than")]
+        [Range(LoanConstants.LoanPeriodMinValue, LoanConstants.LoanPeriodMaxValue)]
+        [Display(Name = EnterPeriod)]
         public int Period { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
-        [Display(Name = "Enter a Amount not more than")]
+        [Range(typeof(decimal), LoanConstants.LoanAmountMinValue, LoanConstants.LoanAmountMaxValue)]
+        [Display(Name = EnterAmount)]
         public decimal Amount { get; set; }
 
-        [Display(Name = "Monthly Fee (it's auto calculate)")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Display(Name = AutoMonthlyFee)]
+        [Range(typeof(decimal), MonthlyFeeMinValue, MonthlyFeeMaxValue)]
         public decimal MonthlyFee { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0.00", "79228162514264337593543950335")]
+        [Range(typeof(decimal), LoanConstants.LoanCommissionMinValue, LoanConstants.LoanCommissionMaxValue)]
         public decimal Commission { get; set; }
 
         public string CurrencyName { get; set; }
 
-        public ICollection<string> UserCurrencyTypes { get; set; }
-
         [Required]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), LoanConstants.LoanRateMinValue, LoanConstants.LoanRateMaxValue)]
         public decimal InterestRate { get; set; }
 
         [Required]
-        [Display(Name = "Specify a money transfer account")]
+        [Display(Name = SpecifyAccount)]
         public string AccountId { get; set; }
+
+        public ICollection<string> UserCurrencyTypes { get; set; }
     }
 }
