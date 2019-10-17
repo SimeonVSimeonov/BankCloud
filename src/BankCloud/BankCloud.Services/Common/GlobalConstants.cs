@@ -2,6 +2,10 @@
 {
     public class GlobalConstants
     {
+        public const string IBAN_PREFIX = "CLD";
+
+        public const string IBAN_NUMBER_WHITESPACE = " ";
+
         public const string SAVE = "Save";
 
         public const string LOAN = "Loan";

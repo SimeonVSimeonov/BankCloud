@@ -9,6 +9,10 @@ namespace BankCloud.Services
 {
     public class CloudinaryService : ICloudinaryService
     {
+        private const string PRODUCT_PICTURE_FOLDER_NAME = "product_images";
+        private const int PRODUCT_PICTURE_HEIGHT = 693;
+        private const int PRODUCT_PICTURE_WIDTH = 700;
+
         private readonly Cloudinary cloudinaryUtility;
 
         public CloudinaryService(Cloudinary cloudinaryUtility)
@@ -32,9 +36,11 @@ namespace BankCloud.Services
             {
                 ImageUploadParams uploadParams = new ImageUploadParams
                 {
-                    Folder = "product_images",
+                    Folder = PRODUCT_PICTURE_FOLDER_NAME,
                     File = new FileDescription(fileName, ms),
-                    Transformation = new Transformation().Height(693).Width(700)
+                    Transformation = new Transformation()
+                                        .Height(PRODUCT_PICTURE_HEIGHT)
+                                        .Width(PRODUCT_PICTURE_WIDTH)
                 };
 
                 uploadResult = this.cloudinaryUtility.Upload(uploadParams);
